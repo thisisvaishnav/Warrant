@@ -81,7 +81,7 @@ PROTECTED: nothing yet.
 DONE = acceptance passes.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T2 Schema   [ ]
+### T2 Schema   [x]
 DEPENDS ON: none        PRIORITY: must
 GOAL: Node and edge model and indexes exist (`guard/db.py`).
 ACCEPTANCE: A sample graph can be written and read back from a live FalkorDB via automated test `tests/test_db.py`.
@@ -90,7 +90,7 @@ FALLBACK: In-memory networkx/SQLite graph backend conforming to same DB interfac
 DONE = `pytest tests/test_db.py` passes on a live database.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T3 Static graph   [ ]
+### T3 Static graph   [x]
 DEPENDS ON: T1, T2      PRIORITY: must
 GOAL: Functions, calls, imports, and dynamic-dispatch flags for the target repo are in FalkorDB.
 ACCEPTANCE:
@@ -106,7 +106,7 @@ PROTECTED: tests/test_static.py.
 DONE = all three acceptance checks pass.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### S1 SPIKE: per-test coverage   [ ]
+### S1 SPIKE: per-test coverage   [x]
 DEPENDS ON: T1          PRIORITY: must (riskiest unknown)
 GOAL: Learn whether per-test coverage is usable and affordable on the target repo.
 ACCEPTANCE: On 20 tests, `pytest --cov --cov-context=test` finishes; data maps each test to functions; slowdown versus plain run is recorded as a number.
@@ -116,7 +116,7 @@ FALLBACK: Per-file contexts (one coverage context per test file). Log in DEVIATI
 DONE = result and slowdown number written down, and choice (per-test or per-file) made.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T0 Evaluation harness (early)   [ ]
+### T0 Evaluation harness (early)   [x]
 DEPENDS ON: T1          PRIORITY: must
 GOAL: A script that takes a mutant and a "selected tests" list and reports escape, time saved, and fallback.
 ACCEPTANCE: With run-all strategy it reports escape = 0 and savings = 0 on 3 mutants. Mutants are split calibration / held-out by a frozen file (`evals/split.json`), written BEFORE any tuning.
