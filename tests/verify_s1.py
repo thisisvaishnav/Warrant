@@ -95,43 +95,39 @@ def run_coverage_suite():
 
 
 def inspect_coverage_mapping():
+    import coverage
     cov_file = Path(".coverage")
     assert cov_file.exists(), ".coverage file was not generated!"
 
-    conn = sqlite3.connect(str(cov_file))
-    cur = conn.cursor()
+    cov = coverage.CoverageData(str(cov_file))
+    cov.read()
 
-    # Get contexts
-    cur.execute("SELECT id, context FROM context WHERE context != ''")
-    contexts = dict(cur.fetchall())
-    print(f"[S1] Found {len(contexts)} non-empty coverage contexts in .coverage")
-    assert len(contexts) >= 20, f"Expected at least 20 test contexts, found {len(contexts)}"
-
-    # Get file map
-    cur.execute("SELECT id, path FROM file")
-    files = dict(cur.fetchall())
-
-    # Build AST function map for Flask
-    flask_src = Path("target_repos/flask/src/flask")
+    flask_src = Path("target_repos/flask/src/flask").resolve()
     ast_map = build_function_line_map(flask_src)
 
-    # Map context -> functions
     test_to_funcs = {}
-    cur.execute("SELECT file_id, context_id, lineno FROM line_map")
-    rows = cur.fetchall()
-    conn.close()
+    total_test_contexts = set()
 
-    for file_id, context_id, lineno in rows:
-        ctx_name = contexts.get(context_id)
-        if not ctx_name:
+    for filepath_str in cov.measured_files():
+        filepath = Path(filepath_str).resolve()
+        # Only inspect flask source files
+        if not str(filepath).startswith(str(flask_src)):
             continue
-        filepath = os.path.abspath(files.get(file_id, ""))
-        func_name = ast_map.get((filepath, lineno))
-        if func_name:
-            test_to_funcs.setdefault(ctx_name, set()).add(func_name)
 
-    print(f"[S1] Successfully mapped {len(test_to_funcs)} test contexts to Flask functions.")
-    assert len(test_to_funcs) >= 20, f"Failed to map all 20 tests: mapped {len(test_to_funcs)}"
+        contexts_by_line = cov.contexts_by_lineno(str(filepath))
+        for lineno, ctx_list in contexts_by_line.items():
+            func_name = ast_map.get((str(filepath), lineno))
+            for ctx in ctx_list:
+                if not ctx or "|" not in ctx:
+                    continue
+                test_id = ctx.split("|")[0]
+                total_test_contexts.add(test_id)
+                if func_name:
+                    test_to_funcs.setdefault(test_id, set()).add(func_name)
+
+    print(f"[S1] Found {len(total_test_contexts)} distinct test contexts covering Flask code.")
+    print(f"[S1] Successfully mapped {len(test_to_funcs)} test contexts to specific Flask functions.")
+    assert len(test_to_funcs) >= 20, f"Expected at least 20 test mappings, got {len(test_to_funcs)}"
 
     return test_to_funcs
 
