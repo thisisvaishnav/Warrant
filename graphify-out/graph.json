@@ -16741,18 +16741,6 @@
     },
     {
       "source": "landing_src_app_app",
-      "target": "landing_src_app_arrow",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "landing/src/App.tsx",
-      "source_location": "L219",
-      "weight": 1.0
-    },
-    {
-      "source": "landing_src_app_app",
       "target": "landing_src_components_install_agenticon_agenticon",
       "relation": "calls",
       "_origin": "ast",
@@ -16760,7 +16748,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L245",
+      "source_location": "L258",
       "weight": 1.0
     },
     {
@@ -16772,7 +16760,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L257",
+      "source_location": "L270",
       "weight": 1.0
     },
     {
@@ -16784,7 +16772,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L266",
+      "source_location": "L279",
       "weight": 1.0
     },
     {
@@ -16796,7 +16784,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L274",
+      "source_location": "L287",
       "weight": 1.0
     },
     {
@@ -16808,7 +16796,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L312",
+      "source_location": "L325",
       "weight": 1.0
     },
     {
@@ -16820,7 +16808,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L323",
+      "source_location": "L336",
+      "weight": 1.0
+    },
+    {
+      "source": "landing_src_app_app",
+      "target": "landing_src_app_arrow",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "landing/src/App.tsx",
+      "source_location": "L374",
       "weight": 1.0
     },
     {
@@ -39283,5 +39283,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "182cc6a54bda13ca62dc4008c4bbb6f93dc6f1f4"
+  "built_at_commit": "eef6aec6876d1806fbcf14e63dc90ae4c5620520"
 }

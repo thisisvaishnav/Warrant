@@ -147,6 +147,36 @@ export default function App() {
           </div>
         </nav>
 
+        <svg
+          className="hero-orange-line"
+          viewBox="0 0 1440 900"
+          fill="none"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M -40 220 C 220 80 440 340 760 180 C 1060 40 1260 280 1480 190"
+            stroke="#f46722"
+            strokeWidth="1.2"
+            strokeOpacity="0.55"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            d="M -20 460 C 280 540 520 280 820 440 C 1120 600 1300 360 1480 480"
+            stroke="#ff5c51"
+            strokeWidth="1"
+            strokeOpacity="0.4"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            d="M 60 20 C 180 340 400 640 720 720 C 1040 800 1280 620 1460 920"
+            stroke="#f46722"
+            strokeWidth="1"
+            strokeOpacity="0.25"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
         <div className="hero-lines" aria-hidden="true">
           <i />
           <i />
@@ -165,8 +195,8 @@ export default function App() {
               src="/assets/falkordb.svg"
               alt="FalkorDB"
               style={{
-                width: 18,
-                height: 18,
+                width: 22,
+                height: 22,
                 borderRadius: 0,
                 display: "block",
               }}
@@ -213,23 +243,6 @@ export default function App() {
             </p>
           </div>
 
-          {/* Action Row */}
-          <div className="hero-actions-group">
-            <a className="button hero-quickstart-btn" href="#install">
-              <Arrow />
-              <span>Quickstart Guide</span>
-            </a>
-            <a
-              className="hero-view-github-btn"
-              href="https://github.com/thisisvaishnav/guard"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GithubIcon size={16} aria-hidden="true" />
-              <span>View on GitHub</span>
-            </a>
-          </div>
-
           {/* Factual Proof Line */}
           <div className="hero-proof-strip">
             <a href="#stories" className="hero-proof-link">
@@ -264,12 +277,12 @@ export default function App() {
         <div className="shell">
           <div className="eyebrow"><span>02</span> INSTALL &amp; CONNECT</div>
           <SectionTitle>
-            Install Guard where your agents work.
-            <span>No files to edit by hand.</span>
+            Install Guard for your AI coding agent.
+            <span>Automatic repository configuration.</span>
           </SectionTitle>
           <p className="section-lead">
-            Pick your agent, paste one command at the root of your project,
-            restart, and verify. Your code never leaves your machine.
+            Select your agent. Run the command in your project root directory.
+            Restart the agent and verify the installation. All code stays on your local system.
           </p>
           <InstallTabs />
         </div>
