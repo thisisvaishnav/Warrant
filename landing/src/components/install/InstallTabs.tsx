@@ -4,6 +4,7 @@ import agents from "@/data/agents.json"
 import { Badge } from "./Badge"
 import { CodeBlock } from "./CodeBlock"
 import { Step } from "./Step"
+import { AgentIcon } from "./AgentIcon"
 import { ArrowRight, CheckCircle2, FileCode, RotateCcw } from "lucide-react"
 
 type Agent = (typeof agents)[number]
@@ -27,6 +28,16 @@ function initialValue(): string {
 function InstallSteps({ agent }: { agent: Agent }) {
   return (
     <div className="install-steps-wrapper">
+      <div className="install-agent-banner">
+        <div className="install-agent-banner-icon" aria-hidden="true">
+          <AgentIcon id={agent.id} size={22} />
+        </div>
+        <div className="install-agent-banner-info">
+          <h3 className="install-agent-banner-title">{agent.label}</h3>
+          <span className="install-agent-banner-sub">Hook configuration &amp; verification</span>
+        </div>
+      </div>
+
       <Step n={1} title="Run in your project folder" tag="One command">
         <p>
           The command configures Guard&apos;s enforcement hook for{" "}
@@ -89,7 +100,15 @@ function ComingSoon({ agent }: { agent: Agent }) {
       <div className="install-soon-badge-wrap">
         <span className="install-soon-status">Phase 3 · Roadmap</span>
       </div>
-      <h3>{agent.label} Support in Development</h3>
+      <div className="install-agent-banner">
+        <div className="install-agent-banner-icon" aria-hidden="true">
+          <AgentIcon id={agent.id} size={22} />
+        </div>
+        <div className="install-agent-banner-info">
+          <h3 className="install-agent-banner-title">{agent.label}</h3>
+          <span className="install-agent-banner-sub">Native MCP integration in development</span>
+        </div>
+      </div>
       <p>
         Full native hook integration for <strong>{agent.label}</strong> is
         scheduled with the Guard MCP server release. In the interim, Guard
@@ -157,8 +176,13 @@ export function InstallTabs() {
               key={a.id}
               value={a.id}
               className="install-tab-trigger"
+              title={a.label}
+              aria-label={a.label}
             >
-              <span className="install-tab-label">{a.label}</span>
+              <div className="install-tab-icon-wrap" aria-hidden="true">
+                <AgentIcon id={a.id} size={20} />
+              </div>
+              <span className="sr-only">{a.label}</span>
               <Badge status={a.badge} />
             </TabsTrigger>
           ))}
