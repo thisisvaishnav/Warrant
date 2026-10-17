@@ -7,32 +7,32 @@
     "prereqUrl": "https://docs.astral.sh/uv/",
     "installCmd": "uv tool install guard-cli",
     "initCmd": "guard init --yes",
-    "initNote": "In your project folder, run guard init --yes. This builds the test graph, which can take a few minutes on large projects.",
-    "restart": "Restart Claude Code in that folder.",
+    "initNote": "Run this command in your project root directory. Guard builds the FalkorDB test graph for your repository.",
+    "restart": "Restart Claude Code in your project directory.",
     "verify": "guard doctor",
     "expected": "──────────────────────── Guard Doctor Diagnostic Report ────────────────────────\nSubsystem Checks:\n  environment   PASS   Python 3.10+, guard v0.1.2 (binary: guard)\n  backend       PASS   Backend 'server' is healthy (localhost:6379)\n  graph         PASS   Graph has 393 functions, 1,038 tests, 22,015 coverage edges\n  freshness     PASS   Graph is fresh at commit 822d265\n  target_repo   PASS   Target environment verified with pytest and pytest-cov\n  integrations  PASS   Integrations verified for claude (AGENTS.md and .gitignore present)\n  hook_timeout  PASS   Hook timeout is configured to 180s.\nResult: 7 passed, 0 warnings, 0 failures",
     "writes": [
       {
         "file": ".claude/settings.local.json",
-        "description": "Stop hook command (guard hook stop) with exit code 2 on test failure"
+        "description": "Sets the stop hook to run 'guard hook stop' with exit code 2 on failure"
       },
       {
         "file": "AGENTS.md & CLAUDE.md",
-        "description": "Injects Guard verification instructions so agents test before finishing"
+        "description": "Adds instructions that require tests before task completion"
       },
       {
         "file": ".gitignore",
-        "description": "Adds .guard/ to keep local database state and caches uncommitted"
+        "description": "Adds .guard/ to ignore local database files"
       },
       {
         "file": ".guard/",
-        "description": "Local graph storage, session records, and test run cache"
+        "description": "Stores the local graph and test session cache"
       }
     ],
-    "coverageNote": "--yes may automatically install pytest-cov into your virtual environment if coverage profiling is missing.",
+    "coverageNote": "The --yes option installs pytest-cov if pytest-cov is not installed in your environment.",
     "undo": "guard hook uninstall",
-    "platformLimit": "Embedded database needs Python 3.12+, Linux glibc 2.39+ or macOS 15+. Otherwise Guard uses Docker.",
-    "alternative": "Alternative: permanent install via pipx (`pipx install guard-cli`)."
+    "platformLimit": "System requirements: Embedded FalkorDB requires Python 3.12+, Linux glibc 2.39+, or macOS 15+. On other systems, Guard uses Docker automatically.",
+    "alternative": "Optional: Install Guard with pipx (pipx install guard-cli)."
   },
   {
     "id": "antigravity",
@@ -42,31 +42,31 @@
     "prereqUrl": "https://docs.astral.sh/uv/",
     "installCmd": "uv tool install guard-cli",
     "initCmd": "guard init --yes --agents antigravity",
-    "initNote": "In your project folder, run guard init --yes --agents antigravity to index code and configure hooks.",
-    "restart": "Quit Antigravity and reopen your workspace.",
+    "initNote": "Run this command in your project root directory to index code and configure hooks.",
+    "restart": "Close Antigravity and open your workspace again.",
     "verify": "guard doctor",
     "expected": "──────────────────────── Guard Doctor Diagnostic Report ────────────────────────\nSubsystem Checks:\n  environment   PASS   Python 3.10+, guard v0.1.2 (binary: guard)\n  backend       PASS   Backend 'server' is healthy (localhost:6379)\n  graph         PASS   Graph has 393 functions, 1,038 tests, 22,015 coverage edges\n  freshness     PASS   Graph is fresh at commit 822d265\n  target_repo   PASS   Target environment verified with pytest and pytest-cov\n  integrations  PASS   Integrations verified for antigravity (AGENTS.md and .gitignore present)\n  hook_timeout  PASS   Hook timeout is configured to 180s.\nResult: 7 passed, 0 warnings, 0 failures",
     "writes": [
       {
         "file": ".agents/hooks.json",
-        "description": "PreInvocation (baseline SHA) and Stop hook configuration (merge-safe)"
+        "description": "Configures PreInvocation and Stop hooks"
       },
       {
         "file": "AGENTS.md",
-        "description": "Agent instructions for testing and running Guard"
+        "description": "Adds instructions that require tests before task completion"
       },
       {
         "file": ".gitignore",
-        "description": "Adds .guard/ to keep local database state uncommitted"
+        "description": "Adds .guard/ to ignore local database files"
       },
       {
         "file": ".guard/",
-        "description": "Local graph storage, session records, and test run cache"
+        "description": "Stores the local graph and test session cache"
       }
     ],
-    "coverageNote": "--yes may automatically install pytest-cov into your virtual environment if coverage profiling is missing.",
+    "coverageNote": "The --yes option installs pytest-cov if pytest-cov is not installed in your environment.",
     "undo": "guard hook uninstall --antigravity",
-    "platformLimit": "Embedded database needs Python 3.12+, Linux glibc 2.39+ or macOS 15+. Otherwise Guard uses Docker.",
-    "alternative": "Alternative: permanent install via pipx (`pipx install guard-cli`)."
+    "platformLimit": "System requirements: Embedded FalkorDB requires Python 3.12+, Linux glibc 2.39+, or macOS 15+. On other systems, Guard uses Docker automatically.",
+    "alternative": "Optional: Install Guard with pipx (pipx install guard-cli)."
   }
 ]

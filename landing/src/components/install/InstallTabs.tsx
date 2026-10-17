@@ -32,7 +32,7 @@ function InstallSteps({ agent }: { agent: Agent }) {
     <div className="install-steps-wrapper" role="tabpanel" id={`panel-${agent.id}`} aria-labelledby={`tab-${agent.id}`}>
       {/* Before you start prerequisite callout */}
       <div className="install-prereq-banner">
-        <span className="install-prereq-label">Before you start:</span>
+        <span className="install-prereq-label">Prerequisites:</span>
         <span className="install-prereq-text">
           Python project with pytest, git, and{" "}
           <a
@@ -49,19 +49,19 @@ function InstallSteps({ agent }: { agent: Agent }) {
 
       {/* Step 1: Install tool */}
       <Step n={1} title="Install Guard" tag="Global Tool">
-        <p>Install the Guard CLI as an isolated, PATH-accessible tool on your machine:</p>
+        <p>Install the Guard CLI tool on your system PATH:</p>
         <CodeBlock value={agent.installCmd} label="bash" isCommand />
         {agent.alternative && (
           <p className="install-alt-row">
-            <strong>Alternative:</strong> permanent install via pipx (<code>pipx install guard-cli</code>)
+            <strong>Optional:</strong> Install Guard with pipx (<code>pipx install guard-cli</code>).
           </p>
         )}
       </Step>
 
       {/* Step 2: Set up repository */}
-      <Step n={2} title="Set up your project" tag="Repository Init">
+      <Step n={2} title="Initialize your project" tag="Repository Init">
         <p>
-          In your project root directory, run the initialization command. This builds the FalkorDB test graph, which can take a few minutes on large projects:
+          Run the initialization command in your project root directory:
         </p>
         <CodeBlock value={agent.initCmd} label="bash" isCommand />
         <p className="install-runnote">{agent.initNote}</p>
@@ -78,8 +78,8 @@ function InstallSteps({ agent }: { agent: Agent }) {
       </Step>
 
       {/* Step 4: Verify integration */}
-      <Step n={4} title="Verify integration" tag="Doctor check" isLast>
-        <p>Run the diagnostic check in your terminal. Expected: all checks pass.</p>
+      <Step n={4} title="Verify the installation" tag="Doctor check" isLast>
+        <p>Run the diagnostic tool in your terminal. Confirm that all checks pass.</p>
         <CodeBlock value={agent.verify} label="verify" compact isCommand />
         <div className="install-verify-expected">
           <div className="install-verify-header">
@@ -105,7 +105,7 @@ function InstallSteps({ agent }: { agent: Agent }) {
         >
           <div className="install-disclosure-toggle-title">
             <FileCode size={14} className="install-disclosure-icon" aria-hidden="true" />
-            <span>What does this change?</span>
+            <span>Files created or modified</span>
           </div>
           {disclosureOpen ? <ChevronUp size={15} aria-hidden="true" /> : <ChevronDown size={15} aria-hidden="true" />}
         </button>
@@ -113,7 +113,7 @@ function InstallSteps({ agent }: { agent: Agent }) {
         {disclosureOpen && (
           <div className="install-disclosure-content">
             <p className="install-disclosure-desc">
-              Guard writes only local integration configurations into your repository. No code logic is modified:
+              Guard writes configuration files to your repository. Guard does not change your source code:
             </p>
             <ul className="install-disclosure-list">
               {agent.writes.map((item) => (
@@ -129,7 +129,7 @@ function InstallSteps({ agent }: { agent: Agent }) {
             )}
             <div className="install-undo-row">
               <Undo2 size={13} className="install-undo-icon" aria-hidden="true" />
-              <span>To uninstall hooks at any time: </span>
+              <span>To remove the hooks at any time, run: </span>
               <code className="install-code-inline">{agent.undo}</code>
             </div>
           </div>
