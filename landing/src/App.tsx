@@ -115,14 +115,11 @@ export default function App() {
             <a href="#install" onClick={() => setMenuOpen(false)}>
               Install
             </a>
-            <a href="#playbooks" onClick={() => setMenuOpen(false)}>
-              How it works
+            <a href="#features" onClick={() => setMenuOpen(false)}>
+              Features
             </a>
             <a href="#stories" onClick={() => setMenuOpen(false)}>
               Benchmarks
-            </a>
-            <a href="#pricing" onClick={() => setMenuOpen(false)}>
-              Docs
             </a>
             <a
               href="https://github.com/thisisvaishnav/guard"
@@ -286,10 +283,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* Page 2: Install Section */}
+      {/* Page 1: Install Section */}
       <section className="install-section" id="install">
         <div className="shell">
-          <div className="eyebrow"><span>02</span> INSTALL &amp; CONNECT</div>
+          <div className="eyebrow"><span>01</span> INSTALL &amp; CONNECT</div>
           <SectionTitle>
             Install Guard for your AI coding agent.
             <span>Automatic repository configuration.</span>
@@ -306,7 +303,7 @@ export default function App() {
       <section className="agent-section" id="features">
         <div className="shell">
           <div className="eyebrow">
-            <span>01</span> GRAPH SAFETY LAYER
+            <span>02</span> GRAPH SAFETY LAYER
           </div>
           <SectionTitle light>
             Trust-scored test selection
@@ -392,187 +389,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="setup-section" id="playbooks">
-        <div className="shell">
-          <div className="eyebrow dark">
-            <span>03</span> HOW IT WORKS
-          </div>
-          <SectionTitle>
-            5 minutes to ingest.
-            <span>Instant test acceleration.</span>
-          </SectionTitle>
-          <p className="section-lead">
-            Parse your repo once into FalkorDB. Guard takes it from there.
-          </p>
-          <div className="step-tabs">
-            <span>Ingest</span>
-            <span>Analyze</span>
-            <span>Decide</span>
-          </div>
-          <div className="steps">
-            <article>
-              <div className="step-number">01</div>
-              <div className="website-mock">
-                <div className="browser-bar">
-                  <i />
-                  <i />
-                  <i />
-                </div>
-                <div className="site-chip">
-                  guard init --yes
-                </div>
-                <div className="scan-line" />
-              </div>
-              <h3>Ingest static call graph &amp; baseline</h3>
-              <p>
-                Extracts functions, calls, imports, and attaches per-test
-                coverage baseline without guessing.
-              </p>
-              <b>guard init --yes</b>
-            </article>
-            <article>
-              <div className="step-number">02</div>
-              <div className="radar-mock">
-                <SignalIcon />
-                <span>26 covering tests found</span>
-              </div>
-              <h3>Attach coverage evidence</h3>
-              <p>
-                Maps pytest execution contexts to functions with confidence 0.9
-                and filters flaky tests.
-              </p>
-              <b>
-                Static edges capped at 0.6; execution evidence raises
-                confidence.
-              </b>
-            </article>
-            <article>
-              <div className="step-number">03</div>
-              <div className="calendar-mock">
-                <div className="cal-head">
-                  <span>EVAL</span>
-                  <b>67% Saved</b>
-                </div>
-                <div className="cal-grid">
-                  {Array.from({ length: 20 }).map((_, i) => (
-                    <i
-                      key={i}
-                      className={[4, 8, 11, 17].includes(i) ? "booked" : ""}
-                    />
-                  ))}
-                </div>
-              </div>
-              <h3>Tests run in seconds</h3>
-              <p>
-                Run only the tests that matter. Fall back to full suite when
-                trust drops below threshold.
-              </p>
-              <b>0 missed failures with 67% test-time savings on Flask.</b>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* Capabilities */}
-      <section className="capabilities">
-        <div className="shell">
-          <div className="eyebrow">
-            <span>04</span> CAPABILITIES
-          </div>
-          <SectionTitle light>
-            Built to safeguard your
-            <span>agent pipeline.</span>
-          </SectionTitle>
-          <p className="section-lead light">
-            Guard handles AST parsing, FalkorDB traversals, trust calculation,
-            and agent pre-commit hooks.
-          </p>
-          <div className="cap-grid">
-            <article className="cap-card hero-cap">
-              <small>DECISION ENGINE</small>
-              <h3>Multi-hop graph traversal &amp; trust scoring</h3>
-              <p>
-                Traverses CALLS and COVERED_BY edges in FalkorDB to calculate
-                evidence ratio, freshness, and certainty.
-              </p>
-              <div className="orbit">
-                <i />
-                <i />
-                <i />
-                <b>0.94</b>
-              </div>
-              <div className="pills">
-                <span>FalkorDB Cypher</span>
-                <span>Multi-hop Callers</span>
-                <span>Flake Filtering</span>
-              </div>
-            </article>
-            <article className="cap-card">
-              <small>AGENT INTEGRATION</small>
-              <h3>Strict gate for autonomous coding agents</h3>
-              <p>
-                Agent calls Guard before declaring done. Low trust or failing
-                tests block task completion automatically.
-              </p>
-              <div className="mini-email">
-                <b>CLI Command</b>
-                <span>guard check --session sess_123</span>
-              </div>
-            </article>
-            <article className="cap-card orange-card">
-              <small>FEEDBACK LOOP</small>
-              <h3>Repairs the graph on any miss</h3>
-              <p>
-                Inserts miss_repair edges (confidence 1.0) and unsets
-                no_evidence flags so future runs catch it.
-              </p>
-              <div className="learn-bars">
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
-            </article>
-            <article className="cap-card">
-              <small>SAFETY OVERRIDES</small>
-              <h3>Hard safety overrides before trust policy</h3>
-              <p>
-                Test file edited? Run all. Uncovered function? Run all. Dynamic
-                dispatch? Widen to module tests.
-              </p>
-              <div className="toggle-row">
-                <span>Fail-safe override</span>
-                <i>
-                  <b />
-                </i>
-              </div>
-            </article>
-            <article className="cap-card reply-card">
-              <small>EXPLAINABILITY</small>
-              <h3>Every skipped test is queryable</h3>
-              <p>
-                Inspect why any test was run or skipped with full confidence and
-                edge attribution.
-              </p>
-              <div className="reply-ui">
-                <span>Decision Output</span>
-                <b>Skipped: no covering edge from any changed function.</b>
-                <a href="#install" className="button" style={{ padding: "8px 14px", fontSize: 12 }}>
-                  guard doctor ↗
-                </a>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
       {/* Benchmark & Evals */}
       <section className="stories" id="stories">
         <div className="shell">
           <div className="eyebrow">
-            <span>05</span> BENCHMARK &amp; EVALS
+            <span>03</span> BENCHMARK &amp; EVALS
           </div>
           <SectionTitle light>
             Frozen benchmark on held-out mutants
@@ -642,95 +463,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Architecture & Specs */}
-      <section className="pricing" id="pricing">
-        <div className="shell">
-          <div className="eyebrow dark">
-            <span>06</span> SPECS &amp; ARCHITECTURE
-          </div>
-          <SectionTitle>
-            Built with discipline.
-            <span>Rules R1 through R9.</span>
-          </SectionTitle>
-          <p className="section-lead">
-            Frozen claims, paired metrics, independent verification, and
-            automated fallbacks.
-          </p>
-          <div className="price-grid">
-            <article className="price-card pro">
-              <div className="price-head">
-                <span>CORE</span>
-                <b>
-                  FalkorDB<small>/Graph</small>
-                </b>
-                <p>
-                  Graph-native test selection engine for CI pipelines and agent
-                  pre-commit hooks.
-                </p>
-              </div>
-              <a href="https://github.com/thisisvaishnav/guard" target="_blank" rel="noopener noreferrer">
-                Read PLAN.md &amp; Spec <span>↗</span>
-              </a>
-              <h4>What&apos;s included</h4>
-              <ul>
-                <li>FalkorDB graph storage &amp; Cypher traversals</li>
-                <li>Static AST analysis &amp; call graph extraction</li>
-                <li>Per-test coverage context ingestion (confidence 0.9)</li>
-                <li>
-                  3-tier policy with hard overrides (subset/medium/run-all)
-                </li>
-                <li>Feedback loop for automatic miss repair</li>
-                <li>Agent CLI (guard check, guard doctor, guard init)</li>
-              </ul>
-            </article>
-            <article className="price-card custom">
-              <div className="price-head">
-                <span>RIGOR</span>
-                <b>
-                  R1–R9<small>/Rules</small>
-                </b>
-                <p>
-                  Engineering discipline to prevent the failure modes of
-                  AI-built systems.
-                </p>
-              </div>
-              <a href="https://github.com/thisisvaishnav/guard" target="_blank" rel="noopener noreferrer">
-                Read DEVIATIONS.md <span>↗</span>
-              </a>
-              <h4>What&apos;s included</h4>
-              <ul>
-                <li>R1 Hofstadter: Order by dependency &amp; risk</li>
-                <li>R3 Goodhart: Calibration split vs held-out split</li>
-                <li>R5 Murphy: Spike riskiest unknown (S1 spike)</li>
-                <li>R7 Chesterton: Written rationale for deviations</li>
-                <li>R8 Self-Grading: Acceptance checks written first</li>
-                <li>R9 Independent Verification: Fresh-context verifier</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="final-cta" id="cta">
-        <div className="cta-mark" aria-hidden="true">
-          G
-        </div>
-        <div className="shell">
-          <p>Your next</p>
-          <h2>500 Test Runs</h2>
-          <p>don&apos;t have to slow you down.</p>
-          <h3>Let Guard select what matters.</h3>
-          <a className="button hero-cta-btn" href="#install">
-            <Arrow />
-            <span>Get Started with Guard</span>
-          </a>
-          <small>
-            Open Source · Built on FalkorDB · Verified on pallets/flask
-          </small>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="footer">
         <div className="shell footer-grid">
@@ -762,16 +494,18 @@ export default function App() {
           <div>
             <b>Navigation</b>
             <a href="#install">Install</a>
-            <a href="#playbooks">How it works</a>
+            <a href="#features">Features</a>
             <a href="#stories">Benchmarks</a>
-            <a href="#pricing">Architecture</a>
+            <a href="https://github.com/thisisvaishnav/guard" target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
           </div>
           <div>
             <b>Product</b>
-            <a href="#playbooks">FalkorDB Graph</a>
-            <a href="#features">Decision Engine</a>
-            <a href="#features">Coverage Ingest</a>
-            <a href="#install">Agent CLI</a>
+            <a href="#features">Graph Safety Layer</a>
+            <a href="#features">Trust Scoring</a>
+            <a href="#stories">Evaluation Report</a>
+            <a href="#install">Agent Integration</a>
           </div>
           <div>
             <b>Project</b>
