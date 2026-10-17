@@ -3,6 +3,8 @@
 > **A high-velocity, graph-native regression prevention engine built on FalkorDB.**  
 > Guard selects the exact minimal subset of tests to run after an AI coding agent modifies code, measures a multi-factor **Trust Score**, and deterministically triggers hard fallbacks to full test suites when graph confidence drops.
 
+---
+
 ## 1. Problem Statement & Motivation
 
 When AI coding agents (Claude Code, Cursor, Codex, OpenCode) modify complex codebases, running the entire test suite on every step slows iteration cycles to a crawl. Conversely, naive heuristics used by developers or agents to speed things up introduce catastrophic silent escapes:
@@ -41,47 +43,13 @@ All metrics are evaluated and reported as **Paired Metrics** (Escape Rate $\left
 
 ## 3. Architecture & System Design
 
-```
-                     +-----------------------------+
-                     |    Agent Git Diff / HEAD    |
-                     +--------------+--------------+
-                                    |
-                                    v
-                     +-----------------------------+
-                     |   AST Diff Analyzer (T5a)   |
-                     |  - Maps diff lines to funcs |
-                     |  - Checks touched files     |
-                     +--------------+--------------+
-                                    |
-                                    v
-+------------------+         +--------------+         +------------------+
-| Dynamic Coverage |         |   FalkorDB   |         | Static AST Parse |
-|  pytest-cov ctx  +-------->| Graph Engine |<--------+  ast / symtable  |
-+------------------+         +-------+------+         +------------------+
-                                     |
-                                     v
-                     +-----------------------------+
-                     |    Decision Engine (T5)     |
-                     |  - Hard Overrides Gate      |
-                     |  - Trust Score Calculation  |
-                     |  - 3-Level Policy Routing   |
-                     +--------------+--------------+
-                                    |
-                   +----------------+----------------+
-                   |                                 |
-                   v                                 v
-         [High Trust: >= 0.8]              [Low Trust / Fallback]
-         Run Selected Subset                  Run Full Suite
-                   |                                 |
-                   +----------------+----------------+
-                                    |
-                                    v
-                     +-----------------------------+
-                     |    Feedback Loop (T6)       |
-                     |  - Miss Repair Edges        |
-                     |  - Self-Healing Confidence  |
-                     +-----------------------------+
-```
+Guard operates as a deterministic, graph-native verification pipeline connecting static code structure, dynamic coverage telemetry, and autonomous agent loops:
+
+1. **AST Diff Analyzer (`guard.thin_slice`)**: Inspects unified git diffs, identifies modified lines, and resolves them to exact function boundaries while flagging test file modifications.
+2. **FalkorDB Graph Engine (`guard.db`)**: Maintains structural call/import relationships and empirical per-test coverage contexts (`COVERED_BY`) in FalkorDB for sub-millisecond Cypher graph traversals.
+3. **Decision Engine (`guard.decision`)**: Pre-emptively checks hard safety overrides (uncovered functions, dynamic dispatch, touched tests), computes the multi-factor Trust Score, and routes execution to the appropriate policy level.
+4. **Self-Healing Feedback Loop (`guard.feedback`)**: Injects high-confidence `miss_repair` edges whenever a missed failure is detected, continuously hardening the graph against future escapes.
+
 
 ### 3.1. FalkorDB Graph Schema
 
@@ -126,12 +94,6 @@ $$\text{Trust} = 0.5 \cdot \text{EvidenceRatio} + 0.3 \cdot \text{Freshness} + 0
 - **$\text{Trust} \ge 0.8$ (`subset`)**: Execute only the directly covering tests mapped via high-confidence `COVERED_BY` edges.
 - **$0.5 \le \text{Trust} < 0.8$ (`medium`)**: Execute the covering subset plus all tests associated with the modified modules.
 - **$\text{Trust} < 0.5$ (`run-all`)**: Enforce full test suite fallback.
-
-<p align="center">
-  <img src="falkordb-state-verified.png" alt="High Trust Verified Execution" width="48%" />
-  &nbsp;
-  <img src="falkordb-state-blocked.png" alt="Fallback / Blocked Execution" width="48%" />
-</p>
 
 ---
 
