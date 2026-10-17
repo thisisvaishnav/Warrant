@@ -421,3 +421,34 @@ def test_claude_settings_uninstall_only_removes_guard(temp_repo):
     
     stat = claude.status(repo_path=temp_repo, shared=False)
     assert stat["installed"] is False
+
+
+def test_cli_hook_subcommands(temp_repo, capsys):
+    """Test CLI dispatch for hook status, install, and uninstall."""
+    from guard_cli.cli import main
+
+    # Status before install
+    ret = main(["hook", "status", "--repo", str(temp_repo)])
+    assert ret == 0
+    captured = capsys.readouterr().out
+    data = json.loads(captured)
+    assert "claude" in data
+    assert "antigravity" in data
+    assert data["antigravity"]["installed"] is False
+
+    # Install antigravity hook
+    ret = main(["hook", "install", "--repo", str(temp_repo), "--antigravity"])
+    assert ret == 0
+    capsys.readouterr()
+
+    # Status after install
+    ret = main(["hook", "status", "--repo", str(temp_repo)])
+    assert ret == 0
+    captured = capsys.readouterr().out
+    data = json.loads(captured)
+    assert data["antigravity"]["installed"] is True
+
+    # Uninstall antigravity hook
+    ret = main(["hook", "uninstall", "--repo", str(temp_repo), "--antigravity"])
+    assert ret == 0
+

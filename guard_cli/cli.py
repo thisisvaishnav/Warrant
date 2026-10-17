@@ -287,16 +287,19 @@ def main(argv=None) -> int:
     hk_inst.add_argument("--repo", default=None, help="path to repo root")
     hk_inst.add_argument("--shared", action="store_true", help="install to settings.json instead of settings.local.json")
     hk_inst.add_argument("--antigravity", action="store_true", help="install to Antigravity .agents/hooks.json instead of Claude Code settings")
+    hk_inst.set_defaults(fn=cmd_hook_install)
 
     hk_uninst = hk_sub.add_parser("uninstall", help="Uninstall Stop hook from agent settings (Claude Code by default, Antigravity with --antigravity)")
     hk_uninst.add_argument("--repo", default=None, help="path to repo root")
     hk_uninst.add_argument("--shared", action="store_true", help="uninstall from settings.json instead of settings.local.json")
     hk_uninst.add_argument("--antigravity", action="store_true", help="uninstall from Antigravity .agents/hooks.json instead of Claude Code settings")
+    hk_uninst.set_defaults(fn=cmd_hook_uninstall)
 
     hk_stat = hk_sub.add_parser("status", help="Check hook installation status (Claude Code by default, Antigravity with --antigravity)")
     hk_stat.add_argument("--repo", default=None, help="path to repo root")
     hk_stat.add_argument("--shared", action="store_true", help="check settings.json instead of settings.local.json")
     hk_stat.add_argument("--antigravity", action="store_true", help="check Antigravity .agents/hooks.json instead of Claude Code settings")
+    hk_stat.set_defaults(fn=cmd_hook_status)
 
     fb = sub.add_parser("feedback")
     fb.add_argument("--function", required=True, help="Function ID where fault was missed")
@@ -336,6 +339,9 @@ def main(argv=None) -> int:
     cov.set_defaults(fn=cmd_covering_tests)
 
     args = p.parse_args(argv)
+    if not hasattr(args, "fn"):
+        p.print_help()
+        return 1
     return args.fn(args)
 
 
