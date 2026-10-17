@@ -1,5 +1,6 @@
 {
-  "description": "This web application offers personalized AI-driven recommendations for health and wellness, helping users achieve their fitness goals effectively.",
+  "title": "Warrant — Graph-Powered Safety Layer for AI Coding Agents",
+  "description": "After an AI agent changes code, Warrant selects the right tests to run with a measured trust score, built on FalkorDB.",
   "robots": {
     "index": false
   },

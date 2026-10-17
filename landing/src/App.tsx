@@ -45,8 +45,8 @@ export default function App() {
     <main>
       <section className="hero" id="top">
         <nav className="nav shell">
-          <a className="brand" href="#top" aria-label="Gojiberry home">
-            <img src="/assets/gojiberry-logo.png" alt="gojiberry" />
+          <a className="brand" href="#top" aria-label="Warrant home">
+            warrant
           </a>
           <button
             className="menu-button"
@@ -307,7 +307,7 @@ export default function App() {
           <div className="stack-visual">
             <div className="tool-ring">
               {['AST Call Graph', 'Per-Test Coverage', 'FalkorDB Engine', 'Agent Integration'].map((item) => <span key={item}>{item}</span>)}
-              <img src="/assets/warrant-logo.svg" alt="Warrant" />
+              <span className="tool-ring-brand">warrant</span>
             </div>
           </div>
         </div>
@@ -399,7 +399,9 @@ export default function App() {
       <footer className="footer">
         <div className="shell footer-grid">
           <div className="footer-brand">
-            <img src="/assets/warrant-logo.svg" alt="Warrant" />
+            <a className="brand" href="#top" aria-label="Warrant home">
+              warrant
+            </a>
             <p>Graph-powered safety layer for AI coding agents.</p>
           </div>
           <div><b>Sections</b><a href="#features">Solution</a><a href="#pricing">Architecture</a><a href="#features">Features</a><a href="#stories">Benchmarks</a></div>

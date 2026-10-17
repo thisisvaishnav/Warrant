@@ -21,7 +21,28 @@ button, input { font: inherit; }
 .hero { min-height: 930px; position: relative; overflow: hidden; background: #fff url('/assets/hero-glow.jpg') center top / 100% auto no-repeat; }
 .hero::after { content: ''; position: absolute; inset: 100px 0 auto; height: 480px; background: linear-gradient(180deg, transparent, rgba(255,255,255,.7) 70%, #fff); pointer-events: none; }
 .nav { height: 96px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 10; }
-.brand img { width: 122px; display: block; }
+.brand {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  transition: opacity .2s;
+}
+.brand:hover { opacity: .85; }
+.footer-brand .brand { color: #ffffff; font-size: 28px; display: inline-block; margin-bottom: 18px; }
+.tool-ring-brand {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  color: var(--ink);
+  z-index: 2;
+}
 .nav-links { display: flex; align-items: center; gap: 38px; margin-left: 90px; }
 .nav-links a { color: #49413d; font-size: 13px; transition: .2s; }
 .nav-links a:hover { color: var(--coral); }
@@ -148,7 +169,7 @@ h2.light span { color: #676767; }
 .footer{background:#0d0e0f;color:white;padding:85px 0 22px}.footer-grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:40px}.footer-brand img{width:145px;filter:invert(1) grayscale(1) brightness(5)}.footer-brand p{color:#777;margin-top:18px}.footer-grid>div:not(:first-child){display:flex;flex-direction:column;gap:14px}.footer-grid b{font:10px 'DM Mono';color:#777;margin-bottom:12px}.footer-grid a{font-size:12px;color:#bbb}.footer-grid a:hover{color:var(--coral)}.footer-bottom{border-top:1px solid #292929;margin-top:70px;padding-top:22px;display:flex;justify-content:space-between;color:#666;font:9px 'DM Mono'}
 
 @media (max-width: 900px) {
-  .shell{width:min(100% - 36px, 720px)}.nav{height:74px}.nav-links,.nav-actions{display:none}.menu-button{display:flex;border:0;background:transparent;flex-direction:column;gap:6px;padding:10px}.menu-button span{width:25px;height:1px;background:#111}.nav-links.open{display:flex;position:absolute;top:70px;left:-18px;right:-18px;margin:0;padding:25px;flex-direction:column;align-items:flex-start;background:white;box-shadow:0 20px 30px rgba(0,0,0,.1)}
+  .shell{width:min(100% - 36px, 720px)}.nav{height:74px}.brand{font-size:24px}.nav-links,.nav-actions{display:none}.menu-button{display:flex;border:0;background:transparent;flex-direction:column;gap:6px;padding:10px}.menu-button span{width:25px;height:1px;background:#111}.nav-links.open{display:flex;position:absolute;top:70px;left:-18px;right:-18px;margin:0;padding:25px;flex-direction:column;align-items:flex-start;background:white;box-shadow:0 20px 30px rgba(0,0,0,.1)}
   .hero{min-height:820px;background-size:auto 350px}.hero-content{padding-top:70px}.hero-lines{left:5%;right:5%;height:540px}h1{letter-spacing:-3px}.hero-content>p{font-size:15px}.hero-foot{grid-template-columns:1fr 1fr}.hero-foot>span{display:none}
   .logo-row{overflow:hidden;justify-content:flex-start}.logo-row img{flex:0 0 90px}
   .agent-section,.capabilities,.stories,.setup-section,.stack-section,.pricing{padding:85px 0}h2{letter-spacing:-3px}.agent-grid,.cap-grid,.price-grid{grid-template-columns:1fr}.agent-card.wide{grid-column:auto}.agent-card.wide{display:block}.card-copy{width:100%}.signal-art{position:absolute;right:10px;bottom:10px;width:45%;opacity:.7}.agent-card{min-height:430px;padding:28px}.agent-card.wide{min-height:570px}.prospect-stack,.message-card{left:28px;right:28px}
@@ -158,7 +179,7 @@ h2.light span { color: #676767; }
 }
 
 @media (max-width: 560px) {
-  .shell{width:calc(100% - 28px)}.brand img{width:110px}.hero{min-height:760px}.hero-content{padding-top:54px}.yc-badge{font-size:9px}h1{font-size:44px;letter-spacing:-2.5px}.url-form{height:auto;flex-direction:column;background:transparent;border:0;gap:8px;box-shadow:none}.url-form input,.url-form button{height:50px;background:white;border:1px solid #ddd}.url-form button{background:#111}.hero-foot{margin-top:55px;grid-template-columns:1fr}.avatars{display:none}
+  .shell{width:calc(100% - 28px)}.brand{font-size:22px}.tool-ring-brand{font-size:20px}.hero{min-height:760px}.hero-content{padding-top:54px}.yc-badge{font-size:9px}h1{font-size:44px;letter-spacing:-2.5px}.url-form{height:auto;flex-direction:column;background:transparent;border:0;gap:8px;box-shadow:none}.url-form input,.url-form button{height:50px;background:white;border:1px solid #ddd}.url-form button{background:#111}.hero-foot{margin-top:55px;grid-template-columns:1fr}.avatars{display:none}
   h2{font-size:44px;letter-spacing:-2.5px}.section-lead{margin-bottom:42px}.agent-card h3,.cap-card h3{font-size:30px}.agent-card.wide{min-height:620px}.signal-art{width:70%;right:-60px}.pills{gap:5px}.pills span{font-size:8px}
   .metrics{grid-template-columns:1fr;margin:45px 0}.metrics div{border-right:0;border-bottom:1px solid #333}.metrics div:last-child{border:0}.stack-visual{min-height:360px}.tool-ring{width:260px;height:260px}.tool-ring span{font-size:8px;padding:8px}.tool-ring span:nth-child(2){right:-10px}.tool-ring span:nth-child(4){left:-10px}.tool-ring img{width:120px}
   .final-cta h2{font-size:75px;letter-spacing:-5px}.final-cta h3{font-size:29px}.footer-grid{grid-template-columns:1fr}.footer-brand{grid-column:auto}.footer-bottom{flex-direction:column;gap:10px}
