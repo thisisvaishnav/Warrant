@@ -17,3 +17,5 @@ graphify-out/.graphify_semantic_marker
 dist/
 build/
 uv.lock
+.agents/
+.claude/

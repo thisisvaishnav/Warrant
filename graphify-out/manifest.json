@@ -929,12 +929,6 @@
     "ast_hash": "5e0bd1c281a62a380d7a948085bfe2d1",
     "semantic_hash": ""
   },
-  ".agents/hooks.json": {
-    "mtime": 1792265288.5491865,
-    "seen": 1792266004.53949,
-    "ast_hash": "f8164486127e40da8b0067806a4bc0fc",
-    "semantic_hash": ""
-  },
   "tests/fixtures/agy_stop_payload.json": {
     "mtime": 1792265759.3960855,
     "seen": 1792266004.539562,
