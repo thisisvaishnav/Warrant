@@ -141,8 +141,8 @@ export default function App() {
               rel="noopener noreferrer"
               aria-label="View Guard repository on GitHub"
             >
-              <GithubIcon size={15} aria-hidden="true" />
-              <span>View on GitHub</span>
+              <GithubIcon size={14} aria-hidden="true" />
+              <span>GitHub</span>
             </a>
           </div>
         </nav>
