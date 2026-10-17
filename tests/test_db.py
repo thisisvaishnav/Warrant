@@ -6,12 +6,21 @@ from guard.ingest.static import StaticResult, FuncDef
 @pytest.fixture
 def test_graph():
     """Provides a fresh test graph in FalkorDB."""
-    g = db.get_graph("guard_test")
-    db.reset_graph(g)
-    g = db.get_graph("guard_test")
-    db.ensure_schema(g)
+    backend = db.get_backend()
+    if not backend.is_healthy():
+        pytest.skip("FalkorDB server is not reachable")
+    try:
+        g = db.get_graph("guard_test", backend=backend)
+        db.reset_graph(g)
+        g = db.get_graph("guard_test", backend=backend)
+        db.ensure_schema(g)
+    except Exception as exc:
+        pytest.skip(f"FalkorDB server error: {exc}")
     yield g
-    db.reset_graph(g)
+    try:
+        db.reset_graph(g)
+    except Exception:
+        pass
 
 
 def test_ensure_schema_creates_indexes(test_graph):

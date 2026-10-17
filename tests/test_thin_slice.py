@@ -52,12 +52,21 @@ def test_thin_slice_decision_fallback_on_test_files_touched():
 
 @pytest.fixture
 def slice_test_graph():
-    g = db.get_graph("guard_slice_test")
-    db.reset_graph(g)
-    g = db.get_graph("guard_slice_test")
-    db.ensure_schema(g)
+    backend = db.get_backend()
+    if not backend.is_healthy():
+        pytest.skip("FalkorDB server is not reachable")
+    try:
+        g = db.get_graph("guard_slice_test", backend=backend)
+        db.reset_graph(g)
+        g = db.get_graph("guard_slice_test", backend=backend)
+        db.ensure_schema(g)
+    except Exception as exc:
+        pytest.skip(f"FalkorDB server error: {exc}")
     yield g
-    db.reset_graph(g)
+    try:
+        db.reset_graph(g)
+    except Exception:
+        pass
 
 
 def test_thin_slice_selects_covering_tests(slice_test_graph):
