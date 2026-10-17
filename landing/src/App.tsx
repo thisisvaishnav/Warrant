@@ -75,12 +75,15 @@ export default function App() {
             </a>
           </div>
           <div className="nav-actions">
-            <a className="login" href="#pricing">
-              GitHub
-            </a>
-            <a className="button nav-cta" href="#cta">
+            <a
+              className="button nav-cta"
+              href="https://github.com/thisisvaishnav/guard"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub repository"
+            >
               <Arrow />
-              <span>Quickstart</span>
+              <span>GitHub</span>
             </a>
           </div>
         </nav>

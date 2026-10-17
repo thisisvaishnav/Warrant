@@ -17,7 +17,7 @@
   "15": "App.tsx",
   "16": "Verification Reports README",
   "17": "SafetyGate",
-  "18": "verify_t9.py",
+  "18": "test_thin_slice.py",
   "19": "FalkorDB Safety Layer",
   "20": "scripts",
   "21": "FalkorDB Graph Matrix",
@@ -56,5 +56,6 @@
   "54": "Warrant Logo",
   "55": "vite-env.d.ts",
   "56": "guard",
-  "57": "VERIFIER.md"
+  "57": "VERIFIER.md",
+  "58": "vercel.json"
 }

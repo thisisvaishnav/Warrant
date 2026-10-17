@@ -118,32 +118,6 @@
       "source_location": "L150"
     },
     {
-      "id": "guard_thin_slice_changedfunction",
-      "label": "ChangedFunction",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "changedfunction",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L19"
-    },
-    {
-      "id": "guard_thin_slice_checkresult",
-      "label": "CheckResult",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "checkresult",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L31"
-    },
-    {
       "id": "guard_decision_change",
       "label": "Change",
       "_callable": true,
@@ -220,6 +194,32 @@
       "norm_label": "reason",
       "source_file": "guard/decision.py",
       "source_location": "L124"
+    },
+    {
+      "id": "guard_thin_slice_changedfunction",
+      "label": "ChangedFunction",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "changedfunction",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L19"
+    },
+    {
+      "id": "guard_thin_slice_checkresult",
+      "label": "CheckResult",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "checkresult",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L31"
     },
     {
       "id": "landing_vite_config_figmasiteconfiguration",
@@ -406,6 +406,18 @@
       "source_location": "L14"
     },
     {
+      "id": "guard_ingest_static_is_test_function",
+      "label": "is_test_function()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "db.py",
+      "file_type": "code",
+      "norm_label": "is_test_function()",
+      "source_file": "guard/ingest/static.py",
+      "source_location": "L38"
+    },
+    {
       "id": "guard_ingest_static_staticresult_call_rows",
       "label": ".call_rows()",
       "_callable": true,
@@ -430,6 +442,18 @@
       "source_location": "L159"
     },
     {
+      "id": "guard_ingest_static_staticresult_function_rows",
+      "label": ".function_rows()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "db.py",
+      "file_type": "code",
+      "norm_label": ".function_rows()",
+      "source_file": "guard/ingest/static.py",
+      "source_location": "L162"
+    },
+    {
       "id": "guard_ingest_static_staticresult_import_rows",
       "label": ".import_rows()",
       "_callable": true,
@@ -442,64 +466,28 @@
       "source_location": "L181"
     },
     {
-      "id": "guard_thin_slice_checkresult_to_dict",
-      "label": ".to_dict()",
+      "id": "guard_ingest_static_staticresult_summary",
+      "label": ".summary()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
       "community_name": "db.py",
       "file_type": "code",
-      "norm_label": ".to_dict()",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L39"
+      "norm_label": ".summary()",
+      "source_file": "guard/ingest/static.py",
+      "source_location": "L184"
     },
     {
-      "id": "guard_thin_slice_guard_check",
-      "label": "guard_check()",
+      "id": "guard_ingest_static_staticresult_test_rows",
+      "label": ".test_rows()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
       "community_name": "db.py",
       "file_type": "code",
-      "norm_label": "guard_check()",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L227"
-    },
-    {
-      "id": "guard_thin_slice_parse_unified_diff",
-      "label": "parse_unified_diff()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "parse_unified_diff()",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L51"
-    },
-    {
-      "id": "guard_thin_slice_resolve_changed_functions",
-      "label": "resolve_changed_functions()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "resolve_changed_functions()",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L97"
-    },
-    {
-      "id": "guard_thin_slice_thin_slice_decision",
-      "label": "thin_slice_decision()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "thin_slice_decision()",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L133"
+      "norm_label": ".test_rows()",
+      "source_file": "guard/ingest/static.py",
+      "source_location": "L170"
     },
     {
       "id": "tests_test_db_test_ensure_schema_creates_indexes",
@@ -584,54 +572,6 @@
       "norm_label": "test_record_miss_elevates_existing_confidence()",
       "source_file": "tests/test_feedback.py",
       "source_location": "L53"
-    },
-    {
-      "id": "tests_test_thin_slice_test_parse_unified_diff",
-      "label": "test_parse_unified_diff()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "test_parse_unified_diff()",
-      "source_file": "tests/test_thin_slice.py",
-      "source_location": "L26"
-    },
-    {
-      "id": "tests_test_thin_slice_test_thin_slice_decision_fallback_on_no_evidence",
-      "label": "test_thin_slice_decision_fallback_on_no_evidence()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "test_thin_slice_decision_fallback_on_no_evidence()",
-      "source_file": "tests/test_thin_slice.py",
-      "source_location": "L33"
-    },
-    {
-      "id": "tests_test_thin_slice_test_thin_slice_decision_fallback_on_test_files_touched",
-      "label": "test_thin_slice_decision_fallback_on_test_files_touched()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "test_thin_slice_decision_fallback_on_test_files_touched()",
-      "source_file": "tests/test_thin_slice.py",
-      "source_location": "L43"
-    },
-    {
-      "id": "tests_test_thin_slice_test_thin_slice_selects_covering_tests",
-      "label": "test_thin_slice_selects_covering_tests()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "test_thin_slice_selects_covering_tests()",
-      "source_file": "tests/test_thin_slice.py",
-      "source_location": "L63"
     },
     {
       "id": "guard_decision_change_module_tests_for",
@@ -1090,52 +1030,160 @@
       "source_location": "L9"
     },
     {
-      "id": "tests_verify_t9_check_demo_execution",
-      "label": "check_demo_execution()",
+      "id": "guard_agent_integration_apply_patch",
+      "label": "apply_patch()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "verify_t9.py",
+      "community_name": "test_thin_slice.py",
       "file_type": "code",
-      "norm_label": "check_demo_execution()",
-      "source_file": "tests/verify_t9.py",
+      "norm_label": "apply_patch()",
+      "source_file": "guard/agent_integration.py",
       "source_location": "L22"
     },
     {
-      "id": "tests_verify_t9_check_readme_content",
-      "label": "check_readme_content()",
+      "id": "guard_agent_integration_count_collected_tests",
+      "label": "count_collected_tests()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "verify_t9.py",
+      "community_name": "test_thin_slice.py",
       "file_type": "code",
-      "norm_label": "check_readme_content()",
-      "source_file": "tests/verify_t9.py",
+      "norm_label": "count_collected_tests()",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L37"
+    },
+    {
+      "id": "guard_agent_integration_reset_repo",
+      "label": "reset_repo()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "reset_repo()",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L31"
+    },
+    {
+      "id": "guard_agent_integration_run_agent_guard",
+      "label": "run_agent_guard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "run_agent_guard()",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L51"
+    },
+    {
+      "id": "guard_thin_slice_checkresult_to_dict",
+      "label": ".to_dict()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": ".to_dict()",
+      "source_file": "guard/thin_slice.py",
       "source_location": "L39"
     },
     {
-      "id": "tests_verify_t9_check_report",
-      "label": "check_report()",
+      "id": "guard_thin_slice_guard_check",
+      "label": "guard_check()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "verify_t9.py",
+      "community_name": "test_thin_slice.py",
       "file_type": "code",
-      "norm_label": "check_report()",
-      "source_file": "tests/verify_t9.py",
-      "source_location": "L59"
+      "norm_label": "guard_check()",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L227"
     },
     {
-      "id": "tests_verify_t9_main",
-      "label": "main()",
+      "id": "guard_thin_slice_parse_unified_diff",
+      "label": "parse_unified_diff()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "verify_t9.py",
+      "community_name": "test_thin_slice.py",
       "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "tests/verify_t9.py",
-      "source_location": "L67"
+      "norm_label": "parse_unified_diff()",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L51"
+    },
+    {
+      "id": "guard_thin_slice_resolve_changed_functions",
+      "label": "resolve_changed_functions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "resolve_changed_functions()",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L97"
+    },
+    {
+      "id": "guard_thin_slice_thin_slice_decision",
+      "label": "thin_slice_decision()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "thin_slice_decision()",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L133"
+    },
+    {
+      "id": "tests_test_thin_slice_test_parse_unified_diff",
+      "label": "test_parse_unified_diff()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "test_parse_unified_diff()",
+      "source_file": "tests/test_thin_slice.py",
+      "source_location": "L26"
+    },
+    {
+      "id": "tests_test_thin_slice_test_thin_slice_decision_fallback_on_no_evidence",
+      "label": "test_thin_slice_decision_fallback_on_no_evidence()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "test_thin_slice_decision_fallback_on_no_evidence()",
+      "source_file": "tests/test_thin_slice.py",
+      "source_location": "L33"
+    },
+    {
+      "id": "tests_test_thin_slice_test_thin_slice_decision_fallback_on_test_files_touched",
+      "label": "test_thin_slice_decision_fallback_on_test_files_touched()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "test_thin_slice_decision_fallback_on_test_files_touched()",
+      "source_file": "tests/test_thin_slice.py",
+      "source_location": "L43"
+    },
+    {
+      "id": "tests_test_thin_slice_test_thin_slice_selects_covering_tests",
+      "label": "test_thin_slice_selects_covering_tests()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "test_thin_slice_selects_covering_tests()",
+      "source_file": "tests/test_thin_slice.py",
+      "source_location": "L63"
     },
     {
       "id": "evals_harness_apply_mutant",
@@ -1234,6 +1282,54 @@
       "source_location": "L42"
     },
     {
+      "id": "evals_mutator_find_mutation_candidates",
+      "label": "find_mutation_candidates()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "find_mutation_candidates()",
+      "source_file": "evals/mutator.py",
+      "source_location": "L17"
+    },
+    {
+      "id": "evals_mutator_generate_diff",
+      "label": "generate_diff()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "generate_diff()",
+      "source_file": "evals/mutator.py",
+      "source_location": "L54"
+    },
+    {
+      "id": "evals_mutator_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "evals/mutator.py",
+      "source_location": "L99"
+    },
+    {
+      "id": "evals_mutator_select_diverse_mutants",
+      "label": "select_diverse_mutants()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "select_diverse_mutants()",
+      "source_file": "evals/mutator.py",
+      "source_location": "L81"
+    },
+    {
       "id": "evals_run_t8_eval_main",
       "label": "main()",
       "_callable": true,
@@ -1306,52 +1402,16 @@
       "source_location": "L79"
     },
     {
-      "id": "guard_agent_integration_apply_patch",
-      "label": "apply_patch()",
+      "id": "tests_verify_s1_build_function_line_map",
+      "label": "build_function_line_map()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
       "community_name": "subprocess",
       "file_type": "code",
-      "norm_label": "apply_patch()",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L22"
-    },
-    {
-      "id": "guard_agent_integration_count_collected_tests",
-      "label": "count_collected_tests()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "code",
-      "norm_label": "count_collected_tests()",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L37"
-    },
-    {
-      "id": "guard_agent_integration_reset_repo",
-      "label": "reset_repo()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "code",
-      "norm_label": "reset_repo()",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L31"
-    },
-    {
-      "id": "guard_agent_integration_run_agent_guard",
-      "label": "run_agent_guard()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "code",
-      "norm_label": "run_agent_guard()",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L51"
+      "norm_label": "build_function_line_map()",
+      "source_file": "tests/verify_s1.py",
+      "source_location": "L43"
     },
     {
       "id": "tests_verify_s1_inspect_coverage_mapping",
@@ -1570,6 +1630,54 @@
       "source_location": "L102"
     },
     {
+      "id": "tests_verify_t9_check_demo_execution",
+      "label": "check_demo_execution()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "check_demo_execution()",
+      "source_file": "tests/verify_t9.py",
+      "source_location": "L22"
+    },
+    {
+      "id": "tests_verify_t9_check_readme_content",
+      "label": "check_readme_content()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "check_readme_content()",
+      "source_file": "tests/verify_t9.py",
+      "source_location": "L39"
+    },
+    {
+      "id": "tests_verify_t9_check_report",
+      "label": "check_report()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "check_report()",
+      "source_file": "tests/verify_t9.py",
+      "source_location": "L59"
+    },
+    {
+      "id": "tests_verify_t9_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "tests/verify_t9.py",
+      "source_location": "L67"
+    },
+    {
       "id": "landing_vite_config_figmasiteconfiguration_escapehtmltext",
       "label": "escapeHtmlText()",
       "_callable": true,
@@ -1604,54 +1712,6 @@
       "norm_label": "sanitizehtmlvalue()",
       "source_file": "landing/vite.config.ts",
       "source_location": "L79"
-    },
-    {
-      "id": "evals_mutator_find_mutation_candidates",
-      "label": "find_mutation_candidates()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "code",
-      "norm_label": "find_mutation_candidates()",
-      "source_file": "evals/mutator.py",
-      "source_location": "L17"
-    },
-    {
-      "id": "evals_mutator_generate_diff",
-      "label": "generate_diff()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "code",
-      "norm_label": "generate_diff()",
-      "source_file": "evals/mutator.py",
-      "source_location": "L54"
-    },
-    {
-      "id": "evals_mutator_main",
-      "label": "main()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "evals/mutator.py",
-      "source_location": "L99"
-    },
-    {
-      "id": "evals_mutator_select_diverse_mutants",
-      "label": "select_diverse_mutants()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "code",
-      "norm_label": "select_diverse_mutants()",
-      "source_file": "evals/mutator.py",
-      "source_location": "L81"
     },
     {
       "id": "guard_cli_cmd_callers",
@@ -2110,18 +2170,6 @@
       "source_location": "L26"
     },
     {
-      "id": "guard_ingest_static_is_test_function",
-      "label": "is_test_function()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "static.py",
-      "file_type": "code",
-      "norm_label": "is_test_function()",
-      "source_file": "guard/ingest/static.py",
-      "source_location": "L38"
-    },
-    {
       "id": "guard_ingest_static_module_name",
       "label": "module_name()",
       "_callable": true,
@@ -2144,42 +2192,6 @@
       "norm_label": "_resolve_module()",
       "source_file": "guard/ingest/static.py",
       "source_location": "L200"
-    },
-    {
-      "id": "guard_ingest_static_staticresult_function_rows",
-      "label": ".function_rows()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "static.py",
-      "file_type": "code",
-      "norm_label": ".function_rows()",
-      "source_file": "guard/ingest/static.py",
-      "source_location": "L162"
-    },
-    {
-      "id": "guard_ingest_static_staticresult_summary",
-      "label": ".summary()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "static.py",
-      "file_type": "code",
-      "norm_label": ".summary()",
-      "source_file": "guard/ingest/static.py",
-      "source_location": "L184"
-    },
-    {
-      "id": "guard_ingest_static_staticresult_test_rows",
-      "label": ".test_rows()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "static.py",
-      "file_type": "code",
-      "norm_label": ".test_rows()",
-      "source_file": "guard/ingest/static.py",
-      "source_location": "L170"
     },
     {
       "id": "tests_test_static_make",
@@ -2264,18 +2276,6 @@
       "norm_label": "test_test_files_excluded_by_default()",
       "source_file": "tests/test_static.py",
       "source_location": "L50"
-    },
-    {
-      "id": "tests_verify_s1_build_function_line_map",
-      "label": "build_function_line_map()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "static.py",
-      "file_type": "code",
-      "norm_label": "build_function_line_map()",
-      "source_file": "tests/verify_s1.py",
-      "source_location": "L43"
     },
     {
       "id": "build_safety_figure_at",
@@ -2657,50 +2657,6 @@
       "source_location": ""
     },
     {
-      "id": "guard_init",
-      "label": "guard/__init__.py",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "guard/__init__.py",
-      "source_file": "guard/__init__.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "guard_thin_slice",
-      "label": "thin_slice.py",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "thin_slice.py",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "guard_thin_slice_py_any",
-      "label": "Any",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "any",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "guard_thin_slice_py_path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "tests_test_db",
       "label": "test_db.py",
       "_origin": "ast",
@@ -2720,17 +2676,6 @@
       "file_type": "code",
       "norm_label": "test_feedback.py",
       "source_file": "tests/test_feedback.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_test_thin_slice",
-      "label": "test_thin_slice.py",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "code",
-      "norm_label": "test_thin_slice.py",
-      "source_file": "tests/test_thin_slice.py",
       "source_location": "L1"
     },
     {
@@ -2844,72 +2789,6 @@
       "source_location": "L20"
     },
     {
-      "id": "guard_init_rationale_1",
-      "label": "Guard: Graph-powered safety layer for AI coding agents.",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "rationale",
-      "norm_label": "guard: graph-powered safety layer for ai coding agents.",
-      "source_file": "guard/__init__.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "guard_thin_slice_rationale_1",
-      "label": "Thin slice end-to-end decision engine (Task T5a). Parses a git diff, maps\u2026",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "rationale",
-      "norm_label": "thin slice end-to-end decision engine (task t5a). parses a git diff, maps...",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "guard_thin_slice_rationale_140",
-      "label": "Decision logic: - If test files were touched or no functions matched -> run\u2026",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "rationale",
-      "norm_label": "decision logic: - if test files were touched or no functions matched -> run...",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L140"
-    },
-    {
-      "id": "guard_thin_slice_rationale_235",
-      "label": "Evaluates a diff and returns the test selection decision.",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "rationale",
-      "norm_label": "evaluates a diff and returns the test selection decision.",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L235"
-    },
-    {
-      "id": "guard_thin_slice_rationale_52",
-      "label": "Parses a unified diff into a map of {relative_file_path: set(modified_lines)}.",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "rationale",
-      "norm_label": "parses a unified diff into a map of {relative_file_path: set(modified_lines)}.",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L52"
-    },
-    {
-      "id": "guard_thin_slice_rationale_98",
-      "label": "Queries FalkorDB to find Function nodes spanning the modified lines.",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "rationale",
-      "norm_label": "queries falkordb to find function nodes spanning the modified lines.",
-      "source_file": "guard/thin_slice.py",
-      "source_location": "L98"
-    },
-    {
       "id": "tests_test_feedback_rationale_1",
       "label": "Unit tests for feedback loop and repair edge mechanism (Task T6).",
       "_origin": "ast",
@@ -2918,17 +2797,6 @@
       "file_type": "rationale",
       "norm_label": "unit tests for feedback loop and repair edge mechanism (task t6).",
       "source_file": "tests/test_feedback.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_test_thin_slice_rationale_1",
-      "label": "Unit tests for Thin Slice (Task T5a).",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "db.py",
-      "file_type": "rationale",
-      "norm_label": "unit tests for thin slice (task t5a).",
-      "source_file": "tests/test_thin_slice.py",
       "source_location": "L1"
     },
     {
@@ -3439,25 +3307,201 @@
       "source_location": "L13"
     },
     {
-      "id": "tests_verify_t9",
-      "label": "verify_t9.py",
+      "id": "guard_agent_integration",
+      "label": "agent_integration.py",
       "_origin": "ast",
       "community": 18,
-      "community_name": "verify_t9.py",
+      "community_name": "test_thin_slice.py",
       "file_type": "code",
-      "norm_label": "verify_t9.py",
-      "source_file": "tests/verify_t9.py",
+      "norm_label": "agent_integration.py",
+      "source_file": "guard/agent_integration.py",
       "source_location": "L1"
     },
     {
-      "id": "tests_verify_t9_rationale_1",
-      "label": "Automated Acceptance Verification Script for Task T9: Demo and Submission.\u2026",
+      "id": "guard_agent_integration_py_any",
+      "label": "Any",
       "_origin": "ast",
       "community": 18,
-      "community_name": "verify_t9.py",
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "any",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "guard_agent_integration_py_path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "guard_thin_slice",
+      "label": "thin_slice.py",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "thin_slice.py",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "guard_thin_slice_py_any",
+      "label": "Any",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "any",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "guard_thin_slice_py_path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "tests_test_thin_slice",
+      "label": "test_thin_slice.py",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "code",
+      "norm_label": "test_thin_slice.py",
+      "source_file": "tests/test_thin_slice.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "guard_agent_integration_rationale_1",
+      "label": "Agent integration and test execution runner (Task T7). Provides `guard run`: an\u2026",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
       "file_type": "rationale",
-      "norm_label": "automated acceptance verification script for task t9: demo and submission....",
-      "source_file": "tests/verify_t9.py",
+      "norm_label": "agent integration and test execution runner (task t7). provides `guard run`: an...",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "guard_agent_integration_rationale_23",
+      "label": "Applies patch to target repo.",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "applies patch to target repo.",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L23"
+    },
+    {
+      "id": "guard_agent_integration_rationale_32",
+      "label": "Restores target repo to clean state.",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "restores target repo to clean state.",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L32"
+    },
+    {
+      "id": "guard_agent_integration_rationale_38",
+      "label": "Counts how many test items are collected for the targets.",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "counts how many test items are collected for the targets.",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L38"
+    },
+    {
+      "id": "guard_agent_integration_rationale_56",
+      "label": "Runs Guard check and executes tests according to trust level. Returns:\u2026",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "runs guard check and executes tests according to trust level. returns:...",
+      "source_file": "guard/agent_integration.py",
+      "source_location": "L56"
+    },
+    {
+      "id": "guard_thin_slice_rationale_1",
+      "label": "Thin slice end-to-end decision engine (Task T5a). Parses a git diff, maps\u2026",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "thin slice end-to-end decision engine (task t5a). parses a git diff, maps...",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "guard_thin_slice_rationale_140",
+      "label": "Decision logic: - If test files were touched or no functions matched -> run\u2026",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "decision logic: - if test files were touched or no functions matched -> run...",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L140"
+    },
+    {
+      "id": "guard_thin_slice_rationale_235",
+      "label": "Evaluates a diff and returns the test selection decision.",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "evaluates a diff and returns the test selection decision.",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L235"
+    },
+    {
+      "id": "guard_thin_slice_rationale_52",
+      "label": "Parses a unified diff into a map of {relative_file_path: set(modified_lines)}.",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "parses a unified diff into a map of {relative_file_path: set(modified_lines)}.",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L52"
+    },
+    {
+      "id": "guard_thin_slice_rationale_98",
+      "label": "Queries FalkorDB to find Function nodes spanning the modified lines.",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "queries falkordb to find function nodes spanning the modified lines.",
+      "source_file": "guard/thin_slice.py",
+      "source_location": "L98"
+    },
+    {
+      "id": "tests_test_thin_slice_rationale_1",
+      "label": "Unit tests for Thin Slice (Task T5a).",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "file_type": "rationale",
+      "norm_label": "unit tests for thin slice (task t5a).",
+      "source_file": "tests/test_thin_slice.py",
       "source_location": "L1"
     },
     {
@@ -3483,6 +3527,17 @@
       "source_location": ""
     },
     {
+      "id": "evals_mutator",
+      "label": "mutator.py",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "mutator.py",
+      "source_file": "evals/mutator.py",
+      "source_location": "L1"
+    },
+    {
       "id": "evals_run_t8_eval",
       "label": "run_t8_eval.py",
       "_origin": "ast",
@@ -3505,39 +3560,6 @@
       "source_location": "L1"
     },
     {
-      "id": "guard_agent_integration",
-      "label": "agent_integration.py",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "code",
-      "norm_label": "agent_integration.py",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "guard_agent_integration_py_any",
-      "label": "Any",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "code",
-      "norm_label": "any",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "guard_agent_integration_py_path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "tests_verify_s1",
       "label": "verify_s1.py",
       "_origin": "ast",
@@ -3547,6 +3569,17 @@
       "norm_label": "verify_s1.py",
       "source_file": "tests/verify_s1.py",
       "source_location": "L1"
+    },
+    {
+      "id": "tests_verify_s1_py_path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "tests_verify_t0",
@@ -3590,6 +3623,17 @@
       "file_type": "code",
       "norm_label": "verify_t7.py",
       "source_file": "tests/verify_t7.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_verify_t9",
+      "label": "verify_t9.py",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "code",
+      "norm_label": "verify_t9.py",
+      "source_file": "tests/verify_t9.py",
       "source_location": "L1"
     },
     {
@@ -3659,6 +3703,39 @@
       "source_location": "L84"
     },
     {
+      "id": "evals_mutator_rationale_1",
+      "label": "Mutant generator for Flask target repo. Generates 40 semantic mutations across\u2026",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "rationale",
+      "norm_label": "mutant generator for flask target repo. generates 40 semantic mutations across...",
+      "source_file": "evals/mutator.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "evals_mutator_rationale_18",
+      "label": "Scans Flask source files to find reliable semantic mutation candidates.",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "rationale",
+      "norm_label": "scans flask source files to find reliable semantic mutation candidates.",
+      "source_file": "evals/mutator.py",
+      "source_location": "L18"
+    },
+    {
+      "id": "evals_mutator_rationale_82",
+      "label": "Picks target_count mutants distributed evenly across files.",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "rationale",
+      "norm_label": "picks target_count mutants distributed evenly across files.",
+      "source_file": "evals/mutator.py",
+      "source_location": "L82"
+    },
+    {
       "id": "evals_run_t8_eval_rationale_1",
       "label": "Runner script for Task T8: Full Evaluation on Frozen Claim. Runs all 4\u2026",
       "_origin": "ast",
@@ -3670,61 +3747,6 @@
       "source_location": "L1"
     },
     {
-      "id": "guard_agent_integration_rationale_1",
-      "label": "Agent integration and test execution runner (Task T7). Provides `guard run`: an\u2026",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "rationale",
-      "norm_label": "agent integration and test execution runner (task t7). provides `guard run`: an...",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "guard_agent_integration_rationale_23",
-      "label": "Applies patch to target repo.",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "rationale",
-      "norm_label": "applies patch to target repo.",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L23"
-    },
-    {
-      "id": "guard_agent_integration_rationale_32",
-      "label": "Restores target repo to clean state.",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "rationale",
-      "norm_label": "restores target repo to clean state.",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L32"
-    },
-    {
-      "id": "guard_agent_integration_rationale_38",
-      "label": "Counts how many test items are collected for the targets.",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "rationale",
-      "norm_label": "counts how many test items are collected for the targets.",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L38"
-    },
-    {
-      "id": "guard_agent_integration_rationale_56",
-      "label": "Runs Guard check and executes tests according to trust level. Returns:\u2026",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "subprocess",
-      "file_type": "rationale",
-      "norm_label": "runs guard check and executes tests according to trust level. returns:...",
-      "source_file": "guard/agent_integration.py",
-      "source_location": "L56"
-    },
-    {
       "id": "tests_verify_s1_rationale_1",
       "label": "Automated Spike Verification for S1: Per-Test Coverage on Target Repo.\u2026",
       "_origin": "ast",
@@ -3734,6 +3756,17 @@
       "norm_label": "automated spike verification for s1: per-test coverage on target repo....",
       "source_file": "tests/verify_s1.py",
       "source_location": "L1"
+    },
+    {
+      "id": "tests_verify_s1_rationale_44",
+      "label": "Maps (file_path, line_number) -> function_qualname using AST.",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "rationale",
+      "norm_label": "maps (file_path, line_number) -> function_qualname using ast.",
+      "source_file": "tests/verify_s1.py",
+      "source_location": "L44"
     },
     {
       "id": "tests_verify_t0_rationale_1",
@@ -3777,6 +3810,17 @@
       "file_type": "rationale",
       "norm_label": "automated acceptance verification script for task t7: agent integration....",
       "source_file": "tests/verify_t7.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_verify_t9_rationale_1",
+      "label": "Automated Acceptance Verification Script for Task T9: Demo and Submission.\u2026",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "subprocess",
+      "file_type": "rationale",
+      "norm_label": "automated acceptance verification script for task t9: demo and submission....",
+      "source_file": "tests/verify_t9.py",
       "source_location": "L1"
     },
     {
@@ -4262,17 +4306,6 @@
       "source_location": "L1"
     },
     {
-      "id": "evals_mutator",
-      "label": "mutator.py",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "code",
-      "norm_label": "mutator.py",
-      "source_file": "evals/mutator.py",
-      "source_location": "L1"
-    },
-    {
       "id": "guard_cli",
       "label": "cli.py",
       "_origin": "ast",
@@ -4359,39 +4392,6 @@
       "norm_label": "verify_t8.py",
       "source_file": "tests/verify_t8.py",
       "source_location": "L1"
-    },
-    {
-      "id": "evals_mutator_rationale_1",
-      "label": "Mutant generator for Flask target repo. Generates 40 semantic mutations across\u2026",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "rationale",
-      "norm_label": "mutant generator for flask target repo. generates 40 semantic mutations across...",
-      "source_file": "evals/mutator.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "evals_mutator_rationale_18",
-      "label": "Scans Flask source files to find reliable semantic mutation candidates.",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "rationale",
-      "norm_label": "scans flask source files to find reliable semantic mutation candidates.",
-      "source_file": "evals/mutator.py",
-      "source_location": "L18"
-    },
-    {
-      "id": "evals_mutator_rationale_82",
-      "label": "Picks target_count mutants distributed evenly across files.",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "json",
-      "file_type": "rationale",
-      "norm_label": "picks target_count mutants distributed evenly across files.",
-      "source_file": "evals/mutator.py",
-      "source_location": "L82"
     },
     {
       "id": "guard_cli_rationale_1",
@@ -4537,17 +4537,6 @@
       "source_location": "L1"
     },
     {
-      "id": "tests_verify_s1_py_path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "static.py",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "guard_ingest_static_rationale_1",
       "label": "Static ingestion: parse a Python repo into functions, calls, and imports.\u2026",
       "_origin": "ast",
@@ -4557,17 +4546,6 @@
       "norm_label": "static ingestion: parse a python repo into functions, calls, and imports....",
       "source_file": "guard/ingest/static.py",
       "source_location": "L1"
-    },
-    {
-      "id": "tests_verify_s1_rationale_44",
-      "label": "Maps (file_path, line_number) -> function_qualname using AST.",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "static.py",
-      "file_type": "rationale",
-      "norm_label": "maps (file_path, line_number) -> function_qualname using ast.",
-      "source_file": "tests/verify_s1.py",
-      "source_location": "L44"
     },
     {
       "id": "landing_src_vite_env_d",
@@ -4605,6 +4583,28 @@
       "norm_label": "verifier.md",
       "source_file": "VERIFIER.md",
       "source_location": "L1"
+    },
+    {
+      "id": "landing_vercel",
+      "label": "vercel.json",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "vercel.json",
+      "file_type": "code",
+      "norm_label": "vercel.json",
+      "source_file": "landing/vercel.json",
+      "source_location": "L1"
+    },
+    {
+      "id": "landing_vercel_rewrites",
+      "label": "rewrites",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "vercel.json",
+      "file_type": "code",
+      "norm_label": "rewrites",
+      "source_file": "landing/vercel.json",
+      "source_location": "L2"
     },
     {
       "id": "build_safety_figure",
@@ -4794,6 +4794,17 @@
       "source_location": ""
     },
     {
+      "id": "guard_init",
+      "label": "guard/__init__.py",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "coverage.py",
+      "file_type": "code",
+      "norm_label": "guard/__init__.py",
+      "source_file": "guard/__init__.py",
+      "source_location": "L1"
+    },
+    {
       "id": "tests_test_coverage",
       "label": "test_coverage.py",
       "_origin": "ast",
@@ -4880,6 +4891,17 @@
       "norm_label": "runs the target repo test suite once, producing a junit xml report and optional...",
       "source_file": "guard/ingest/coverage.py",
       "source_location": "L76"
+    },
+    {
+      "id": "guard_init_rationale_1",
+      "label": "Guard: Graph-powered safety layer for AI coding agents.",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "coverage.py",
+      "file_type": "rationale",
+      "norm_label": "guard: graph-powered safety layer for ai coding agents.",
+      "source_file": "guard/__init__.py",
+      "source_location": "L1"
     },
     {
       "id": "tests_test_coverage_rationale_1",
@@ -5844,17 +5866,6 @@
       "type": "external"
     },
     {
-      "id": "re",
-      "label": "re",
-      "community": 0,
-      "community_name": "db.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "re",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "typing",
       "label": "typing",
       "community": 0,
@@ -5899,6 +5910,28 @@
       "type": "external"
     },
     {
+      "id": "pathlib",
+      "label": "pathlib",
+      "community": 18,
+      "community_name": "test_thin_slice.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "pathlib",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "hashlib",
+      "label": "hashlib",
+      "community": 2,
+      "community_name": "subprocess",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "hashlib",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "os",
       "label": "os",
       "community": 2,
@@ -5910,13 +5943,13 @@
       "type": "external"
     },
     {
-      "id": "pathlib",
-      "label": "pathlib",
+      "id": "re",
+      "label": "re",
       "community": 2,
       "community_name": "subprocess",
       "external": true,
       "file_type": "concept",
-      "norm_label": "pathlib",
+      "norm_label": "re",
       "source_file": "",
       "type": "external"
     },
@@ -5983,17 +6016,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "argparse",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "hashlib",
-      "label": "hashlib",
-      "community": 4,
-      "community_name": "json",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "hashlib",
       "source_file": "",
       "type": "external"
     },
@@ -8111,7 +8133,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L138",
+      "source_location": "L141",
       "weight": 1.0
     },
     {
@@ -8123,7 +8145,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L161",
+      "source_location": "L164",
       "weight": 1.0
     },
     {
@@ -8135,7 +8157,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L169",
+      "source_location": "L172",
       "weight": 1.0
     },
     {
@@ -8147,7 +8169,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L82",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -15369,6 +15391,17 @@
       "weight": 1.0
     },
     {
+      "source": "landing_vercel",
+      "target": "landing_vercel_rewrites",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "landing/vercel.json",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
       "source": "landing_vite_config",
       "target": "landing_vite_config_figmaerroroverlayreplay",
       "relation": "contains",
@@ -17899,5 +17932,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "1ac56047a7946b2d43c17b7bb9b6413253691d60"
+  "built_at_commit": "8adf3180f2673b9bbedceb8caa305d5348121355"
 }

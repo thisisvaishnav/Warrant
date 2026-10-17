@@ -1,17 +1,17 @@
 # Graph Report - guard  (2026-10-17)
 
 ## Corpus Check
-- 70 files · ~114,349 words
+- 71 files · ~114,361 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 52 file(s) not represented in the graph (top: .diff 40, (none) 5, .patch 4)
 
 ## Summary
-- 512 nodes · 1014 edges · 58 communities (22 shown, 36 thin omitted)
+- 514 nodes · 1015 edges · 59 communities (22 shown, 37 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.86)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1ac56047`
+- Built from commit: `8adf3180`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,7 +33,7 @@
 - App.tsx
 - Verification Reports README
 - SafetyGate
-- verify_t9.py
+- test_thin_slice.py
 - FalkorDB Safety Layer
 - scripts
 - FalkorDB Graph Matrix
@@ -58,6 +58,7 @@
 - Louis Portrait
 - Warrant Logo
 - guard
+- vercel.json
 
 ## God Nodes (most connected - your core abstractions)
 1. `decide()` - 23 edges
@@ -94,38 +95,38 @@
 - **Guard Verification Pipeline** — reports_verify_t4, reports_verify_t5, reports_verify_t5a, reports_verify_t6, reports_verify_t7, reports_verify_t8 [EXTRACTED 1.00]
 - **Trust Score Calculation Components** — deviations_t5_metric, plan_t5, readme_concept [INFERRED 0.80]
 
-## Communities (58 total, 36 thin omitted)
+## Communities (59 total, 37 thin omitted)
 
 ### Community 0 - "db.py"
-Cohesion: 0.07
-Nodes (30): main(), run_capability_evals(), run_regression_evals(), _batches(), get_callers(), get_covering_tests(), get_schema_counts(), write_coverage() (+22 more)
+Cohesion: 0.09
+Nodes (21): main(), run_capability_evals(), run_regression_evals(), _batches(), get_callers(), get_covering_tests(), get_schema_counts(), write_coverage() (+13 more)
 
 ### Community 1 - "decide"
 Cohesion: 0.09
 Nodes (28): Change, compute_trust(), CoveringTest, decide(), Decision, EvidenceEdge, _fresh(), FunctionEvidence (+20 more)
 
 ### Community 2 - "subprocess"
-Cohesion: 0.07
-Nodes (31): apply_mutant(), evaluate_diff(), evaluate_mutant(), main(), reset_repo(), resolve_strategy_tests(), run_evaluation(), run_pytest() (+23 more)
+Cohesion: 0.06
+Nodes (36): apply_mutant(), evaluate_diff(), evaluate_mutant(), main(), reset_repo(), resolve_strategy_tests(), run_evaluation(), run_pytest() (+28 more)
 
 ### Community 3 - "figma-make-app"
 Cohesion: 0.33
 Nodes (5): Dependencies, Development Server, figma-make-app, Project Structure, Styling
 
 ### Community 4 - "json"
-Cohesion: 0.08
-Nodes (32): find_mutation_candidates(), generate_diff(), main(), select_diverse_mutants(), cmd_callers(), cmd_check(), cmd_covering_tests(), cmd_feedback() (+24 more)
+Cohesion: 0.10
+Nodes (28): cmd_callers(), cmd_check(), cmd_covering_tests(), cmd_feedback(), cmd_ingest_coverage(), cmd_ingest_static(), cmd_run(), cmd_stats() (+20 more)
 
 ### Community 5 - "static.py"
-Cohesion: 0.07
-Nodes (15): analyze_repo(), _Collector, _decorator_name(), is_test_file(), is_test_function(), module_name(), _resolve_module(), make() (+7 more)
+Cohesion: 0.09
+Nodes (13): analyze_repo(), _Collector, _decorator_name(), is_test_file(), module_name(), _resolve_module(), make(), test_custom_decorator_flags_dynamic() (+5 more)
 
 ### Community 6 - "build_safety_figure.mjs"
 Cohesion: 0.13
 Nodes (25): at(), body, byDepth(), CARRIAGE, D(), DIAL, L(), MATRIX (+17 more)
 
 ### Community 7 - "coverage.py"
-Cohesion: 0.15
+Cohesion: 0.13
 Nodes (11): compute_flakiness(), CoverageResult, ingest_coverage(), normalize_test_id(), read_coverage_contexts(), run_pytest_once(), RunResult, _write_to_falkordb() (+3 more)
 
 ### Community 8 - "verify_t3.py"
@@ -164,9 +165,9 @@ Nodes (8): FalkorDB Logo, Verification Reports README, Task T4 Verification Repo
 Cohesion: 0.33
 Nodes (6): Anatomy Drafting Stylus, Cypher Evaluation Gantry, FalkorDB Engine, Policy, SafetyGate, Trip Latch
 
-### Community 18 - "verify_t9.py"
-Cohesion: 0.53
-Nodes (4): check_demo_execution(), check_readme_content(), check_report(), main()
+### Community 18 - "test_thin_slice.py"
+Cohesion: 0.11
+Nodes (14): apply_patch(), count_collected_tests(), reset_repo(), run_agent_guard(), ChangedFunction, CheckResult, guard_check(), parse_unified_diff() (+6 more)
 
 ### Community 19 - "FalkorDB Safety Layer"
 Cohesion: 0.40
@@ -185,24 +186,24 @@ Cohesion: 0.67
 Nodes (3): dependencies, react, react-dom
 
 ## Knowledge Gaps
-- **97 isolated node(s):** `PLATE`, `MATRIX`, `NODES`, `CARRIAGE`, `POST` (+92 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 230 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **36 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **98 isolated node(s):** `PLATE`, `MATRIX`, `NODES`, `CARRIAGE`, `POST` (+93 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 232 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **37 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `StaticResult` connect `db.py` to `static.py`, `coverage.py`?**
+- **Why does `StaticResult` connect `db.py` to `test_thin_slice.py`, `static.py`, `coverage.py`?**
   _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **What connects `PLATE`, `MATRIX`, `NODES` to the rest of the system?**
-  _97 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _98 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `db.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.06965174129353234 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09343200740055504 - nodes in this community are weakly interconnected._
 - **Should `decide` be split into smaller, more focused modules?**
   _Cohesion score 0.09490196078431372 - nodes in this community are weakly interconnected._
 - **Should `subprocess` be split into smaller, more focused modules?**
-  _Cohesion score 0.06533646322378717 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.055944055944055944 - nodes in this community are weakly interconnected._
 - **Should `json` be split into smaller, more focused modules?**
-  _Cohesion score 0.07541478129713423 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
 - **Should `static.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.07396870554765292 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09462365591397849 - nodes in this community are weakly interconnected._

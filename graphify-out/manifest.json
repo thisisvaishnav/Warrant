@@ -192,9 +192,9 @@
     "semantic_hash": "6a75f3785307085242c90f51b1d2bf1c"
   },
   "landing/src/App.tsx": {
-    "mtime": 1792240543.748042,
-    "seen": 1792240559.237778,
-    "ast_hash": "746967cef69f30bff462b023dddc30ee",
+    "mtime": 1792240986.7512393,
+    "seen": 1792240998.990452,
+    "ast_hash": "bf5a329be05ff997cbd87cc69bb0b7e7",
     "semantic_hash": ""
   },
   "landing/src/main.tsx": {
@@ -585,6 +585,12 @@
     "mtime": 1792239312.731826,
     "seen": 1792240423.449101,
     "ast_hash": "bed1485d53b7581a9d7c280aca821ed5",
+    "semantic_hash": ""
+  },
+  "landing/vercel.json": {
+    "mtime": 1792240781.6645977,
+    "seen": 1792240998.9904552,
+    "ast_hash": "61bd31a2b0ac08f10f13c932b32d6ca1",
     "semantic_hash": ""
   }
 }
