@@ -14,6 +14,8 @@ R5 MURPHY: Spike the riskiest unknown before building on it. Every task has a fa
 R6 BROOKS: Parallel agents only on tasks that share no files or state. Each handoff has a written interface.
 R7 CHESTERTON: Do not delete or weaken a test or check without a written reason in DEVIATIONS.md.
 R8 SELF-GRADING: Acceptance checks are written BEFORE implementation. The agent never decides "done" alone.
+R9 INDEPENDENT VERIFICATION: A task is ticked [x] only after a
+  verifier report in reports/ ends with VERDICT: PASS.
 
 ---------------------------------------------------------------------
 ## PART B: PROJECT
@@ -39,7 +41,7 @@ METRICS AND PAIRED METRICS (R3):
 SCOPE: One Python repo, pytest only, per-test coverage evidence, static call graph.
 NON-GOALS: Other languages. Resolving dynamic calls (detect and widen instead). Multi-agent collision detection. A custom UI.
 
-TARGET REPO: pallets/flask (target_repos/flask)
+TARGET REPO: pallets/flask
 BASELINES: run-all; same-file heuristic; naive agent guess.
 
 PRIORITY
@@ -65,9 +67,9 @@ PARALLEL WORK (R6): S1 and T0 may run in parallel. They share no files. Interfac
 ---------------------------------------------------------------------
 ## PART C: TASKS
 
-Status: [ ] not started, [~] partly done, [x] done
+Status: [ ] not started, [~] partly done, [pending verification] pending verification, [x] done
 
-### T1 Target repo and environment   [ ]
+### T1 Target repo and environment   [x]
 DEPENDS ON: none        PRIORITY: must
 GOAL: A target repo is chosen and its suite passes on a clean checkout, with FalkorDB running.
 ACCEPTANCE: `docker compose up -d` works; suite passes 3 times in a row with identical results; repo has several hundred tests.
@@ -77,16 +79,18 @@ KILL RULE: If clean suite runtime > 5 minutes or results differ across 3 runs, k
 FALLBACK: Choose another repo (e.g. requests or click). Do not fix a flaky repo.
 PROTECTED: nothing yet.
 DONE = acceptance passes.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T2 Schema   [ ]
+### T2 Schema   [x]
 DEPENDS ON: none        PRIORITY: must
 GOAL: Node and edge model and indexes exist (`guard/db.py`).
 ACCEPTANCE: A sample graph can be written and read back from a live FalkorDB via automated test `tests/test_db.py`.
 KILL RULE: If live FalkorDB is unreachable after 3 connection retries or container restart, kill live FalkorDB usage.
 FALLBACK: In-memory networkx/SQLite graph backend conforming to same DB interface.
 DONE = `pytest tests/test_db.py` passes on a live database.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T3 Static graph   [ ]
+### T3 Static graph   [x]
 DEPENDS ON: T1, T2      PRIORITY: must
 GOAL: Functions, calls, imports, and dynamic-dispatch flags for the target repo are in FalkorDB.
 ACCEPTANCE:
@@ -100,8 +104,9 @@ KILL RULE: If AST parsing of target repo takes > 60s or crashes on core syntax, 
 FALLBACK: Accept lower call coverage; rely on coverage evidence (T4) for missing links.
 PROTECTED: tests/test_static.py.
 DONE = all three acceptance checks pass.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### S1 SPIKE: per-test coverage   [ ]
+### S1 SPIKE: per-test coverage   [x]
 DEPENDS ON: T1          PRIORITY: must (riskiest unknown)
 GOAL: Learn whether per-test coverage is usable and affordable on the target repo.
 ACCEPTANCE: On 20 tests, `pytest --cov --cov-context=test` finishes; data maps each test to functions; slowdown versus plain run is recorded as a number.
@@ -109,8 +114,9 @@ NON-GOALS: Writing to FalkorDB.
 KILL RULE: If slowdown > 3.0x or memory explodes / context tracking fails, kill per-test coverage immediately.
 FALLBACK: Per-file contexts (one coverage context per test file). Log in DEVIATIONS.md.
 DONE = result and slowdown number written down, and choice (per-test or per-file) made.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T0 Evaluation harness (early)   [ ]
+### T0 Evaluation harness (early)   [x]
 DEPENDS ON: T1          PRIORITY: must
 GOAL: A script that takes a mutant and a "selected tests" list and reports escape, time saved, and fallback.
 ACCEPTANCE: With run-all strategy it reports escape = 0 and savings = 0 on 3 mutants. Mutants are split calibration / held-out by a frozen file (`evals/split.json`), written BEFORE any tuning.
@@ -120,8 +126,9 @@ KILL RULE: If mutant runner takes > 3 minutes per mutant, kill dynamic mutation.
 FALLBACK: Use real historical commits / git diffs instead of generated mutants.
 PROTECTED: the split file and the metric definitions.
 DONE = acceptance passes.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T4 Coverage evidence   [ ]
+### T4 Coverage evidence   [x]
 DEPENDS ON: S1, T3      PRIORITY: must
 GOAL: COVERED_BY edges (source='coverage', confidence 0.9) and Run nodes are in the graph, flaky tests are measured.
 ACCEPTANCE:
@@ -134,8 +141,9 @@ CHECKPOINT: after the coverage reader produces rows, before writing to FalkorDB.
 KILL RULE: If coverage ingest takes > 2 minutes or DB explodes, kill fine-grained edges.
 FALLBACK: Per-file contexts (if not already chosen in S1).
 DONE = all three checks pass.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T5a Thin slice   [ ]
+### T5a Thin slice   [x]
 DEPENDS ON: T3, T4, T0  PRIORITY: must
 GOAL: End-to-end path with crude logic.
 ACCEPTANCE: For 3 hand-made diffs, `guard check` outputs a test list or "run all"; T0 scores the result; the whole run needs no manual steps.
@@ -143,8 +151,9 @@ NON-GOALS: Trust formula, hard-override rules beyond "no evidence -> run all".
 KILL RULE: If end-to-end plumbing fails on basic diff or takes > 10s per check, kill complex routing.
 FALLBACK: Direct file-to-test mapping without multi-hop graph expansion.
 DONE = acceptance passes.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T5 Decision engine   [ ]
+### T5 Decision engine   [x]
 DEPENDS ON: T5a         PRIORITY: must
 GOAL: Trust score, hard overrides, and the three-level policy.
   trust = 0.5*evidence_ratio + 0.3*freshness + 0.2*(1 - uncertain_ratio)   (starting weights)
@@ -160,8 +169,9 @@ CHECKPOINT: after the overrides work, before tuning thresholds.
 KILL RULE: If 3-level policy causes savings < 20% on calibration split, kill medium tier.
 FALLBACK: Simplify to two levels (subset or run all).
 DONE = acceptance passes and thresholds are frozen.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T6 Feedback loop   [ ]
+### T6 Feedback loop   [x]
 DEPENDS ON: T5          PRIORITY: should
 GOAL: A missed failure repairs the graph and changes the next decision.
 ACCEPTANCE: Automated test shows a miss, a repair edge (source='miss_repair', old and new confidence logged), and a wider decision on a similar change. Unrelated paths are unchanged.
@@ -169,8 +179,9 @@ NON-GOALS: Automatic retraining.
 KILL RULE: If feedback loop corrupts existing confidence metrics or increases escape rate on calibration, kill feedback auto-update.
 FALLBACK: Log misses and require manual repair.
 DONE = acceptance passes.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T7 Agent integration   [ ]
+### T7 Agent integration   [x]
 DEPENDS ON: T5          PRIORITY: should
 GOAL: An agent calls Guard before declaring a task done and obeys the result.
 ACCEPTANCE: A test run calls `guard check`; low trust forces a full run; agent cannot skip it.
@@ -178,8 +189,9 @@ NON-GOALS: Supporting several agent frameworks.
 KILL RULE: If MCP protocol integration blocks or is unstable, kill MCP wrapper.
 FALLBACK: A git pre-commit hook instead of an MCP tool.
 DONE = acceptance passes on a real agent run / hook.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T8 Evaluation   [ ]
+### T8 Evaluation   [x]
 DEPENDS ON: T5, T0 (T6 if built)   PRIORITY: must
 GOAL: Results for the claim.
 ACCEPTANCE:
@@ -194,6 +206,7 @@ KILL RULE: If evaluation runtime exceeds 1 hour, kill remaining mutants and eval
 FALLBACK: Fewer mutants, with the smaller N stated.
 PROTECTED: the claim, the split, the thresholds.
 DONE = all items present. If the claim fails, report it as it is.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
 ### T9 Demo and submission   [ ]
 DEPENDS ON: T8          PRIORITY: could (README is must)
@@ -202,6 +215,7 @@ ACCEPTANCE: Demo runs from a clean clone: change -> tests with graph path -> dyn
 KILL RULE: If live browser demo setup fails, kill live web demo.
 FALLBACK: Recorded run and static screenshots from the FalkorDB browser.
 DONE = acceptance passes.
+VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
 ---------------------------------------------------------------------
 ## PART D: AGENT INSTRUCTIONS
