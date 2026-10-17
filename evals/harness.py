@@ -36,7 +36,7 @@ def apply_mutant(diff_file: Path) -> bool:
 def reset_repo():
     """Restores the target repo to pristine clean state."""
     subprocess.run(["git", "checkout", "--", "."], cwd=str(REPO_ROOT), capture_output=True)
-    subprocess.run(["git", "clean", "-fd"], cwd=str(REPO_ROOT), capture_output=True)
+    subprocess.run(["git", "clean", "-fdx"], cwd=str(REPO_ROOT), capture_output=True)
 
 
 def run_pytest(test_targets=None) -> tuple[int, float, int]:
@@ -53,8 +53,12 @@ def run_pytest(test_targets=None) -> tuple[int, float, int]:
         cmd.append("tests")
 
     start = time.time()
-    proc = subprocess.run(cmd, cwd=str(REPO_ROOT), capture_output=True, text=True)
-    duration = time.time() - start
+    try:
+        proc = subprocess.run(cmd, cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=15)
+        duration = time.time() - start
+    except subprocess.TimeoutExpired:
+        duration = time.time() - start
+        return 1, duration, 1
 
     # Parse failures count
     # Output line usually ends with e.g. "1 failed, 493 passed in 1.1s" or "494 passed in 1.0s"
@@ -96,12 +100,94 @@ def resolve_strategy_tests(strategy: str, mutant_info: dict) -> tuple[list[str],
             return ["tests/test_basic.py"], False
         return ["tests"], True
 
+    elif strategy == "naive-guess":
+        # Naive agent guess: guesses test file from stem, or test_basic if not found.
+        # Crucially: NEVER falls back (is_fallback=False), modeling an agent with no safety layer.
+        changed_file = mutant_info.get("file", "")
+        stem = Path(changed_file).stem
+        candidate = f"tests/test_{stem}.py"
+        full_candidate = REPO_ROOT / candidate
+        if full_candidate.exists():
+            return [candidate], False
+        return ["tests/test_basic.py"], False
+
     elif strategy == "guard":
-        # Guard strategy interface
-        # For thin slice / T5 integration, calls guard check
-        return ["tests"], True
+        from guard.thin_slice import guard_check
+        diff_file = mutant_info.get("diff_file")
+        if diff_file and Path(diff_file).exists():
+            check_res = guard_check(diff_file=diff_file)
+        elif "diff_text" in mutant_info:
+            check_res = guard_check(diff_text=mutant_info["diff_text"])
+        else:
+            check_res = guard_check(repo_path=REPO_ROOT)
+        return check_res.selected_tests, check_res.is_fallback
+
+    elif strategy == "guard-no-confidence":
+        from guard.thin_slice import guard_check
+        diff_file = mutant_info.get("diff_file")
+        if diff_file and Path(diff_file).exists():
+            check_res = guard_check(diff_file=diff_file, no_confidence_filter=True)
+        elif "diff_text" in mutant_info:
+            check_res = guard_check(diff_text=mutant_info["diff_text"], no_confidence_filter=True)
+        else:
+            check_res = guard_check(repo_path=REPO_ROOT, no_confidence_filter=True)
+        return check_res.selected_tests, check_res.is_fallback
+
+    elif strategy == "guard-no-widening":
+        from guard.thin_slice import guard_check
+        diff_file = mutant_info.get("diff_file")
+        if diff_file and Path(diff_file).exists():
+            check_res = guard_check(diff_file=diff_file, no_dynamic_widening=True)
+        elif "diff_text" in mutant_info:
+            check_res = guard_check(diff_text=mutant_info["diff_text"], no_dynamic_widening=True)
+        else:
+            check_res = guard_check(repo_path=REPO_ROOT, no_dynamic_widening=True)
+        return check_res.selected_tests, check_res.is_fallback
 
     raise ValueError(f"Unknown strategy: {strategy}")
+
+
+def evaluate_diff(diff_file: Path, strategy: str) -> dict:
+    """Evaluates a single diff file using the specified strategy."""
+    diff_file = diff_file.resolve()
+    assert diff_file.exists(), f"Diff file {diff_file} not found"
+    reset_repo()
+    applied = apply_mutant(diff_file)
+    if not applied:
+        return {"diff_file": str(diff_file), "status": "ERROR", "error": "Failed to apply diff"}
+
+    try:
+        full_failures, t_full, full_exit = run_pytest()
+        is_killable = full_failures > 0
+
+        mutant_info = {"id": diff_file.stem, "diff_file": diff_file}
+        selected_tests, is_fallback = resolve_strategy_tests(strategy, mutant_info)
+
+        if is_fallback or strategy == "run-all":
+            sel_failures = full_failures
+            t_sel = t_full
+        else:
+            sel_failures, t_sel, sel_exit = run_pytest(selected_tests)
+
+        escaped = is_killable and (sel_failures == 0)
+        savings = 0.0 if is_fallback else (max(0.0, 1.0 - (t_sel / t_full)) if t_full > 0 else 0.0)
+
+        return {
+            "diff_file": str(diff_file),
+            "status": "OK",
+            "strategy": strategy,
+            "is_killable": is_killable,
+            "escaped": escaped,
+            "is_fallback": is_fallback,
+            "selected_tests_count": len(selected_tests),
+            "selected_duration_s": round(t_sel, 3),
+            "full_duration_s": round(t_full, 3),
+            "savings": round(savings, 4),
+            "full_failures": full_failures,
+            "selected_failures": sel_failures,
+        }
+    finally:
+        reset_repo()
 
 
 def evaluate_mutant(mutant_id: str, strategy: str) -> dict:
@@ -111,6 +197,7 @@ def evaluate_mutant(mutant_id: str, strategy: str) -> dict:
     with open(MUTANTS_DIR / "index.json", "r", encoding="utf-8") as f:
         index = {m["id"]: m for m in json.load(f)}
     mutant_info = index.get(mutant_id, {"id": mutant_id})
+    mutant_info["diff_file"] = diff_file
 
     # Ensure clean starting state
     reset_repo()
@@ -215,10 +302,23 @@ def run_evaluation(mutants: list[str], strategy: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="Guard Evaluation Harness")
-    parser.add_argument("--strategy", choices=["run-all", "same-file", "guard"], default="run-all")
+    parser.add_argument(
+        "--strategy",
+        choices=["run-all", "same-file", "naive-guess", "guard", "guard-no-confidence", "guard-no-widening"],
+        default="run-all",
+    )
     parser.add_argument("--mutants", help="Comma-separated mutant IDs or 'calibration' or 'held-out'")
+    parser.add_argument("--diff", help="Path to a single diff file to evaluate")
     parser.add_argument("--json", action="store_true", help="Output JSON only")
     args = parser.parse_args()
+
+    if args.diff:
+        res = evaluate_diff(Path(args.diff), args.strategy)
+        if args.json:
+            print(json.dumps(res, indent=2))
+        else:
+            print(json.dumps(res, indent=2))
+        return
 
     # Resolve mutant list
     if args.mutants == "calibration" or args.mutants == "held-out":

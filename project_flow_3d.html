@@ -7,10 +7,10 @@
   <style>
     :root {
       --bg-dark: #07090e;
-      --panel-bg: rgba(13, 17, 27, 0.88);
-      --panel-border: rgba(255, 255, 255, 0.12);
+      --panel-bg: rgba(13, 17, 27, 0.92);
+      --panel-border: rgba(255, 255, 255, 0.14);
       --text-main: #f0f4f8;
-      --text-muted: #8b9bb4;
+      --text-muted: #94a3b8;
       --accent-cyan: #00f2fe;
       --accent-gold: #ffbe0b;
       --accent-green: #00f076;
@@ -43,6 +43,7 @@
       width: 100%;
       height: 100%;
       z-index: 1;
+      display: block;
     }
 
     /* UI Overlay */
@@ -73,11 +74,12 @@
 
     .title-block {
       background: var(--panel-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--panel-border);
       border-radius: 12px;
       padding: 16px 22px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     }
 
     .title-row {
@@ -152,7 +154,7 @@
       border-radius: 50%;
     }
 
-    /* Right Stats & Controls */
+    /* Right Controls */
     .controls-panel {
       display: flex;
       flex-direction: column;
@@ -162,7 +164,8 @@
 
     .btn {
       background: var(--panel-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--panel-border);
       color: var(--text-main);
       padding: 8px 16px;
@@ -188,7 +191,7 @@
       color: #fff;
     }
 
-    /* Left Floating ASD-STE100 Info Box */
+    /* Side Drawer for ASD-STE100 Info */
     .info-card {
       position: absolute;
       top: 150px;
@@ -198,16 +201,17 @@
       overflow-y: auto;
       background: var(--panel-bg);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--panel-border);
       border-radius: 14px;
       padding: 20px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
       pointer-events: auto;
     }
 
     .info-card.collapsed {
-      transform: translateX(420px);
+      transform: translateX(430px);
       opacity: 0;
       pointer-events: none;
     }
@@ -249,7 +253,7 @@
     }
 
     .ste-block {
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.4);
       border-left: 3px solid var(--accent-cyan);
       border-radius: 0 6px 6px 0;
       padding: 10px 14px;
@@ -321,11 +325,12 @@
       justify-content: space-between;
       align-items: center;
       background: var(--panel-bg);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--panel-border);
       border-radius: 12px;
       padding: 12px 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     }
 
     .playback-controls {
@@ -374,35 +379,47 @@
       border-radius: 50%;
     }
 
-    /* Hint Overlay */
     .interaction-hint {
       position: absolute;
       bottom: 80px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 20px;
       padding: 6px 16px;
       font-size: 11px;
-      color: var(--text-muted);
+      color: #94a3b8;
       pointer-events: none;
-      animation: pulseHint 3s infinite ease-in-out;
     }
 
-    @keyframes pulseHint {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
+    #error-banner {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e11d48;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 9999;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
   </style>
-  <!-- Three.js and OrbitControls via unpkg CDN -->
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Load Reliable Three.js r128 UMD build and controls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
 </head>
 <body>
 
+  <div id="error-banner"></div>
   <canvas id="webgl-canvas"></canvas>
 
   <div class="hud-layer">
@@ -410,11 +427,11 @@
     <header class="interactive">
       <div class="title-block">
         <div class="title-row">
-          <h1>Guard System Workflow</h1>
+          <h1>Guard Project Flow</h1>
           <span class="badge-ste">ASD-STE100 COMPLIANT</span>
         </div>
         <p class="subtitle">
-          Interactive 3D representation of the end-to-end engineering pipeline: from planning and spikes to verification gates and GitHub publication.
+          Interactive 3D representation of the engineering pipeline: from planning and spikes to verification gates and GitHub publication.
         </p>
         <div class="stage-nav">
           <div class="stage-pill active" onclick="focusStage(0)">
@@ -502,6 +519,16 @@
   </div>
 
   <script>
+    // Global Error Handler for Diagnostics
+    window.onerror = function(msg, url, line) {
+      const banner = document.getElementById("error-banner");
+      if (banner) {
+        banner.style.display = "block";
+        banner.innerText = "Script Notice: " + msg + " (Line " + line + ")";
+      }
+      console.error(msg, url, line);
+    };
+
     // -------------------------------------------------------------
     // DATA DEFINITION: 5 Phases, 15 Interconnected Nodes in ASD-STE100
     // -------------------------------------------------------------
@@ -742,7 +769,6 @@
       }
     ];
 
-    // Pipeline Stage Camera Presets
     const STAGE_PRESETS = [
       { pos: [-36, 18, -32], target: [-16, 4, -12] }, // Plan
       { pos: [-10, 20, 18], target: [1, 6, 2] },       // Spike
@@ -755,40 +781,93 @@
     let isTourRunning = false;
     let tourTimer = null;
 
+    // Verify Three.js
+    if (typeof THREE === "undefined") {
+      document.body.innerHTML += '<div style="position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);background:#1e293b;border:1px solid #ff3366;padding:30px;border-radius:12px;color:white;text-align:center;max-width:500px;z-index:99999;"><h2>Network Notice</h2><p style="margin-top:10px;color:#cbd5e1;">Three.js could not be loaded from CDN. Please verify internet connectivity to load the 3D graphics.</p></div>';
+      throw new Error("Three.js not loaded");
+    }
+
     // -------------------------------------------------------------
     // THREE.JS SCENE SETUP
     // -------------------------------------------------------------
     const canvas = document.getElementById("webgl-canvas");
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x07090e);
     scene.fog = new THREE.FogExp2(0x07090e, 0.015);
 
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(-36, 22, -34);
 
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.maxDistance = 140;
-    controls.minDistance = 8;
-    controls.target.set(0, 3, 0);
+    // Controller Setup with Bulletproof Fallback
+    let controls;
+    if (typeof THREE.OrbitControls === "function") {
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxDistance = 140;
+      controls.minDistance = 8;
+      controls.target.set(0, 3, 0);
+    } else {
+      // Standalone Orbit Fallback Controller
+      let isDragging = false;
+      let prevMouse = { x: 0, y: 0 };
+      let spherical = { radius: 55, phi: Math.PI / 3, theta: Math.PI / 4 };
+      const target = new THREE.Vector3(0, 3, 0);
+
+      function updateCamera() {
+        camera.position.x = target.x + spherical.radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
+        camera.position.y = target.y + spherical.radius * Math.cos(spherical.phi);
+        camera.position.z = target.z + spherical.radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
+        camera.lookAt(target);
+      }
+      updateCamera();
+
+      window.addEventListener("pointerdown", (e) => {
+        if (e.target.closest(".interactive")) return;
+        isDragging = true;
+        prevMouse = { x: e.clientX, y: e.clientY };
+      });
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - prevMouse.x;
+        const deltaY = e.clientY - prevMouse.y;
+        prevMouse = { x: e.clientX, y: e.clientY };
+
+        spherical.theta -= deltaX * 0.008;
+        spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi - deltaY * 0.008));
+        updateCamera();
+      });
+
+      window.addEventListener("pointerup", () => { isDragging = false; });
+      window.addEventListener("wheel", (e) => {
+        spherical.radius = Math.max(10, Math.min(140, spherical.radius + e.deltaY * 0.05));
+        updateCamera();
+      });
+
+      controls = {
+        update: () => {},
+        target: target
+      };
+    }
 
     // Ambient & Point Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    const pointLight1 = new THREE.PointLight(0x00f2fe, 2.5, 100);
+    const pointLight1 = new THREE.PointLight(0x00f2fe, 3, 120);
     pointLight1.position.set(-20, 30, -20);
     scene.add(pointLight1);
 
-    const pointLight2 = new THREE.PointLight(0xb176f2, 2.5, 100);
+    const pointLight2 = new THREE.PointLight(0xb176f2, 3, 120);
     pointLight2.position.set(20, 20, 20);
     scene.add(pointLight2);
 
-    const pointLight3 = new THREE.PointLight(0xff3366, 2.0, 100);
+    const pointLight3 = new THREE.PointLight(0xff3366, 2.5, 120);
     pointLight3.position.set(-10, 30, 20);
     scene.add(pointLight3);
 
@@ -811,11 +890,24 @@
     const starField = new THREE.Points(starGeo, starMat);
     scene.add(starField);
 
-    // -------------------------------------------------------------
-    // NODE MESHES & 3D BILLBOARD SPRITES
-    // -------------------------------------------------------------
-    const nodeMeshes = [];
-    const interactiveObjects = [];
+    // Cross-Browser Compatible Rounded Rect function
+    function drawCompatRoundRect(ctx, x, y, width, height, radius) {
+      if (typeof ctx.roundRect === "function") {
+        ctx.roundRect(x, y, width, height, radius);
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+      }
+    }
 
     function makeTextSprite(message, colorHex) {
       const canvasText = document.createElement("canvas");
@@ -823,12 +915,12 @@
       canvasText.height = 128;
       const ctx = canvasText.getContext("2d");
 
-      ctx.fillStyle = "rgba(7, 9, 14, 0.75)";
-      ctx.roundRect(16, 24, 480, 80, 16);
+      ctx.fillStyle = "rgba(7, 9, 14, 0.85)";
+      drawCompatRoundRect(ctx, 16, 24, 480, 80, 16);
       ctx.fill();
       ctx.lineWidth = 4;
       ctx.strokeStyle = colorHex;
-      ctx.roundRect(16, 24, 480, 80, 16);
+      drawCompatRoundRect(ctx, 16, 24, 480, 80, 16);
       ctx.stroke();
 
       ctx.fillStyle = "#ffffff";
@@ -843,6 +935,12 @@
       sprite.scale.set(6, 1.5, 1);
       return sprite;
     }
+
+    // -------------------------------------------------------------
+    // NODE MESHES & 3D BILLBOARD SPRITES
+    // -------------------------------------------------------------
+    const nodeMeshes = [];
+    const interactiveObjects = [];
 
     PIPELINE_NODES.forEach((node, index) => {
       const group = new THREE.Group();
@@ -981,19 +1079,23 @@
       const camOffset = new THREE.Vector3(12, 10, 16);
       const destCamPos = targetPos.clone().add(camOffset);
 
-      new TWEEN.Tween(camera.position)
-        .to(destCamPos, duration)
-        .easing(TWEEN.Easing.Cubic.Out)
-        .start();
+      if (typeof TWEEN !== "undefined") {
+        new TWEEN.Tween(camera.position)
+          .to(destCamPos, duration)
+          .easing(TWEEN.Easing.Cubic.Out)
+          .start();
 
-      new TWEEN.Tween(controls.target)
-        .to(targetPos, duration)
-        .easing(TWEEN.Easing.Cubic.Out)
-        .start();
+        new TWEEN.Tween(controls.target)
+          .to(targetPos, duration)
+          .easing(TWEEN.Easing.Cubic.Out)
+          .start();
+      } else {
+        camera.position.copy(destCamPos);
+        controls.target.copy(targetPos);
+      }
     }
 
     function focusStage(stageIndex) {
-      const preset = STAGE_PRESETS[stageIndex];
       const firstNodeIndex = PIPELINE_NODES.findIndex(n => n.stage === stageIndex);
       if (firstNodeIndex !== -1) {
         selectNode(firstNodeIndex, 1000);
@@ -1011,15 +1113,20 @@
     }
 
     function resetCamera() {
-      new TWEEN.Tween(camera.position)
-        .to({ x: -36, y: 22, z: -34 }, 1200)
-        .easing(TWEEN.Easing.Cubic.Out)
-        .start();
+      if (typeof TWEEN !== "undefined") {
+        new TWEEN.Tween(camera.position)
+          .to({ x: -36, y: 22, z: -34 }, 1200)
+          .easing(TWEEN.Easing.Cubic.Out)
+          .start();
 
-      new TWEEN.Tween(controls.target)
-        .to({ x: 0, y: 3, z: 0 }, 1200)
-        .easing(TWEEN.Easing.Cubic.Out)
-        .start();
+        new TWEEN.Tween(controls.target)
+          .to({ x: 0, y: 3, z: 0 }, 1200)
+          .easing(TWEEN.Easing.Cubic.Out)
+          .start();
+      } else {
+        camera.position.set(-36, 22, -34);
+        controls.target.set(0, 3, 0);
+      }
     }
 
     function toggleInfoCard() {
@@ -1038,6 +1145,7 @@
         icon.innerText = "⏸";
         runTourStep();
       } else {
+        btn.classList.remove("btn-primary");
         icon.innerText = "▶";
         clearTimeout(tourTimer);
       }
@@ -1056,7 +1164,6 @@
     const mouse = new THREE.Vector2();
 
     window.addEventListener("pointerdown", (event) => {
-      // Ignore clicks on HUD overlay
       if (event.target.closest(".interactive")) return;
 
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -1098,8 +1205,12 @@
       requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
-      TWEEN.update();
-      controls.update();
+      if (typeof TWEEN !== "undefined") {
+        TWEEN.update();
+      }
+      if (controls && controls.update) {
+        controls.update();
+      }
 
       // Rotate Outer Wireframe Rings
       nodeMeshes.forEach((nm, idx) => {

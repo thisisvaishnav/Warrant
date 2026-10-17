@@ -61,10 +61,103 @@ def cmd_covering_tests(args) -> int:
     return 0
 
 
+def cmd_ingest_coverage(args) -> int:
+    from guard.ingest.coverage import ingest_coverage
+
+    res = ingest_coverage(
+        repo_path=args.repo,
+        graph_name=args.graph,
+        commit_sha=args.commit_sha,
+        num_runs=args.runs,
+    )
+    print(json.dumps(res.summary(), indent=2))
+    return 0
+
+
+def cmd_check(args) -> int:
+    from guard.thin_slice import guard_check
+
+    res = guard_check(
+        diff_file=args.diff,
+        repo_path=args.repo,
+        graph_name=args.graph,
+    )
+    if args.json:
+        print(json.dumps(res.to_dict(), indent=2))
+    else:
+        print(f"Status: {res.status}")
+        print(f"Fallback: {res.is_fallback}")
+        if res.fallback_reason:
+            print(f"Reason: {res.fallback_reason}")
+        print(f"Changed Functions ({len(res.changed_functions)}): {res.changed_functions}")
+        print(f"Selected Tests ({len(res.selected_tests)}): {res.selected_tests}")
+    return 0
+
+
+def cmd_feedback(args) -> int:
+    from guard import db
+    from guard.feedback import record_miss
+
+    g = db.get_graph(args.graph)
+    res = record_miss(
+        g,
+        function_id=args.function,
+        test_id=args.test,
+        new_confidence=args.confidence,
+    )
+    if args.json:
+        print(json.dumps(res, indent=2))
+    else:
+        print(f"Repaired: function='{res['function']}' -> test='{res['test']}'")
+        print(f"Confidence: {res['old_confidence']} -> {res['new_confidence']} (source: {res['source']})")
+    return 0
+
+
+def cmd_run(args) -> int:
+    from guard.agent_integration import run_agent_guard
+
+    report, exit_code = run_agent_guard(
+        diff_file=args.diff,
+        repo_path=args.repo,
+        graph_name=args.graph,
+    )
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(f"Status: {report['status']}")
+        print(f"Forced Full Suite: {report['forced_full']}")
+        if report['fallback_reason']:
+            print(f"Fallback Reason: {report['fallback_reason']}")
+        print(f"Tests Run ({report['tests_run_count']}): {report['tests_run']}")
+        print(f"Passed: {report['tests_passed']} in {report['duration_s']}s")
+        if report['output_summary']:
+            print(f"Summary: {report['output_summary']}")
+    return exit_code
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="guard")
     p.add_argument("--graph", default="guard")
     sub = p.add_subparsers(dest="cmd", required=True)
+
+    rn = sub.add_parser("run")
+    rn.add_argument("--diff", default=None, help="path to unified diff file")
+    rn.add_argument("--repo", default=None, help="path to target repo")
+    rn.add_argument("--json", action="store_true", help="output JSON")
+    rn.set_defaults(fn=cmd_run)
+
+    chk = sub.add_parser("check")
+    chk.add_argument("--diff", default=None, help="path to unified diff file")
+    chk.add_argument("--repo", default=None, help="path to repo to run git diff HEAD")
+    chk.add_argument("--json", action="store_true", help="output JSON")
+    chk.set_defaults(fn=cmd_check)
+
+    fb = sub.add_parser("feedback")
+    fb.add_argument("--function", required=True, help="Function ID where fault was missed")
+    fb.add_argument("--test", required=True, help="Test ID that failed and was missed")
+    fb.add_argument("--confidence", default=1.0, type=float, help="Confidence of repair edge (default: 1.0)")
+    fb.add_argument("--json", action="store_true", help="output JSON")
+    fb.set_defaults(fn=cmd_feedback)
 
     s = sub.add_parser("ingest-static")
     s.add_argument("repo")
@@ -72,6 +165,12 @@ def main(argv=None) -> int:
     s.add_argument("--include-tests", action="store_true")
     s.add_argument("--commit-sha", default=None, help="commit SHA to associate with edges")
     s.set_defaults(fn=cmd_ingest_static)
+
+    ic = sub.add_parser("ingest-coverage")
+    ic.add_argument("repo")
+    ic.add_argument("--runs", default=3, type=int, help="number of test runs for flake measurement")
+    ic.add_argument("--commit-sha", default=None, help="commit SHA to associate with edges")
+    ic.set_defaults(fn=cmd_ingest_coverage)
 
     c = sub.add_parser("callers")
     c.add_argument("function", help="function id, e.g. pkg/mod.py::Class.method")

@@ -128,7 +128,7 @@ PROTECTED: the split file and the metric definitions.
 DONE = acceptance passes.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T4 Coverage evidence   [ ]
+### T4 Coverage evidence   [x]
 DEPENDS ON: S1, T3      PRIORITY: must
 GOAL: COVERED_BY edges (source='coverage', confidence 0.9) and Run nodes are in the graph, flaky tests are measured.
 ACCEPTANCE:
@@ -143,7 +143,7 @@ FALLBACK: Per-file contexts (if not already chosen in S1).
 DONE = all three checks pass.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T5a Thin slice   [ ]
+### T5a Thin slice   [x]
 DEPENDS ON: T3, T4, T0  PRIORITY: must
 GOAL: End-to-end path with crude logic.
 ACCEPTANCE: For 3 hand-made diffs, `guard check` outputs a test list or "run all"; T0 scores the result; the whole run needs no manual steps.
@@ -153,7 +153,7 @@ FALLBACK: Direct file-to-test mapping without multi-hop graph expansion.
 DONE = acceptance passes.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T5 Decision engine   [ ]
+### T5 Decision engine   [x]
 DEPENDS ON: T5a         PRIORITY: must
 GOAL: Trust score, hard overrides, and the three-level policy.
   trust = 0.5*evidence_ratio + 0.3*freshness + 0.2*(1 - uncertain_ratio)   (starting weights)
@@ -171,7 +171,7 @@ FALLBACK: Simplify to two levels (subset or run all).
 DONE = acceptance passes and thresholds are frozen.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T6 Feedback loop   [ ]
+### T6 Feedback loop   [x]
 DEPENDS ON: T5          PRIORITY: should
 GOAL: A missed failure repairs the graph and changes the next decision.
 ACCEPTANCE: Automated test shows a miss, a repair edge (source='miss_repair', old and new confidence logged), and a wider decision on a similar change. Unrelated paths are unchanged.
@@ -181,7 +181,7 @@ FALLBACK: Log misses and require manual repair.
 DONE = acceptance passes.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T7 Agent integration   [ ]
+### T7 Agent integration   [x]
 DEPENDS ON: T5          PRIORITY: should
 GOAL: An agent calls Guard before declaring a task done and obeys the result.
 ACCEPTANCE: A test run calls `guard check`; low trust forces a full run; agent cannot skip it.
@@ -191,7 +191,7 @@ FALLBACK: A git pre-commit hook instead of an MCP tool.
 DONE = acceptance passes on a real agent run / hook.
 VERIFIED BY: independent verifier session (fresh context). Human reads VERDICT only.
 
-### T8 Evaluation   [ ]
+### T8 Evaluation   [x]
 DEPENDS ON: T5, T0 (T6 if built)   PRIORITY: must
 GOAL: Results for the claim.
 ACCEPTANCE:
