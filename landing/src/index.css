@@ -389,42 +389,98 @@ h2.light span { color: #676767; }
 }
 
 /* ===== Install section ===== */
-.install-section { padding: clamp(70px, 9vw, 130px) 0; background: #fff; border-top: 1px solid var(--line); }
-.install-section .section-lead { max-width: 560px; }
+.install-section {
+  padding: clamp(70px, 9vw, 130px) 0;
+  background: #fff;
+  border-top: 1px solid var(--line);
+}
+.install-section .section-lead {
+  max-width: 580px;
+}
 
-.install-tabs { margin-top: 44px; }
+.install-tabs {
+  margin-top: 44px;
+  max-width: 840px;
+}
 
-.install-tabs [data-slot='tabs-list'] {
-  height: auto;
+/* Nav & Tab trigger list */
+.install-tabs-nav-outer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.install-tabs-list {
+  display: flex !important;
+  align-items: center;
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  gap: 2px;
+  gap: 4px;
   border-bottom: 1px solid var(--line);
-  padding-bottom: 8px;
+  padding: 0 0 8px 0;
   scrollbar-width: none;
+  position: relative;
 }
-.install-tabs [data-slot='tabs-list']::-webkit-scrollbar { display: none; }
+.install-tabs-list::-webkit-scrollbar {
+  display: none;
+}
 
-.install-tabs [data-slot='tabs-trigger'] {
-  height: auto;
-  flex: 0 0 auto;
-  padding: 8px 2px 10px;
-  margin-right: 26px;
-  border-radius: 4px;
-  font-size: 13px;
+.install-tab-trigger {
+  position: relative;
+  height: auto !important;
+  flex: 0 0 auto !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
   font-weight: 500;
   color: #696969;
-  gap: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  transition: color 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 42px;
 }
-.install-tabs [data-slot='tabs-trigger']:hover { color: var(--coral); }
-.install-tabs [data-slot='tabs-trigger'][data-active] { color: var(--ink); }
-.install-tabs [data-slot='tabs-trigger']::after { background: var(--coral); }
-.install-tabs [data-slot='tabs-trigger'] .install-badge { transform: scale(.92); transform-origin: center right; }
+.install-tab-trigger::after {
+  display: none !important;
+}
+.install-tab-trigger:hover {
+  color: var(--ink);
+  background: rgba(20, 20, 20, 0.04);
+}
+.install-tab-trigger[data-active] {
+  color: var(--ink) !important;
+  font-weight: 600;
+  background: transparent;
+}
+.install-tab-label {
+  display: inline-block;
+}
 
+/* Animated sliding active indicator */
+.install-tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: var(--active-tab-left, 0);
+  width: var(--active-tab-width, 0);
+  height: 2.5px;
+  background: var(--coral);
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(255, 92, 81, 0.45);
+  transition: left 260ms cubic-bezier(0.16, 1, 0.3, 1),
+              width 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+/* Badges */
 .install-badge {
-  font: 8.5px 'DM Mono';
+  font: 8.5px/1.2 'DM Mono', monospace;
   letter-spacing: .08em;
   text-transform: uppercase;
   padding: 3px 8px;
@@ -432,75 +488,535 @@ h2.light span { color: #676767; }
   border-radius: 999px;
   color: #696969;
   white-space: nowrap;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   line-height: 1.2;
+  transition: all 0.2s ease;
 }
-.install-badge[data-badge='enforced'] { background: var(--coral); border-color: var(--coral); color: #fff; }
-.install-badge[data-badge='experimental'] { color: var(--coral); border-color: var(--coral); }
-.install-badge[data-badge='coming-soon'] { border-style: dashed; background: transparent; }
+.install-badge[data-badge='enforced'] {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(255, 92, 81, 0.25);
+}
+.install-badge[data-badge='experimental'] {
+  color: var(--coral);
+  border-color: rgba(255, 92, 81, 0.4);
+  background: rgba(255, 92, 81, 0.05);
+}
+.install-badge[data-badge='coming-soon'] {
+  border-style: dashed;
+  background: transparent;
+  color: #888;
+}
 
-.install-tabs [data-slot='tabs-content'] { padding-top: 8px; max-width: 760px; }
+.install-badge-pulse {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
+  animation: installBadgePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes installBadgePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
 
-.install-step { display: flex; gap: 22px; margin-top: 30px; }
-.install-step-num { font: 11px 'DM Mono'; color: var(--coral); padding-top: 4px; white-space: nowrap; }
-.install-step-body h3 { font-size: 19px; letter-spacing: -.5px; font-weight: 500; margin: 0; }
-.install-step-body > p { margin: 7px 0 0; font-size: 13px; color: #333; max-width: 620px; }
+/* Tab panels & Smooth Entrance */
+.install-tabs-panels {
+  position: relative;
+  width: 100%;
+}
 
-.install-code-wrap { position: relative; margin-top: 12px; max-width: 640px; }
+@keyframes installContentSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.install-tab-content {
+  animation: installContentSlideIn 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  padding-top: 24px;
+}
+
+/* Steps & Connected Timeline Rail */
+.install-steps-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+@keyframes installStepStagger {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.install-step {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 20px;
+  position: relative;
+  animation: installStepStagger 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--step-idx, 1) * 70ms);
+}
+
+.install-step-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.install-step-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  color: var(--coral);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 12px 'DM Mono', monospace;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  z-index: 2;
+  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.install-step:hover .install-step-badge {
+  border-color: var(--coral);
+  box-shadow: 0 0 0 4px rgba(255, 92, 81, 0.12);
+  transform: scale(1.05);
+}
+
+.install-step-rail {
+  width: 2px;
+  flex: 1;
+  min-height: 48px;
+  margin-top: 6px;
+  margin-bottom: -6px;
+  background: linear-gradient(180deg, rgba(255, 92, 81, 0.4) 0%, rgba(20, 20, 20, 0.08) 100%);
+  z-index: 1;
+  border-radius: 1px;
+}
+
+.install-step-body {
+  padding-bottom: 32px;
+}
+.install-step.is-last .install-step-body {
+  padding-bottom: 8px;
+}
+
+.install-step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.install-step-header h3 {
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+.install-step-tag {
+  font: 10px/1.2 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #777;
+  background: rgba(20, 20, 20, 0.05);
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+
+.install-step-content > p {
+  margin: 6px 0 12px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #444;
+  max-width: 660px;
+}
+
+/* Modern Terminal CodeBlock */
+.install-code-wrap {
+  position: relative;
+  background: #111213;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin: 12px 0;
+  max-width: 720px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.install-code-wrap:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(255, 92, 81, 0.15);
+}
+.install-code-wrap.compact {
+  margin: 8px 0;
+  border-radius: 8px;
+}
+
+.install-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 36px;
+}
+.install-code-wrap.compact .install-code-header {
+  min-height: 32px;
+  padding: 5px 12px;
+}
+
+.install-code-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.85;
+}
+.dot-close { background: #ff5f56; }
+.dot-min { background: #ffbd2e; }
+.dot-max { background: #27c93f; }
+
+.install-code-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font: 11px 'DM Mono', monospace;
+  color: #7d828a;
+}
+.install-code-term-icon {
+  opacity: 0.6;
+}
+
+.install-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: 10.5px 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+  color: #b0b4ba;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  padding: 3.5px 9px;
+  cursor: pointer;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+.install-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.install-copy-btn:active {
+  transform: scale(0.94);
+}
+.install-copy-btn[data-copied='true'] {
+  background: var(--coral) !important;
+  color: #fff !important;
+  border-color: var(--coral) !important;
+  box-shadow: 0 0 12px rgba(255, 92, 81, 0.4);
+}
+.install-copy-btn .icon-copied {
+  animation: popCheck 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes popCheck {
+  0% { transform: scale(0.5); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.install-code-body {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 14px 18px;
+}
+.install-code-wrap.compact .install-code-body {
+  padding: 10px 14px;
+}
+
 .install-code {
   margin: 0;
-  background: #171819;
+  padding: 0;
+  background: transparent;
   color: #eae7e2;
-  font: 12.5px/1.75 'DM Mono';
-  padding: 18px 116px 18px 20px;
-  border-radius: 8px;
-  overflow-x: auto;
+  font: 12.5px/1.7 'DM Mono', monospace;
   white-space: pre-wrap;
   word-break: break-word;
 }
-.install-code-wrap.compact .install-code { font-size: 11.5px; padding: 14px 104px 14px 16px; }
-.install-code-wrap.compact { margin-top: 10px; }
-.install-copy {
-  font: 9.5px 'DM Mono';
-  letter-spacing: .06em;
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: rgba(255,255,255,.09);
-  color: #fff;
-  border: 0;
-  border-radius: 6px;
-  padding: 8px 13px;
-  cursor: pointer;
-  transition: background .15s ease;
-  min-width: 64px;
-  text-align: center;
+.install-code-wrap.compact .install-code {
+  font-size: 11.5px;
+  line-height: 1.6;
 }
-.install-copy:hover { background: rgba(255,255,255,.18); }
-.install-copy[data-copied='true'] { background: var(--coral); color: #fff; }
 
-.install-inline-code { font: 11px 'DM Mono'; background: rgba(20,20,20,.07); padding: 2px 5px; border-radius: 4px; }
-.install-runnote { color: #696969 !important; font-size: 12px !important; margin-top: 10px !important; }
+.install-prompt-symbol {
+  color: var(--coral);
+  user-select: none;
+  font-weight: 600;
+  opacity: 0.9;
+}
 
-.install-writes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px !important; }
-.install-writes span {
-  font: 10.5px 'DM Mono';
+.install-inline-code {
+  font: 11px 'DM Mono', monospace;
+  background: rgba(20, 20, 20, 0.07);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--ink);
+}
+
+.install-runnote {
+  color: #696969 !important;
+  font-size: 12px !important;
+  margin-top: 8px !important;
+  line-height: 1.5;
+}
+
+/* Writes Box */
+.install-writes-box {
+  margin-top: 14px;
+}
+.install-writes-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 6px;
+}
+.install-writes-icon {
+  color: var(--coral);
+}
+.install-writes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.install-file-pill {
+  font: 11px 'DM Mono', monospace;
   border: 1px solid var(--line);
   background: #faf8f4;
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 5px 10px;
+  color: #333;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.install-file-pill:hover {
+  transform: translateY(-1px);
+  border-color: #bbb;
+}
+
+/* Restart Step Box */
+.install-restart-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #faf9f6;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 8px 0;
+  max-width: 720px;
+  transition: border-color 0.2s ease;
+}
+.install-restart-box:hover {
+  border-color: rgba(255, 92, 81, 0.35);
+}
+.install-restart-icon-wrap {
+  color: var(--coral);
+  padding-top: 2px;
+}
+.install-restart-text {
+  margin: 0;
+  font-size: 13.5px;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Verification */
+.install-verify-expected {
+  margin-top: 14px;
+}
+.install-verify-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1b7340;
+  margin-bottom: 6px;
+}
+.install-verify-icon {
+  color: #1b7340;
+}
+
+/* Coming Soon Card */
+.install-soon-card {
+  background: #faf9f6;
+  border: 1px dashed rgba(20, 20, 20, 0.18);
+  border-radius: 12px;
+  padding: 30px 26px;
+  max-width: 720px;
+  margin-top: 8px;
+  transition: border-color 0.2s ease;
+}
+.install-soon-card:hover {
+  border-color: rgba(255, 92, 81, 0.4);
+}
+.install-soon-badge-wrap {
+  margin-bottom: 12px;
+}
+.install-soon-status {
+  font: 9.5px 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255, 92, 81, 0.1);
+  color: var(--coral);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.install-soon-card h3 {
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--ink);
+}
+.install-soon-card > p {
+  margin: 0 0 16px 0;
+  font-size: 13.5px;
+  line-height: 1.6;
   color: #444;
 }
-
-.install-soon { padding: 6px 0 0; }
-.install-soon > p { margin: 10px 0 0; font-size: 13px; color: #333; max-width: 620px; padding-left: 0; }
-.install-formathint { color: #696969 !important; font-size: 12px !important; margin-top: 20px !important; }
-.install-githublink { display: inline-flex; align-items: center; font-size: 13px; color: var(--ink); border-bottom: 1px solid var(--coral); padding-bottom: 1px; transition: color .15s; }
-.install-githublink:hover { color: var(--coral); }
-
-@media (max-width: 640px) {
-  .install-step { gap: 14px; margin-top: 22px; }
-  .install-code { padding: 44px 14px 14px; }
-  .install-code-wrap.compact .install-code { padding: 38px 14px 12px; }
-  .install-copy { top: 10px; right: 10px; }
+.install-soon-preview {
+  margin-top: 14px;
 }
+.install-soon-format-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 6px;
+}
+.install-soon-actions {
+  margin-top: 18px;
+}
+.install-githublink-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.install-githublink-btn:hover {
+  border-color: var(--coral);
+  color: var(--coral);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+.install-githublink-btn:hover .install-link-arrow {
+  transform: translateX(3px);
+}
+.install-link-arrow {
+  transition: transform 0.2s ease;
+}
+
+/* Responsive Adaptations */
+@media (max-width: 640px) {
+  .install-tabs {
+    margin-top: 32px;
+  }
+  .install-tab-trigger {
+    padding: 7px 10px;
+    font-size: 12.5px;
+    gap: 6px;
+  }
+  .install-step {
+    grid-template-columns: 28px 1fr;
+    gap: 12px;
+  }
+  .install-step-badge {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+  .install-step-rail {
+    min-height: 40px;
+  }
+  .install-step-header h3 {
+    font-size: 17px;
+  }
+  .install-step-body {
+    padding-bottom: 24px;
+  }
+  .install-code-header {
+    padding: 6px 10px;
+  }
+  .install-code-body {
+    padding: 10px 12px;
+  }
+  .install-code {
+    font-size: 11.5px;
+    line-height: 1.6;
+  }
+  .install-restart-box {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .install-soon-card {
+    padding: 20px 16px;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .install-tab-indicator,
+  .install-tab-content,
+  .install-step,
+  .install-badge-pulse,
+  .install-copy-btn,
+  .install-copy-btn .icon-copied,
+  .install-githublink-btn,
+  .install-link-arrow {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+

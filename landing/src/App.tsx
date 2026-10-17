@@ -70,20 +70,20 @@ export default function App() {
             <a href="#features" onClick={() => setMenuOpen(false)}>
               Features<sup>01</sup>
             </a>
+            <a href="#install" onClick={() => setMenuOpen(false)}>
+              Install<sup>02</sup>
+            </a>
             <a href="#playbooks" onClick={() => setMenuOpen(false)}>
-              How It Works<sup>02</sup>
+              How It Works<sup>03</sup>
             </a>
             <a href="#stories" onClick={() => setMenuOpen(false)}>
-              Benchmarks<sup>03</sup>
+              Benchmarks<sup>04</sup>
             </a>
             <a href="#pricing" onClick={() => setMenuOpen(false)}>
-              Architecture<sup>04</sup>
+              Architecture<sup>05</sup>
             </a>
             <a href="#cta" onClick={() => setMenuOpen(false)}>
-              CLI<sup>05</sup>
-            </a>
-            <a href="#install" onClick={() => setMenuOpen(false)}>
-              Install<sup>06</sup>
+              CLI<sup>06</sup>
             </a>
           </div>
           <div className="nav-actions">
@@ -159,6 +159,21 @@ export default function App() {
               <i>T8</i>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="install-section" id="install">
+        <div className="shell">
+          <div className="eyebrow"><span>02</span> INSTALL &amp; CONNECT</div>
+          <SectionTitle>
+            Install Guard where your agents work.
+            <span>No files to edit by hand.</span>
+          </SectionTitle>
+          <p className="section-lead">
+            Pick your agent, paste one command at the root of your project,
+            restart, verify. Your code never leaves your machine.
+          </p>
+          <InstallTabs />
         </div>
       </section>
 
@@ -249,7 +264,7 @@ export default function App() {
       <section className="setup-section" id="playbooks">
         <div className="shell">
           <div className="eyebrow dark">
-            <span>02</span> HOW IT WORKS
+            <span>03</span> HOW IT WORKS
           </div>
           <SectionTitle>
             5 minutes to ingest.
@@ -330,7 +345,7 @@ export default function App() {
       <section className="capabilities">
         <div className="shell">
           <div className="eyebrow">
-            <span>03</span> CAPABILITIES
+            <span>04</span> CAPABILITIES
           </div>
           <SectionTitle light>
             Built to safeguard your
@@ -422,7 +437,7 @@ export default function App() {
         <div className="shell stack-inner">
           <div>
             <div className="eyebrow dark">
-              <span>04</span> ONE SIMPLE STACK
+              <span>05</span> ONE SIMPLE STACK
             </div>
             <SectionTitle>
               One graph safety layer. Eliminates blind agent runs.
@@ -451,7 +466,7 @@ export default function App() {
       <section className="stories" id="stories">
         <div className="shell">
           <div className="eyebrow">
-            <span>05</span> BENCHMARK &amp; EVALS
+            <span>06</span> BENCHMARK &amp; EVALS
           </div>
           <SectionTitle light>
             Frozen benchmark on held-out mutants
@@ -524,7 +539,7 @@ export default function App() {
       <section className="pricing" id="pricing">
         <div className="shell">
           <div className="eyebrow dark">
-            <span>06</span> SPECS &amp; ARCHITECTURE
+            <span>07</span> SPECS &amp; ARCHITECTURE
           </div>
           <SectionTitle>
             Built with discipline.
@@ -586,23 +601,6 @@ export default function App() {
               </ul>
             </article>
           </div>
-        </div>
-      </section>
-
-      <section className="install-section" id="install">
-        <div className="shell">
-          <div className="eyebrow">
-            <span>07</span> INSTALL &amp; CONNECT
-          </div>
-          <SectionTitle>
-            Install Guard where your agents work.
-            <span>No files to edit by hand.</span>
-          </SectionTitle>
-          <p className="section-lead">
-            Pick your agent, paste one command at the root of your project,
-            restart, verify. Your code never leaves your machine.
-          </p>
-          <InstallTabs />
         </div>
       </section>
 

@@ -192,16 +192,16 @@
     "semantic_hash": ""
   },
   "landing/src/App.tsx": {
-    "mtime": 1792241233.6915736,
-    "seen": 1792252418.034985,
-    "ast_hash": "db292f08367123b460ca438a1974620a",
+    "mtime": 1792258193.0498216,
+    "seen": 1792258819.635682,
+    "ast_hash": "5d29752ad783da3076a10752853634be",
     "semantic_hash": ""
   },
   "landing/src/main.tsx": {
-    "mtime": 1792240526.3074462,
-    "seen": 1792252418.034986,
-    "ast_hash": "42c0b1d9c2751a5e4e55876cee46fc57",
-    "semantic_hash": "42c0b1d9c2751a5e4e55876cee46fc57"
+    "mtime": 1792257788.1063201,
+    "seen": 1792258819.635689,
+    "ast_hash": "547ead13ed28a3cd5501f5741c824a2d",
+    "semantic_hash": ""
   },
   "landing/src/vite-env.d.ts": {
     "mtime": 1792239312.7295318,
@@ -858,33 +858,33 @@
     "semantic_hash": ""
   },
   "landing/src/components/install/Badge.tsx": {
-    "mtime": 1792257594.8188677,
-    "seen": 1792257696.409622,
-    "ast_hash": "8d3337ec3f63096e7161d610675859f4",
+    "mtime": 1792258676.6512437,
+    "seen": 1792258819.635683,
+    "ast_hash": "293889df54504fe8bd4aef276e6cc2be",
     "semantic_hash": ""
   },
   "landing/src/components/install/CodeBlock.tsx": {
-    "mtime": 1792257586.008428,
-    "seen": 1792257696.4096231,
-    "ast_hash": "10371bd2c05d198950368399523bd573",
+    "mtime": 1792258661.722329,
+    "seen": 1792258819.635684,
+    "ast_hash": "5691b22965d428efbd7d5ee4c9dffe19",
     "semantic_hash": ""
   },
   "landing/src/components/install/InstallTabs.tsx": {
-    "mtime": 1792257615.3765638,
-    "seen": 1792257696.409624,
-    "ast_hash": "a19e6281ea18e7e36078a117a0001392",
+    "mtime": 1792258703.4780054,
+    "seen": 1792258819.6356852,
+    "ast_hash": "f595935a7a42455180f11487152c9a63",
     "semantic_hash": ""
   },
   "landing/src/components/install/Step.tsx": {
-    "mtime": 1792257594.4603152,
-    "seen": 1792257696.409624,
-    "ast_hash": "584af77073e2b487a9567c734c80a129",
+    "mtime": 1792258670.4793117,
+    "seen": 1792258819.635686,
+    "ast_hash": "67b0549e1170efab4c463247338db1b4",
     "semantic_hash": ""
   },
   "landing/src/components/ui/tabs.tsx": {
-    "mtime": 1792256812.1450434,
-    "seen": 1792257696.409625,
-    "ast_hash": "829ca57f81a08827b5e8a8a670008a1a",
+    "mtime": 1792258620.6535416,
+    "seen": 1792258819.635686,
+    "ast_hash": "e39e1639a4016f25dfd43e79884c4f7d",
     "semantic_hash": ""
   },
   "landing/src/data/agents.json": {
