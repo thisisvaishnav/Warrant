@@ -47,7 +47,9 @@ def get_graph(
     if backend is None:
         backend = get_backend(repo_path=repo_path)
     if name is None:
-        name = os.getenv("GUARD_GRAPH", GRAPH_NAME)
+        from guard_cli.backend import load_config
+        cfg = load_config(repo_path)
+        name = cfg.get("backend", {}).get("graph_name") or os.getenv("GUARD_GRAPH", GRAPH_NAME)
     return backend.get_graph(name)
 
 

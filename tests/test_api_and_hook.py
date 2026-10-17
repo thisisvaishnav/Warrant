@@ -461,3 +461,22 @@ def test_cli_hook_subcommands(temp_repo, capsys):
     ret = main(["hook", "uninstall", "--repo", str(temp_repo), "--antigravity"])
     assert ret == 0
 
+
+def test_cli_default_graph_resolution(temp_repo):
+    """Verify that when graph name is omitted, db and api resolve graph_name from .guard/config.toml."""
+    from guard_cli.backend import save_config
+    save_config(temp_repo, {"backend": {"type": "server", "graph_name": "custom_repo_graph"}})
+
+    with patch("guard_cli.db.get_backend") as mock_get_backend:
+        mock_backend = MagicMock()
+        mock_get_backend.return_value = mock_backend
+        db.get_graph(name=None, repo_path=temp_repo)
+        mock_backend.get_graph.assert_called_with("custom_repo_graph")
+
+    with patch("guard_cli.db.get_backend") as mock_get_backend, patch("guard_cli.db.get_covering_tests") as mock_get_cov:
+        mock_backend = MagicMock()
+        mock_get_backend.return_value = mock_backend
+        mock_get_cov.return_value = []
+        api.covering_tests("pkg/mod.py::calc", repo_path=temp_repo)
+        mock_backend.get_graph.assert_called_with("custom_repo_graph")
+

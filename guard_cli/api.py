@@ -396,12 +396,13 @@ def run(
 def covering_tests(
     function_id: str,
     min_confidence: float = 0.0,
-    graph_name: str = "guard",
+    graph_name: str | None = None,
+    repo_path: str | Path | None = None,
     strict: bool = False,
 ) -> list[dict[str, Any]]:
     """Find tests covering a given function, ordered by confidence."""
     try:
-        g = db.get_graph(graph_name)
+        g = db.get_graph(graph_name, repo_path=repo_path)
         return db.get_covering_tests(g, function_id, min_confidence=min_confidence)
     except Exception as exc:
         if strict:
@@ -414,12 +415,13 @@ def callers(
     function_id: str,
     hops: int = 4,
     min_confidence: float = 0.0,
-    graph_name: str = "guard",
+    graph_name: str | None = None,
+    repo_path: str | Path | None = None,
     strict: bool = False,
 ) -> list[dict[str, Any]]:
     """Traverse inbound CALLS edges up to N hops filtered by min_confidence."""
     try:
-        g = db.get_graph(graph_name)
+        g = db.get_graph(graph_name, repo_path=repo_path)
         return db.get_callers(g, function_id, hops=hops, min_confidence=min_confidence)
     except Exception as exc:
         if strict:
@@ -432,12 +434,13 @@ def report_miss(
     function_id: str,
     test_id: str,
     new_confidence: float = 1.0,
-    graph_name: str = "guard",
+    graph_name: str | None = None,
+    repo_path: str | Path | None = None,
     strict: bool = False,
 ) -> dict[str, Any]:
     """Records a missed failure by repairing the graph with a miss_repair edge."""
     try:
-        g = db.get_graph(graph_name)
+        g = db.get_graph(graph_name, repo_path=repo_path)
         return feedback.record_miss(
             g,
             function_id=function_id,

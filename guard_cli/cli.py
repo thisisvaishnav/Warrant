@@ -239,7 +239,7 @@ def main(argv=None) -> int:
 
     p = argparse.ArgumentParser(prog="guard")
     p.add_argument("-v", "--version", action="version", version=f"guard {guard_cli.__version__}")
-    p.add_argument("--graph", default="guard")
+    p.add_argument("--graph", default=None, help="FalkorDB graph name (defaults to repository graph from .guard/config.toml)")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     ini = sub.add_parser("init", help="Initialize Guard for repository")
