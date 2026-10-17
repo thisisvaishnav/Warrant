@@ -72,6 +72,8 @@ def run_pytest_once(
     run_id: str,
     record_coverage: bool = False,
     cov_file: Path | None = None,
+    python_exe: str | None = None,
+    cov_source: str | None = None,
 ) -> RunResult:
     """Runs the target repo test suite once, producing a JUnit XML report and optional coverage data."""
     repo_path = repo_path.resolve()
@@ -79,8 +81,9 @@ def run_pytest_once(
     if xml_report.exists():
         xml_report.unlink()
 
+    py_bin = python_exe or sys.executable
     cmd = [
-        sys.executable,
+        py_bin,
         "-m",
         "pytest",
         "-q",
@@ -90,8 +93,9 @@ def run_pytest_once(
 
     if record_coverage:
         cov_dest = str(cov_file.resolve()) if cov_file else str(repo_path / ".coverage")
+        source = cov_source or ("flask" if (repo_path / "src" / "flask").exists() or (repo_path / "flask").exists() else ".")
         cmd.extend([
-            "--cov=flask",
+            f"--cov={source}",
             "--cov-context=test",
         ])
         env = os.environ.copy()
@@ -257,6 +261,8 @@ def ingest_coverage(
     graph_name: str = "guard",
     commit_sha: str | None = None,
     num_runs: int = 3,
+    python_exe: str | None = None,
+    cov_source: str | None = None,
 ) -> CoverageResult:
     """Full Task T4 pipeline:
     1. Runs suite 3 times, measuring flake rate.
@@ -282,7 +288,14 @@ def ingest_coverage(
         run_id = f"run_{int(time.time())}_{i}"
         record_cov = (i == 1)
         print(f"[Coverage Ingest] Running suite run {i}/{num_runs} (record_coverage={record_cov})...")
-        res = run_pytest_once(repo, run_id=run_id, record_coverage=record_cov, cov_file=cov_file)
+        res = run_pytest_once(
+            repo,
+            run_id=run_id,
+            record_coverage=record_cov,
+            cov_file=cov_file,
+            python_exe=python_exe,
+            cov_source=cov_source,
+        )
         runs.append(res)
         print(f"  -> Run {i}: {res.passed} passed, {res.failed} failed in {res.duration_ms:.1f}ms")
 

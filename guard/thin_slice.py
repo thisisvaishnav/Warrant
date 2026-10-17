@@ -253,7 +253,19 @@ def guard_check(
         for p in file_lines.keys()
     )
 
-    g = db.get_graph(graph_name)
+    # Resolve unique repo graph name if available
+    if repo_path and (graph_name == "guard" or graph_name is None):
+        try:
+            from guard.backend import get_repo_graph_name
+            repo_graph = get_repo_graph_name(repo_path)
+            cand = db.get_graph(repo_graph, repo_path=repo_path)
+            counts = db.get_schema_counts(cand)
+            if sum(counts.values()) > 0:
+                graph_name = repo_graph
+        except Exception:
+            pass
+
+    g = db.get_graph(graph_name, repo_path=repo_path)
     changed_funcs = resolve_changed_functions(g, file_lines)
     result = thin_slice_decision(
         g,

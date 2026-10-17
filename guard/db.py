@@ -14,12 +14,40 @@ INDEXES = [
 ]
 
 
-def get_graph(name: str = GRAPH_NAME):
-    db = FalkorDB(
-        host=os.getenv("FALKORDB_HOST", "localhost"),
-        port=int(os.getenv("FALKORDB_PORT", "6379")),
-    )
-    return db.select_graph(name)
+_active_backend: Any = None
+
+
+def set_backend(backend: Any) -> None:
+    """Explicitly set active GraphBackend instance."""
+    global _active_backend
+    _active_backend = backend
+
+
+def get_backend(repo_path: Any = None) -> Any:
+    """Return active or resolved GraphBackend."""
+    global _active_backend
+    if _active_backend is not None:
+        return _active_backend
+    from guard.backend import resolve_backend, ServerBackend
+
+    if "FALKORDB_HOST" in os.environ or "FALKORDB_PORT" in os.environ:
+        host = os.getenv("FALKORDB_HOST", "localhost")
+        port = int(os.getenv("FALKORDB_PORT", "6379"))
+        return ServerBackend(host=host, port=port)
+    return resolve_backend(repo_path=repo_path)
+
+
+def get_graph(
+    name: str | None = None,
+    backend: Any = None,
+    repo_path: Any = None,
+):
+    """Retrieve FalkorDB graph using resolved backend and repository name."""
+    if backend is None:
+        backend = get_backend(repo_path=repo_path)
+    if name is None:
+        name = os.getenv("GUARD_GRAPH", GRAPH_NAME)
+    return backend.get_graph(name)
 
 
 def reset_graph(g) -> None:

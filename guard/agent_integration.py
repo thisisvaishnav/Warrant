@@ -19,25 +19,28 @@ from guard.thin_slice import guard_check
 REPO_ROOT = Path("target_repos/flask").resolve()
 
 
-def apply_patch(diff_file: Path) -> bool:
+def apply_patch(diff_file: Path, repo_path: Path | None = None) -> bool:
     """Applies patch to target repo."""
-    proc = subprocess.run(["git", "apply", str(diff_file)], cwd=str(REPO_ROOT), capture_output=True, text=True)
+    target = repo_path or REPO_ROOT
+    proc = subprocess.run(["git", "apply", str(diff_file)], cwd=str(target), capture_output=True, text=True)
     if proc.returncode != 0:
-        patch_proc = subprocess.run(["patch", "-p1", "-i", str(diff_file)], cwd=str(REPO_ROOT), capture_output=True)
+        patch_proc = subprocess.run(["patch", "-p1", "-i", str(diff_file)], cwd=str(target), capture_output=True)
         return patch_proc.returncode == 0
     return True
 
 
-def reset_repo():
+def reset_repo(repo_path: Path | None = None):
     """Restores target repo to clean state."""
-    subprocess.run(["git", "checkout", "--", "."], cwd=str(REPO_ROOT), capture_output=True)
-    subprocess.run(["git", "clean", "-fdx"], cwd=str(REPO_ROOT), capture_output=True)
+    target = repo_path or REPO_ROOT
+    subprocess.run(["git", "checkout", "--", "."], cwd=str(target), capture_output=True)
+    subprocess.run(["git", "clean", "-fdx"], cwd=str(target), capture_output=True)
 
 
-def count_collected_tests(test_targets: list[str]) -> int:
+def count_collected_tests(test_targets: list[str], repo_path: Path | None = None) -> int:
     """Counts how many test items are collected for the targets."""
+    target = repo_path or REPO_ROOT
     cmd = [sys.executable, "-m", "pytest", "--collect-only", "-q"] + test_targets
-    proc = subprocess.run(cmd, cwd=str(REPO_ROOT), capture_output=True, text=True)
+    proc = subprocess.run(cmd, cwd=str(target), capture_output=True, text=True)
     lines = proc.stdout.strip().splitlines()
     for line in reversed(lines):
         if "test" in line:
