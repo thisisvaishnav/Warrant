@@ -170,7 +170,7 @@ def test_antigravity_install_adds_pre_invocation_hook(tmp_path):
     assert ok is True
     data = json.loads((repo / ".agents" / "hooks.json").read_text(encoding="utf-8"))
     pre = data["guard-stop"]["PreInvocation"]
-    assert any(h.get("command") == "guard hook session-start" for h in pre)
+    assert any("hook session-start" in h.get("command", "") for h in pre)
     assert antigravity.status(repo)["pre_invocation_installed"] is True
     antigravity.uninstall(repo)
     data_after = json.loads((repo / ".agents" / "hooks.json").read_text(encoding="utf-8"))

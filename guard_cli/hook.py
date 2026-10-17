@@ -39,14 +39,27 @@ from guard_cli.state import (
 )
 
 
+def _capture_payload(content: str, repo_path: Path | None = None) -> None:
+    """Writes the raw stdin payload to .guard/last_payload.json when GUARD_DEBUG_PAYLOAD=1."""
+    try:
+        base = repo_path or Path.cwd()
+        guard_dir = base / ".guard"
+        guard_dir.mkdir(parents=True, exist_ok=True)
+        (guard_dir / "last_payload.json").write_text(content, encoding="utf-8")
+    except Exception:
+        pass
+
+
 def read_hook_input() -> dict[str, Any]:
     """Reads stdin JSON safely if available."""
     if sys.stdin.isatty():
         return {}
     try:
-        content = sys.stdin.read().strip()
-        if not content:
+        content = sys.stdin.read()
+        if not content.strip():
             return {}
+        if os.getenv("GUARD_DEBUG_PAYLOAD") == "1":
+            _capture_payload(content)
         data = json.loads(content)
         return data if isinstance(data, dict) else {}
     except Exception:
@@ -246,27 +259,21 @@ def resolve_diff_ref(
     session_id: str,
     head_sha: str,
 ) -> tuple[str | None, str]:
-    """Resolves the commit to diff against, independent of the session ID.
+    """Resolves the commit to diff against.
 
     Priority:
-        1. repo-level last_verified_sha (updated whenever tests pass)
-        2. SHA recorded at ingest (.guard/state.json)
-        3. session last_verified_sha (backward compatibility)
-        4. repo-level baseline_sha
-        5. session baseline_sha (backward compatibility)
+        1. session_last_verified (most recent commit that passed tests in this session)
+        2. session_baseline (recorded at SessionStart for this session)
+        3. repo_last_verified (repo-level commit that last passed tests)
+        4. ingest_sha (commit recorded at guard init)
+        5. repo_baseline
         6. HEAD
-
-    A fresh session ID therefore can neither reset the baseline to a broken
-    HEAD nor hide a commit that has not been verified.
-
-    Returns:
-        (diff_ref, source)
     """
-    repo_last_verified = get_repo_last_verified_sha(repo_path)
     session_last_verified = get_last_verified_sha(session_id, repo_path=repo_path)
+    session_baseline = get_baseline_sha(session_id, repo_path=repo_path)
+    repo_last_verified = get_repo_last_verified_sha(repo_path)
     ingest_sha = get_ingest_sha(repo_path)
     repo_baseline = get_repo_baseline_sha(repo_path)
-    session_baseline = get_baseline_sha(session_id, repo_path=repo_path)
 
     # Record a repo-level baseline on first ever use so there is always a
     # non-HEAD reference for future sessions. Never overwrite an existing one.
@@ -277,11 +284,11 @@ def resolve_diff_ref(
         repo_baseline = head_sha
 
     for sha, source in (
+        (session_last_verified, "session_last_verified"),
+        (session_baseline, "session_baseline"),
         (repo_last_verified, "repo_last_verified"),
         (ingest_sha, "ingest_sha"),
-        (session_last_verified, "session_last_verified"),
         (repo_baseline, "repo_baseline"),
-        (session_baseline, "session_baseline"),
     ):
         if sha:
             return sha, source
@@ -311,13 +318,12 @@ def check_idle_turn(
         )
         head_sha = head_proc.stdout.strip() if head_proc.returncode == 0 else ""
 
-        # Resolve the diff baseline in a session-independent way so a fresh
-        # session ID cannot reset the baseline to a broken HEAD.
+        # Resolve the diff baseline
         diff_ref, _ = resolve_diff_ref(repo_path, session_id, head_sha)
 
-        # Keep a session-level baseline for backward compatibility.
-        if head_sha and not get_baseline_sha(session_id, repo_path=repo_path):
-            set_baseline_sha(session_id, head_sha, repo_path=repo_path)
+        # Latch session baseline to resolved diff_ref (never unverified head_sha)
+        if diff_ref and not get_baseline_sha(session_id, repo_path=repo_path):
+            set_baseline_sha(session_id, diff_ref, repo_path=repo_path)
 
         # Working tree status
         status_proc = subprocess.run(
@@ -438,7 +444,7 @@ def check_idle_turn(
 
 
 def format_failure_summary(report: dict[str, Any], max_lines: int = 30) -> str:
-    """Formats a concise <= 30 line error summary for Claude's context."""
+    """Formats a concise <= 30 line error summary for the agent context."""
     lines = [
         "GUARD SAFETY CHECK FAILED (Exit 2 - Blocking Stop)",
         "==================================================",
@@ -452,7 +458,16 @@ def format_failure_summary(report: dict[str, Any], max_lines: int = 30) -> str:
     reason = report.get("fallback_reason")
     if reason:
         lines.append(f"Reason       : {reason}")
-        
+
+    changed_funcs = report.get("changed_functions", [])
+    if changed_funcs:
+        if len(changed_funcs) == 1:
+            lines.append(f"Changed Function: {changed_funcs[0]}")
+        else:
+            lines.append("Changed Functions:")
+            for fn in changed_funcs[:5]:
+                lines.append(f"  - {fn}")
+
     lines.append(f"Tests Run    : {report.get('tests_run_count', 0)}")
     
     failures = report.get("failures", [])
@@ -468,7 +483,7 @@ def format_failure_summary(report: dict[str, Any], max_lines: int = 30) -> str:
         lines.append(f"Summary      : {summary}")
         
     lines.append("--------------------------------------------------")
-    lines.append("Fix the failing tests above before completing this task.")
+    lines.append("Fix the source code. Do not edit, skip, or delete tests.")
     
     return "\n".join(lines[:max_lines]) + "\n"
 
@@ -488,125 +503,180 @@ def run_stop_hook(
 
     cwd, session_id, is_antigravity = resolve_hook_context(repo_override, hook_input)
 
+    if os.getenv("GUARD_DEBUG_PAYLOAD") == "1":
+        guard_dir = cwd / ".guard"
+        guard_dir.mkdir(parents=True, exist_ok=True)
+        payload_file = guard_dir / "last_payload.json"
+        if raw_input is not None or not payload_file.exists():
+            payload_file.write_text(json.dumps(hook_input, indent=2) + "\n", encoding="utf-8")
+
+    saved_stdout = sys.stdout
+    saved_fd = None
+    real_out = None
+    if is_antigravity:
+        sys.stdout = sys.stderr
+        try:
+            if hasattr(saved_stdout, "fileno") and saved_stdout.fileno() == 1:
+                sys.stdout.flush()
+                sys.stderr.flush()
+                saved_fd = os.dup(1)
+                os.dup2(2, 1)
+                real_out = open(saved_fd, "w", encoding="utf-8", closefd=False)
+        except Exception:
+            saved_fd = None
+            real_out = None
+
     def _allow_stop(reason: str | None = None) -> int:
         if is_antigravity:
-            resp: dict[str, Any] = {"decision": "stop"}
-            if reason:
-                resp["reason"] = reason
-            sys.stdout.write(json.dumps(resp) + "\n")
-            sys.stdout.flush()
+            resp: dict[str, Any] = {"decision": "stop", "reason": reason or ""}
+            payload = json.dumps(resp) + "\n"
+            if saved_stdout is not None:
+                try:
+                    saved_stdout.write(payload)
+                    saved_stdout.flush()
+                except Exception:
+                    pass
+            if real_out is not None and real_out is not saved_stdout:
+                try:
+                    real_out.write(payload)
+                    real_out.flush()
+                except Exception:
+                    pass
         return 0
 
     def _block_stop(reason_text: str) -> int:
         if is_antigravity:
-            resp = {"decision": "continue", "reason": reason_text}
-            sys.stdout.write(json.dumps(resp) + "\n")
-            sys.stdout.flush()
+            resp: dict[str, Any] = {"decision": "continue", "reason": reason_text}
+            payload = json.dumps(resp) + "\n"
+            if saved_stdout is not None:
+                try:
+                    saved_stdout.write(payload)
+                    saved_stdout.flush()
+                except Exception:
+                    pass
+            if real_out is not None and real_out is not saved_stdout:
+                try:
+                    real_out.write(payload)
+                    real_out.flush()
+                except Exception:
+                    pass
             sys.stderr.write(reason_text)
             return 0
         else:
             sys.stderr.write(reason_text)
             return 2
 
-    stop_hook_active = bool(hook_input.get("stop_hook_active", False))
-
-    # Log hook entry
-    log_event(
-        event="hook_fired",
-        session_id=session_id,
-        repo_path=cwd,
-        details={
-            "stop_hook_active": stop_hook_active,
-            "agent_type": "antigravity" if is_antigravity else "claude",
-        },
-    )
-
-    # 1. Idle turn check: If working tree is clean, non-python only, or fingerprint cache hit
-    is_idle, idle_reason, fingerprint, baseline_sha = check_idle_turn(cwd, session_id=session_id)
-    if is_idle:
-        log_event(
-            event="idle_turn",
-            session_id=session_id,
-            repo_path=cwd,
-            details={"reason": idle_reason, "fingerprint": fingerprint},
-        )
-        return _allow_stop()
-
-    # 2. Loop guard check: Cap at 3 consecutive blocks
-    prior_blocks = get_session_blocks(session_id, repo_path=cwd)
-    if prior_blocks >= 3:
-        msg = "Guard blocked 3 times, handing back to you\n"
-        sys.stderr.write(msg)
-        log_event(
-            event="handed_back",
-            session_id=session_id,
-            repo_path=cwd,
-            details={"consecutive_blocks": prior_blocks},
-        )
-        return _allow_stop(reason=msg.strip())
-
-    # 3. Execute Guard run
     try:
-        report, exit_code = api.run(
-            repo_path=cwd,
-            strict=strict,
-            session_id=session_id,
-            baseline_sha=baseline_sha,
-        )
-    except Exception as exc:
-        if strict:
-            return _block_stop(f"Guard error (strict): {exc}\n")
-        sys.stderr.write(f"Warning: Guard encountered an error: {exc}. Failing open.\n")
-        log_event(
-            event="fail_open",
-            session_id=session_id,
-            repo_path=cwd,
-            details={"error": str(exc)},
-        )
-        return _allow_stop()
+        stop_hook_active = bool(hook_input.get("stop_hook_active", False))
 
-    # 4. Handle test results
-    if exit_code == 0:
-        reset_session_blocks(session_id, repo_path=cwd)
-        if fingerprint:
-            set_last_passed_fingerprint(session_id, fingerprint, repo_path=cwd)
+        # Log hook entry
+        log_event(
+            event="hook_fired",
+            session_id=session_id,
+            repo_path=cwd,
+            details={
+                "stop_hook_active": stop_hook_active,
+                "agent_type": "antigravity" if is_antigravity else "claude",
+            },
+        )
+
+        # 1. Idle turn check: If working tree is clean, non-python only, or fingerprint cache hit
+        is_idle, idle_reason, fingerprint, baseline_sha = check_idle_turn(cwd, session_id=session_id)
+        if is_idle:
+            log_event(
+                event="idle_turn",
+                session_id=session_id,
+                repo_path=cwd,
+                details={"reason": idle_reason, "fingerprint": fingerprint},
+            )
+            return _allow_stop()
+
+        # 2. Loop guard check: Cap at 3 consecutive blocks
+        prior_blocks = get_session_blocks(session_id, repo_path=cwd)
+        if prior_blocks >= 3:
+            msg = "Guard blocked 3 times, handing back to you\n"
+            sys.stderr.write(msg)
+            log_event(
+                event="handed_back",
+                session_id=session_id,
+                repo_path=cwd,
+                details={"consecutive_blocks": prior_blocks},
+            )
+            return _allow_stop(reason=msg.strip())
+
+        # 3. Execute Guard run
         try:
-            head_proc = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(cwd), capture_output=True, text=True)
-            if head_proc.returncode == 0 and head_proc.stdout.strip():
-                verified_sha = head_proc.stdout.strip()
-                set_last_verified_sha(session_id, verified_sha, repo_path=cwd)
-                # Repo-level marker: survives new session IDs so a later broken
-                # commit is always diffed against the last verified commit.
-                set_repo_last_verified_sha(verified_sha, repo_path=cwd)
-        except Exception:
-            pass
-        return _allow_stop()
+            report, exit_code = api.run(
+                repo_path=cwd,
+                strict=strict,
+                session_id=session_id,
+                baseline_sha=baseline_sha,
+            )
+        except Exception as exc:
+            if strict:
+                return _block_stop(f"Guard error (strict): {exc}\n")
+            sys.stderr.write(f"Warning: Guard encountered an error: {exc}. Failing open.\n")
+            log_event(
+                event="fail_open",
+                session_id=session_id,
+                repo_path=cwd,
+                details={"error": str(exc)},
+            )
+            return _allow_stop(reason="Guard skipped: database unreachable")
 
-    # Test failure: clear cached fingerprint and increment blocks
-    clear_last_passed_fingerprint(session_id, repo_path=cwd)
-    new_blocks = record_session_block(session_id, repo_path=cwd)
-    if new_blocks >= 3:
-        msg = "Guard blocked 3 times, handing back to you\n"
-        sys.stderr.write(msg)
+        # 4. Handle test results
+        if exit_code == 0:
+            if report.get("fail_open"):
+                return _allow_stop(reason="Guard skipped: database unreachable")
+            reset_session_blocks(session_id, repo_path=cwd)
+            if fingerprint:
+                set_last_passed_fingerprint(session_id, fingerprint, repo_path=cwd)
+            try:
+                head_proc = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(cwd), capture_output=True, text=True)
+                if head_proc.returncode == 0 and head_proc.stdout.strip():
+                    verified_sha = head_proc.stdout.strip()
+                    set_last_verified_sha(session_id, verified_sha, repo_path=cwd)
+                    # Repo-level marker: survives new session IDs so a later broken
+                    # commit is always diffed against the last verified commit.
+                    set_repo_last_verified_sha(verified_sha, repo_path=cwd)
+            except Exception:
+                pass
+            return _allow_stop()
+
+        # Test failure: clear cached fingerprint and increment blocks
+        clear_last_passed_fingerprint(session_id, repo_path=cwd)
+        new_blocks = record_session_block(session_id, repo_path=cwd)
+        if new_blocks > 3:
+            msg = "Guard blocked 3 times, handing back to you\n"
+            sys.stderr.write(msg)
+            log_event(
+                event="handed_back",
+                session_id=session_id,
+                repo_path=cwd,
+                details={"consecutive_blocks": new_blocks},
+            )
+            return _allow_stop(reason=msg.strip())
+
+        # Format failure summary <= 30 lines
+        summary_text = format_failure_summary(report, max_lines=30)
+        
         log_event(
-            event="handed_back",
+            event="blocked",
             session_id=session_id,
             repo_path=cwd,
-            details={"consecutive_blocks": new_blocks},
+            details={
+                "consecutive_blocks": new_blocks,
+                "policy": report.get("policy"),
+                "failures": report.get("failures", []),
+            },
         )
-        return _allow_stop(reason=msg.strip())
-
-    # Format failure summary <= 30 lines
-    summary_text = format_failure_summary(report, max_lines=30)
-    
-    log_event(
-        event="blocked",
-        session_id=session_id,
-        repo_path=cwd,
-        details={
-            "consecutive_blocks": new_blocks,
-            "policy": report.get("policy"),
-            "failures": report.get("failures", []),
-        },
-    )
-    return _block_stop(summary_text)
+        return _block_stop(summary_text)
+    finally:
+        sys.stdout = saved_stdout
+        if saved_fd is not None:
+            try:
+                sys.stderr.flush()
+                os.dup2(saved_fd, 1)
+                os.close(saved_fd)
+            except Exception:
+                pass

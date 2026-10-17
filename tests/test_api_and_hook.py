@@ -283,10 +283,11 @@ def test_stop_hook_fails_with_exit_2_and_stderr(temp_repo):
 
 def test_stop_hook_loop_guard_caps_at_3_blocks(temp_repo):
     """After 3 consecutive blocks, hook hands back to user and exits 0."""
-    # Pre-record 2 blocks
+    # Pre-record 3 blocks (agent gets 3 blocks, then handback on 4th attempt)
     record_session_block("sess_loop", repo_path=temp_repo)
     record_session_block("sess_loop", repo_path=temp_repo)
-    assert get_session_blocks("sess_loop", repo_path=temp_repo) == 2
+    record_session_block("sess_loop", repo_path=temp_repo)
+    assert get_session_blocks("sess_loop", repo_path=temp_repo) == 3
 
     mock_report = {
         "policy": "subset",

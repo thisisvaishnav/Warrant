@@ -199,13 +199,14 @@ def cmd_hook_uninstall(args) -> int:
 
 
 def cmd_hook_status(args) -> int:
+    from guard_cli.integrations import claude, antigravity
     if getattr(args, "antigravity", False):
-        stat = {"claude": None}
-        from guard_cli.integrations import antigravity
-        stat["antigravity"] = antigravity.status(repo_path=args.repo)
+        stat = {"antigravity": antigravity.status(repo_path=args.repo)}
     else:
-        from guard_cli.integrations import claude
-        stat = claude.status(repo_path=args.repo, shared=args.shared)
+        stat = {
+            "claude": claude.status(repo_path=args.repo, shared=getattr(args, "shared", False)),
+            "antigravity": antigravity.status(repo_path=args.repo),
+        }
     print(json.dumps(stat, indent=2))
     return 0
 

@@ -45,8 +45,8 @@ def test_antigravity_install_and_status(tmp_path):
     assert "Stop" in data["guard-stop"]
     handlers = data["guard-stop"]["Stop"]
     assert len(handlers) == 1
-    assert handlers[0]["type"] == "command"
-    assert handlers[0]["command"] == "guard hook stop"
+    guard_exe = antigravity.get_guard_executable()
+    assert handlers[0]["command"] == f"{guard_exe} hook stop"
     assert handlers[0]["timeout"] == 180
 
     # Idempotent re-install

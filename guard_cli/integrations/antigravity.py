@@ -20,9 +20,26 @@ import shutil
 from pathlib import Path
 from typing import Any
 
+import os
+import sys
+
 HOOK_COMMAND = "guard hook stop"
 SESSION_START_COMMAND = "guard hook session-start"
 DEFAULT_HOOK_TIMEOUT = 180
+
+
+def get_guard_executable() -> str:
+    """Returns the absolute path to the guard executable."""
+    guard_bin = shutil.which("guard")
+    if guard_bin:
+        return str(Path(guard_bin).resolve())
+    py_dir = Path(sys.executable).parent
+    guard_candidate = py_dir / "guard"
+    if guard_candidate.is_file() and os.access(guard_candidate, os.X_OK):
+        return str(guard_candidate.resolve())
+    if sys.argv and Path(sys.argv[0]).name in ("guard", "guard-cli"):
+        return str(Path(sys.argv[0]).resolve())
+    return "guard"
 
 
 def get_hooks_file_path(repo_path: str | Path | None = None) -> Path:
@@ -31,10 +48,21 @@ def get_hooks_file_path(repo_path: str | Path | None = None) -> Path:
     return base / ".agents" / "hooks.json"
 
 
-def _contains_guard_hook(handlers: list[dict[str, Any]], command: str = HOOK_COMMAND) -> bool:
+def _find_guard_hook(handlers: list[dict[str, Any]], subcmd: str) -> dict[str, Any] | None:
     for h in handlers:
-        if isinstance(h, dict) and h.get("command") == command:
-            return True
+        if isinstance(h, dict):
+            cmd = h.get("command", "")
+            if f"hook {subcmd}" in cmd:
+                return h
+    return None
+
+
+def _contains_guard_hook(handlers: list[dict[str, Any]], subcmd_or_cmd: str = "stop") -> bool:
+    for h in handlers:
+        if isinstance(h, dict):
+            cmd = h.get("command", "")
+            if f"hook {subcmd_or_cmd}" in cmd or cmd == subcmd_or_cmd:
+                return True
     return False
 
 
@@ -54,20 +82,36 @@ def status(repo_path: str | Path | None = None) -> dict[str, Any]:
         if not isinstance(data, dict):
             return {"installed": False, "target_file": str(hooks_file), "exists": True}
 
-        # Check all named hooks for a Stop event handler running HOOK_COMMAND
+        # Check all named hooks for a Stop event handler running Guard hook stop
         for hook_name, hook_cfg in data.items():
             if isinstance(hook_cfg, dict):
                 stop_handlers = hook_cfg.get("Stop", [])
-                if isinstance(stop_handlers, list) and _contains_guard_hook(stop_handlers):
+                stop_hook = _find_guard_hook(stop_handlers, "stop") if isinstance(stop_handlers, list) else None
+                if stop_hook:
                     pre_handlers = hook_cfg.get("PreInvocation", [])
+                    session_handlers = hook_cfg.get("SessionStart", [])
+                    cmd = stop_hook.get("command", "")
+                    exe_path = cmd.split()[0] if cmd else ""
+                    exe_exists = (
+                        Path(exe_path).is_file()
+                        if (exe_path and exe_path != "guard")
+                        else bool(shutil.which("guard"))
+                    )
                     return {
                         "installed": True,
                         "target_file": str(hooks_file),
                         "exists": True,
                         "hook_name": hook_name,
+                        "command": cmd,
+                        "executable_path": exe_path,
+                        "executable_exists": exe_exists,
                         "pre_invocation_installed": (
                             isinstance(pre_handlers, list)
-                            and _contains_guard_hook(pre_handlers, SESSION_START_COMMAND)
+                            and _contains_guard_hook(pre_handlers, "session-start")
+                        ),
+                        "session_start_installed": (
+                            isinstance(session_handlers, list)
+                            and _contains_guard_hook(session_handlers, "session-start")
                         ),
                     }
         return {"installed": False, "target_file": str(hooks_file), "exists": True}
@@ -80,7 +124,7 @@ def status(repo_path: str | Path | None = None) -> dict[str, Any]:
         }
 
 
-def install(repo_path: str | Path | None = None) -> tuple[bool, str]:
+def install(repo_path: str | Path | None = None, guard_executable: str | None = None) -> tuple[bool, str]:
     """Installs Guard Stop hook into .agents/hooks.json.
     
     Returns:
@@ -116,29 +160,46 @@ def install(repo_path: str | Path | None = None) -> tuple[bool, str]:
         pre_list = []
         guard_hook["PreInvocation"] = pre_list
 
-    stop_present = _contains_guard_hook(stop_list)
-    pre_present = _contains_guard_hook(pre_list, SESSION_START_COMMAND)
-    if stop_present and pre_present:
+    session_start_list = guard_hook.setdefault("SessionStart", [])
+    if not isinstance(session_start_list, list):
+        session_start_list = []
+        guard_hook["SessionStart"] = session_start_list
+
+    stop_present = _contains_guard_hook(stop_list, "stop")
+    pre_present = _contains_guard_hook(pre_list, "session-start")
+    session_start_present = _contains_guard_hook(session_start_list, "session-start")
+    if stop_present and (pre_present or session_start_present):
         return True, f"Guard hooks are already installed in {hooks_file}"
 
     from guard_cli.hook import get_hook_timeout
     timeout = get_hook_timeout(repo_path)
 
+    guard_exe = guard_executable or get_guard_executable()
+    stop_cmd = f"{guard_exe} hook stop"
+    session_start_cmd = f"{guard_exe} hook session-start"
+
     if not stop_present:
         stop_list.append({
             "type": "command",
-            "command": HOOK_COMMAND,
+            "command": stop_cmd,
             "timeout": timeout,
         })
 
-    # agy has no SessionStart event; PreInvocation fires before every model call
-    # and records the baseline on first use (see antigravity.google/docs/hooks).
-    # PreInvocation takes a flat handler list (matcher ignored).
+    # Both SessionStart (fires once at session start per hooks.md) and
+    # PreInvocation (fires before each model call) record the baseline
+    # on first use via `guard hook session-start` safely and idempotently.
+    if not session_start_present:
+        session_start_list.append({
+            "type": "command",
+            "command": session_start_cmd,
+            "timeout": 30,
+        })
+
     if not pre_present:
         pre_list.append({
             "type": "command",
-            "command": SESSION_START_COMMAND,
-            "timeout": timeout,
+            "command": session_start_cmd,
+            "timeout": 30,
         })
 
     with open(hooks_file, "w", encoding="utf-8") as f:
@@ -166,11 +227,14 @@ def uninstall(repo_path: str | Path | None = None) -> tuple[bool, str]:
         if not isinstance(hook_cfg, dict):
             continue
         container_modified = False
-        for event, command in (("Stop", HOOK_COMMAND), ("PreInvocation", SESSION_START_COMMAND)):
+        for event, subcmd in (("Stop", "stop"), ("PreInvocation", "session-start"), ("SessionStart", "session-start")):
             orig = hook_cfg.get(event)
             if not isinstance(orig, list):
                 continue
-            new_list = [h for h in orig if not (isinstance(h, dict) and h.get("command") == command)]
+            new_list = [
+                h for h in orig
+                if not (isinstance(h, dict) and (f"hook {subcmd}" in h.get("command", "") or h.get("command") in (HOOK_COMMAND, SESSION_START_COMMAND)))
+            ]
             if len(new_list) != len(orig):
                 if new_list:
                     hook_cfg[event] = new_list

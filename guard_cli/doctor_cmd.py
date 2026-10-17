@@ -316,6 +316,14 @@ def check_integrations(repo_path: Path) -> CheckResult:
     agy_info = antigravity.status(repo_path)
     if not claude_info["installed"] and not agy_info["installed"]:
         missing.append("hook in .agents/hooks.json or .claude/settings.json")
+    elif agy_info.get("installed") and not agy_info.get("executable_exists", True):
+        exe = agy_info.get("executable_path")
+        return CheckResult(
+            name="integrations",
+            status="fail",
+            message=f"Guard executable configured in .agents/hooks.json does not exist: {exe}.",
+            fix="Run 'guard init' or 'guard hook install --antigravity' to update executable path.",
+        )
 
     # 3. Check AGENTS.md or CLAUDE.md marked block
     agents_doc = repo_path / "AGENTS.md"

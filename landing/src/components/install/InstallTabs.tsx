@@ -5,7 +5,7 @@ import { Badge } from "./Badge"
 import { CodeBlock } from "./CodeBlock"
 import { Step } from "./Step"
 import { AgentIcon } from "./AgentIcon"
-import { ArrowRight, CheckCircle2, FileCode, RotateCcw } from "lucide-react"
+import { CheckCircle2, ChevronDown, ChevronUp, ExternalLink, FileCode, RotateCcw, ShieldCheck, Undo2 } from "lucide-react"
 
 type Agent = (typeof agents)[number]
 
@@ -26,45 +26,49 @@ function initialValue(): string {
 }
 
 function InstallSteps({ agent }: { agent: Agent }) {
+  const [disclosureOpen, setDisclosureOpen] = useState(false)
+
   return (
-    <div className="install-steps-wrapper">
-      <div className="install-agent-banner">
-        <div className="install-agent-banner-icon" aria-hidden="true">
-          <AgentIcon id={agent.id} size={22} />
-        </div>
-        <div className="install-agent-banner-info">
-          <h3 className="install-agent-banner-title">{agent.label}</h3>
-          <span className="install-agent-banner-sub">Hook configuration &amp; verification</span>
-        </div>
+    <div className="install-steps-wrapper" role="tabpanel" id={`panel-${agent.id}`} aria-labelledby={`tab-${agent.id}`}>
+      {/* Before you start prerequisite callout */}
+      <div className="install-prereq-banner">
+        <span className="install-prereq-label">Before you start:</span>
+        <span className="install-prereq-text">
+          Python project with pytest, git, and{" "}
+          <a
+            href={agent.prereqUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="install-prereq-link"
+          >
+            uv <ExternalLink size={11} className="inline-icon" aria-hidden="true" />
+          </a>
+          .
+        </span>
       </div>
 
-      <Step n={1} title="Run in your project folder" tag="One command">
-        <p>
-          The command configures Guard&apos;s enforcement hook for{" "}
-          <strong>{agent.label}</strong> (safe to re-run). No extra setup
-          step: <code className="install-inline-code">uvx</code> runs Guard on demand.
-        </p>
-        <CodeBlock value={agent.run ?? ""} label="bash" isCommand />
-        {agent.runNote ? (
-          <p className="install-runnote">{agent.runNote}</p>
-        ) : null}
-
-        <div className="install-writes-box">
-          <div className="install-writes-label">
-            <FileCode size={13} className="install-writes-icon" aria-hidden="true" />
-            <span>Files configured automatically:</span>
-          </div>
-          <div className="install-writes">
-            {agent.writes.map((w) => (
-              <span key={w} className="install-file-pill">
-                <code>{w}</code>
-              </span>
-            ))}
-          </div>
-        </div>
+      {/* Step 1: Install tool */}
+      <Step n={1} title="Install Guard" tag="Global Tool">
+        <p>Install the Guard CLI as an isolated, PATH-accessible tool on your machine:</p>
+        <CodeBlock value={agent.installCmd} label="bash" isCommand />
+        {agent.alternative && (
+          <p className="install-alt-row">
+            <strong>Alternative:</strong> permanent install via pipx (<code>pipx install guard-cli</code>)
+          </p>
+        )}
       </Step>
 
-      <Step n={2} title="Restart your agent" tag="Reload">
+      {/* Step 2: Set up repository */}
+      <Step n={2} title="Set up your project" tag="Repository Init">
+        <p>
+          In your project root directory, run the initialization command. This builds the FalkorDB test graph, which can take a few minutes on large projects:
+        </p>
+        <CodeBlock value={agent.initCmd} label="bash" isCommand />
+        <p className="install-runnote">{agent.initNote}</p>
+      </Step>
+
+      {/* Step 3: Restart agent */}
+      <Step n={3} title="Restart your agent" tag="Reload Hook">
         <div className="install-restart-box">
           <div className="install-restart-icon-wrap" aria-hidden="true">
             <RotateCcw size={15} className="install-restart-icon" />
@@ -73,71 +77,69 @@ function InstallSteps({ agent }: { agent: Agent }) {
         </div>
       </Step>
 
-      <Step n={3} title="Verify integration" tag="Doctor check" isLast>
-        <p>Run the diagnostic check in your terminal to ensure hooks are active:</p>
-        <CodeBlock value={agent.verify ?? "guard doctor"} label="verify" compact isCommand />
+      {/* Step 4: Verify integration */}
+      <Step n={4} title="Verify integration" tag="Doctor check" isLast>
+        <p>Run the diagnostic check in your terminal. Expected: all checks pass.</p>
+        <CodeBlock value={agent.verify} label="verify" compact isCommand />
         <div className="install-verify-expected">
           <div className="install-verify-header">
             <CheckCircle2 size={13} className="install-verify-icon" aria-hidden="true" />
             <span>Expected health report:</span>
           </div>
           <CodeBlock
-            value={agent.expected ?? ""}
-            label="doctor report"
+            value={agent.expected}
+            label="guard doctor"
             compact
             isCommand={false}
           />
         </div>
-        {agent.note ? <p className="install-runnote">{agent.note}</p> : null}
       </Step>
-    </div>
-  )
-}
 
-function ComingSoon({ agent }: { agent: Agent }) {
-  return (
-    <div className="install-soon-card">
-      <div className="install-soon-badge-wrap">
-        <span className="install-soon-status">Phase 3 · Roadmap</span>
-      </div>
-      <div className="install-agent-banner">
-        <div className="install-agent-banner-icon" aria-hidden="true">
-          <AgentIcon id={agent.id} size={22} />
-        </div>
-        <div className="install-agent-banner-info">
-          <h3 className="install-agent-banner-title">{agent.label}</h3>
-          <span className="install-agent-banner-sub">Native MCP integration in development</span>
-        </div>
-      </div>
-      <p>
-        Full native hook integration for <strong>{agent.label}</strong> is
-        scheduled with the Guard MCP server release. In the interim, Guard
-        safeguards Claude Code and Antigravity, and a git{" "}
-        <code className="install-inline-code">pre-push</code> hook protects your team.
-      </p>
-
-      {agent.format ? (
-        <div className="install-soon-preview">
-          <div className="install-soon-format-head">
-            <FileCode size={13} aria-hidden="true" />
-            <span>Target MCP Configuration:</span>
-          </div>
-          <CodeBlock value={agent.format} label="config" compact isCommand={false} />
-        </div>
-      ) : null}
-
-      {agent.note ? <p className="install-runnote">{agent.note}</p> : null}
-
-      <div className="install-soon-actions">
-        <a
-          className="install-githublink-btn"
-          href={GITHUB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+      {/* Expandable "What does this change?" disclosure */}
+      <div className="install-disclosure-box">
+        <button
+          type="button"
+          className="install-disclosure-toggle"
+          onClick={() => setDisclosureOpen((prev) => !prev)}
+          aria-expanded={disclosureOpen}
         >
-          <span>Track progress on GitHub</span>
-          <ArrowRight size={14} className="install-link-arrow" aria-hidden="true" />
-        </a>
+          <div className="install-disclosure-toggle-title">
+            <FileCode size={14} className="install-disclosure-icon" aria-hidden="true" />
+            <span>What does this change?</span>
+          </div>
+          {disclosureOpen ? <ChevronUp size={15} aria-hidden="true" /> : <ChevronDown size={15} aria-hidden="true" />}
+        </button>
+
+        {disclosureOpen && (
+          <div className="install-disclosure-content">
+            <p className="install-disclosure-desc">
+              Guard writes only local integration configurations into your repository. No code logic is modified:
+            </p>
+            <ul className="install-disclosure-list">
+              {agent.writes.map((item) => (
+                <li key={item.file}>
+                  <code className="install-code-inline">{item.file}</code> — {item.description}
+                </li>
+              ))}
+            </ul>
+            {agent.coverageNote && (
+              <p className="install-disclosure-note">
+                <strong>Note:</strong> {agent.coverageNote}
+              </p>
+            )}
+            <div className="install-undo-row">
+              <Undo2 size={13} className="install-undo-icon" aria-hidden="true" />
+              <span>To uninstall hooks at any time: </span>
+              <code className="install-code-inline">{agent.undo}</code>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Platform limits callout */}
+      <div className="install-platform-limits">
+        <ShieldCheck size={14} className="install-platform-icon" aria-hidden="true" />
+        <p>{agent.platformLimit}</p>
       </div>
     </div>
   )
@@ -164,43 +166,65 @@ export function InstallTabs() {
   }, [])
 
   return (
-    <Tabs
-      value={value}
-      onValueChange={handleValueChange}
-      className="install-tabs"
-    >
-      <div className="install-tabs-nav-outer" ref={navRef}>
-        <TabsList variant="line" aria-label="Choose your agent" className="install-tabs-list">
-          {agents.map((a) => (
-            <TabsTrigger
-              key={a.id}
-              value={a.id}
-              className="install-tab-trigger"
-              title={a.label}
-              aria-label={a.label}
-            >
-              <div className="install-tab-icon-wrap" aria-hidden="true">
-                <AgentIcon id={a.id} size={20} />
-              </div>
-              <span className="sr-only">{a.label}</span>
-              <Badge status={a.badge} />
-            </TabsTrigger>
-          ))}
-          <TabsIndicator className="install-tab-indicator" />
-        </TabsList>
+    <div className="install-tabs-container">
+      <div className="install-scope-bar">
+        <span className="install-scope-badge">Python projects with pytest</span>
       </div>
 
-      <div className="install-tabs-panels">
-        {agents.map((a) => (
-          <TabsContent key={a.id} value={a.id} className="install-tab-content">
-            {a.badge === "coming-soon" ? (
-              <ComingSoon agent={a} />
-            ) : (
+      <Tabs
+        value={value}
+        onValueChange={handleValueChange}
+        className="install-tabs"
+      >
+        <div className="install-tabs-nav-outer" ref={navRef}>
+          <TabsList
+            variant="line"
+            aria-label="Choose your agent"
+            className="install-tabs-list"
+            role="tablist"
+          >
+            {agents.map((a) => (
+              <TabsTrigger
+                key={a.id}
+                value={a.id}
+                id={`tab-${a.id}`}
+                aria-controls={`panel-${a.id}`}
+                role="tab"
+                className="install-tab-trigger"
+                title={a.label}
+              >
+                <div className="install-tab-icon-wrap" aria-hidden="true">
+                  <AgentIcon id={a.id} size={18} />
+                </div>
+                <span className="install-tab-name">{a.label}</span>
+                <Badge status={a.badge} />
+              </TabsTrigger>
+            ))}
+            <TabsIndicator className="install-tab-indicator" />
+          </TabsList>
+        </div>
+
+        <div className="install-tabs-panels">
+          {agents.map((a) => (
+            <TabsContent key={a.id} value={a.id} className="install-tab-content">
               <InstallSteps agent={a} />
-            )}
-          </TabsContent>
-        ))}
+            </TabsContent>
+          ))}
+        </div>
+      </Tabs>
+
+      {/* Coming next row */}
+      <div className="install-coming-next-row">
+        <span>Coming next: <strong>Cursor</strong>, <strong>VS Code</strong>, <strong>Codex</strong>, <strong>OpenCode</strong> (needs the MCP server).</span>
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="install-coming-link"
+        >
+          Follow progress on GitHub <ExternalLink size={12} className="inline-icon" aria-hidden="true" />
+        </a>
       </div>
-    </Tabs>
+    </div>
   )
 }

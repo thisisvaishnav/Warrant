@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "react"
 import { Check, Copy, Terminal } from "lucide-react"
 
 async function copyText(text: string): Promise<boolean> {
+  // Strip any prompt characters if accidentally included, ensure plain dashes
+  const cleanText = text.replace(/^[$#]\s+/gm, "").replace(/\u2014/g, "--")
   try {
     if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text)
+      await navigator.clipboard.writeText(cleanText)
       return true
     }
   } catch {
@@ -12,7 +14,7 @@ async function copyText(text: string): Promise<boolean> {
   }
   try {
     const ta = document.createElement("textarea")
-    ta.value = text
+    ta.value = cleanText
     ta.style.position = "fixed"
     ta.style.opacity = "0"
     document.body.appendChild(ta)
@@ -46,7 +48,7 @@ export function CodeBlock({
     if (!ok) return
     setCopied(true)
     window.clearTimeout(timer.current)
-    timer.current = window.setTimeout(() => setCopied(false), 1800)
+    timer.current = window.setTimeout(() => setCopied(false), 2000)
   }
 
   const displayLabel = label ?? (compact ? "terminal" : "zsh")
@@ -68,7 +70,7 @@ export function CodeBlock({
           onClick={onCopy}
           data-copied={copied}
           type="button"
-          aria-label={copied ? "Copied command to clipboard" : "Copy command to clipboard"}
+          aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
         >
           {copied ? (
             <>
@@ -85,7 +87,7 @@ export function CodeBlock({
       </div>
 
       <div className="install-code-body">
-        <pre className="install-code">
+        <pre className="install-code" style={{ fontVariantLigatures: "none" }}>
           <code>
             {isCommand && !compact && <span className="install-prompt-symbol" aria-hidden="true">$ </span>}
             {value}

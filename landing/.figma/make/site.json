@@ -1,11 +1,11 @@
 {
-  "title": "Warrant — Graph-Powered Safety Layer for AI Coding Agents",
-  "description": "After an AI agent changes code, Warrant selects the right tests to run with a measured trust score, built on FalkorDB.",
+  "title": "Guard — Stop AI agents from finishing with broken code",
+  "description": "Guard runs only the tests a change can break, and blocks your coding agent until they pass.",
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
-    "addBypassLinks": false,
+    "addBypassLinks": true,
     "ignoreReducedMotion": false
   }
 }

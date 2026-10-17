@@ -31,3 +31,23 @@ jobs:
       - name: Run unit tests
         run: |
           uv run pytest tests/test_static.py tests/test_decision.py tests/test_feedback.py tests/test_thin_slice.py
+
+  audit-site-commands:
+    name: Verify Site Advertised CLI Commands
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: Install Guard CLI
+        run: |
+          uv pip install -e .
+      - name: Verify site CLI commands exist in release
+        run: |
+          uv run python scripts/verify_site_commands.py

@@ -5,20 +5,26 @@ All notable changes to Guard will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.2] - 2026-10-17
+## [0.1.2] - 2026-10-18
 
 ### Added
 - **PyPI Project Links**: `[project.urls]` block added so the PyPI page links to the repository, issue tracker, and changelog.
 - **Antigravity Hook Subcommand Support**: `guard hook install|uninstall|status --antigravity` now manages stop hooks in Antigravity's `.agents/hooks.json` directly from the CLI.
+- **Payload Capture**: `GUARD_DEBUG_PAYLOAD=1` writes raw stdin payloads to `.guard/last_payload.json` for live debugging and testing.
 
 ### Changed
-- **Antigravity Hook Schema Verification**: `.agents/hooks.json` writer verified against [Antigravity's official hook documentation](https://antigravity.google/docs/hooks). Stop handlers (matcher ignored, direct handler list) and the `{"decision": "continue", "reason": ...}` stdout contract are correct per the published schema; the integration remains **experimental** pending a live-session verification.
+- **Antigravity Hook Hardening**:
+  - Writes absolute executable path into `.agents/hooks.json` to prevent PATH truncation failures inside subshells.
+  - Guaranteed pure stdout JSON stream (`{"decision":"continue"|"stop","reason":"..."}`) with all logs, warnings, and diagnostic output isolated to stderr, always exiting 0.
+  - Verified hook format and field names against official Antigravity documentation (`hooks.md`), configuring `SessionStart`, `PreInvocation`, and `Stop` with execution timeouts in seconds.
+- **Actionable Block Message**: Hook block summary lists failing tests, changed functions, and instructs: "Fix the source code. Do not edit, skip, or delete tests."
 - **Claude Code Hook Format Cleanup**: `guard hook install` now writes the canonical Claude Code shape (`{"matcher": "", "hooks": [{type, command, timeout}]}`) under `hooks.Stop`, dropping the stray non-standard top-level `command` key. Status/uninstall still detect the legacy shape written by 0.1.x releases.
-- Both the Claude Code and Antigravity Stop-hook integrations are labeled **experimental** in the README until a real live session passes.
 
 ### Fixed
-- **Commit Bypass via Fresh Session ID (High)**: A new agent session ID no longer reset the diff baseline to the current HEAD, which let a broken commit look like a clean tree and pass the Stop hook. The baseline is now repo-level — `repo.last_verified_sha` (updated on every successful run), falling back to the SHA recorded at ingest in `.guard/state.json` — and is therefore independent of session IDs. The baseline is also recorded as early as possible: a Claude Code `SessionStart` hook and an Antigravity `PreInvocation` hook (agy has no `SessionStart` event per its docs) both run `guard hook session-start`. Regression test `tests/test_commit_bypass_fresh_session.py` commits a mutant under a fresh session ID and asserts exit 2.
-- **Fail-open on unavailable database**: When `check()` cannot evaluate the diff (database/graph unreachable), `run()` no longer attempts the full-suite fallback — which could itself fail (and block the agent) on repositories whose own tests require FalkorDB. Guard now allows the stop with a loud stderr warning and records a `fail_open` event, matching the documented fail-open contract. Previously this path could log a `blocked` event carrying `policy: fail_open`.
+- **Commit Bypass via Fresh Session ID (High)**: A new agent session ID no longer resets the diff baseline to the current HEAD, which let a broken commit look like a clean tree and pass the Stop hook. The baseline is now repo-level — `repo.last_verified_sha` (updated on every successful run), falling back to the SHA recorded at ingest in `.guard/state.json` — and is therefore independent of session IDs.
+- **Loop Guard Off-by-One**: Corrected block cap calculation to ensure the agent receives exactly 3 consecutive blocks before handing control back to the human.
+- **Database Down Fail-Open**: When FalkorDB is unreachable, allows stop with `{"decision": "stop", "reason": "Guard skipped: database unreachable"}` and logs a `fail_open` event (never a `blocked` event).
+- **Executable Validation in Doctor**: `guard doctor` verifies the absolute binary path configured in `.agents/hooks.json` actually exists on the filesystem.
 
 ## [0.1.1] - 2026-10-17
 

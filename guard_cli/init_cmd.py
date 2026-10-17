@@ -342,14 +342,16 @@ def write_integrations(repo_path: Path, agents: list[str]) -> list[Path]:
 
     # 1. Update .gitignore
     gitignore = repo_path / ".gitignore"
-    if gitignore.exists():
-        content = gitignore.read_text(encoding="utf-8")
-        if ".guard/" not in content and ".guard" not in content:
-            new_content = content.rstrip() + "\n.guard/\n"
-            gitignore.write_text(new_content, encoding="utf-8")
-            modified_files.append(gitignore)
-    else:
-        gitignore.write_text(".guard/\n", encoding="utf-8")
+    current_content = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
+    lines_to_add: list[str] = []
+    if ".guard/" not in current_content and ".guard" not in current_content:
+        lines_to_add.append(".guard/")
+    if ("antigravity" in agents or "agy" in agents) and ".agents/hooks.json" not in current_content and ".agents/" not in current_content:
+        lines_to_add.append(".agents/hooks.json")
+
+    if lines_to_add:
+        new_content = current_content.rstrip() + ("\n" if current_content.strip() else "") + "\n".join(lines_to_add) + "\n"
+        gitignore.write_text(new_content, encoding="utf-8")
         modified_files.append(gitignore)
 
     # 2. Install Claude Code Stop hook and settings via claude integration

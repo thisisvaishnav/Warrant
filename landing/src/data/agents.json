@@ -2,79 +2,71 @@
   {
     "id": "claude-code",
     "label": "Claude Code",
-    "badge": "enforced",
-    "run": "uvx guard-cli setup --agent claude-code",
-    "runNote": "uvx runs Guard without a permanent install. Prefer a hard install? Use pipx install guard-cli, then guard setup --agent claude-code.",
-    "restart": "Quit Claude Code and start it again in your project.",
+    "badge": "beta",
+    "prereq": "Python project with pytest, git, and uv",
+    "prereqUrl": "https://docs.astral.sh/uv/",
+    "installCmd": "uv tool install guard-cli",
+    "initCmd": "guard init --yes",
+    "initNote": "In your project folder, run guard init --yes. This builds the test graph, which can take a few minutes on large projects.",
+    "restart": "Restart Claude Code in that folder.",
     "verify": "guard doctor",
-    "expected": "status: pass\nenvironment   pass   Python 3.10+, guard installed\nbackend       pass   Backend 'server' is healthy\ntarget_repo   pass   Target environment verified with pytest and pytest-cov\nintegrations  pass   Stop hook installed in .claude/settings.local.json\nhook_timeout  pass   Hook timeout is configured to 180s.",
-    "writes": [".claude/settings.local.json — Stop hook (enforcement: exit 2)"],
-    "note": "The Stop hook runs guard check before Claude Code reports a task complete. Failing tests block the stop with exit code 2.",
-    "format": null
+    "expected": "──────────────────────── Guard Doctor Diagnostic Report ────────────────────────\nSubsystem Checks:\n  environment   PASS   Python 3.10+, guard v0.1.2 (binary: guard)\n  backend       PASS   Backend 'server' is healthy (localhost:6379)\n  graph         PASS   Graph has 393 functions, 1,038 tests, 22,015 coverage edges\n  freshness     PASS   Graph is fresh at commit 822d265\n  target_repo   PASS   Target environment verified with pytest and pytest-cov\n  integrations  PASS   Integrations verified for claude (AGENTS.md and .gitignore present)\n  hook_timeout  PASS   Hook timeout is configured to 180s.\nResult: 7 passed, 0 warnings, 0 failures",
+    "writes": [
+      {
+        "file": ".claude/settings.local.json",
+        "description": "Stop hook command (guard hook stop) with exit code 2 on test failure"
+      },
+      {
+        "file": "AGENTS.md & CLAUDE.md",
+        "description": "Injects Guard verification instructions so agents test before finishing"
+      },
+      {
+        "file": ".gitignore",
+        "description": "Adds .guard/ to keep local database state and caches uncommitted"
+      },
+      {
+        "file": ".guard/",
+        "description": "Local graph storage, session records, and test run cache"
+      }
+    ],
+    "coverageNote": "--yes may automatically install pytest-cov into your virtual environment if coverage profiling is missing.",
+    "undo": "guard hook uninstall",
+    "platformLimit": "Embedded database needs Python 3.12+, Linux glibc 2.39+ or macOS 15+. Otherwise Guard uses Docker.",
+    "alternative": "Alternative: permanent install via pipx (`pipx install guard-cli`)."
   },
   {
     "id": "antigravity",
     "label": "Antigravity",
     "badge": "experimental",
-    "run": "uvx guard-cli setup --agent antigravity",
-    "runNote": null,
+    "prereq": "Python project with pytest, git, and uv",
+    "prereqUrl": "https://docs.astral.sh/uv/",
+    "installCmd": "uv tool install guard-cli",
+    "initCmd": "guard init --yes --agents antigravity",
+    "initNote": "In your project folder, run guard init --yes --agents antigravity to index code and configure hooks.",
     "restart": "Quit Antigravity and reopen your workspace.",
     "verify": "guard doctor",
-    "expected": "status: pass\nenvironment   pass   Python 3.10+, guard installed\nbackend       pass   Backend 'server' is healthy\ntarget_repo   pass   Target environment verified with pytest and pytest-cov\nintegrations  pass   Stop hook installed in .agents/hooks.json",
-    "writes": [".agents/hooks.json — Stop hook (merge-safe, uninstallable)"],
-    "note": "Writes a merge-safe Stop hook into .agents/hooks.json. The git pre-push hook is the safety net while the decision-JSON contract is under QA.",
-    "format": null
-  },
-  {
-    "id": "opencode",
-    "label": "OpenCode",
-    "badge": "coming-soon",
-    "run": null,
-    "runNote": null,
-    "restart": null,
-    "verify": null,
-    "expected": null,
-    "writes": ["opencode.json — mcp block with a command array"],
-    "note": "Ships with the MCP server (Phase 3). Advisory enforcement only — OpenCode hooks run for their side effects and cannot block a stop.",
-    "format": "opencode.json → { \"mcp\": { \"guard\": { \"command\": [...] } } }"
-  },
-  {
-    "id": "codex",
-    "label": "Codex",
-    "badge": "coming-soon",
-    "run": null,
-    "runNote": null,
-    "restart": null,
-    "verify": null,
-    "expected": null,
-    "writes": ["codex mcp add guard -- <command>"],
-    "note": "Ships with the MCP server (Phase 3). Advisory enforcement alongside the git pre-push hook.",
-    "format": "codex mcp add guard -- <command>"
-  },
-  {
-    "id": "vscode",
-    "label": "VS Code",
-    "badge": "coming-soon",
-    "run": null,
-    "runNote": null,
-    "restart": null,
-    "verify": null,
-    "expected": null,
-    "writes": [".vscode/mcp.json — mcpServers entry"],
-    "note": "Ships with the MCP server (Phase 3). Advisory enforcement alongside the git pre-push hook.",
-    "format": ".vscode/mcp.json → { \"mcpServers\": { \"guard\": { ... } } }"
-  },
-  {
-    "id": "cursor",
-    "label": "Cursor",
-    "badge": "coming-soon",
-    "run": null,
-    "runNote": null,
-    "restart": null,
-    "verify": null,
-    "expected": null,
-    "writes": [".cursor/mcp.json — mcpServers entry"],
-    "note": "Ships with the MCP server (Phase 3), plus a one-click Cursor deep link with the server config encoded in the URL.",
-    "format": ".cursor/mcp.json → { \"mcpServers\": { \"guard\": { ... } } }"
+    "expected": "──────────────────────── Guard Doctor Diagnostic Report ────────────────────────\nSubsystem Checks:\n  environment   PASS   Python 3.10+, guard v0.1.2 (binary: guard)\n  backend       PASS   Backend 'server' is healthy (localhost:6379)\n  graph         PASS   Graph has 393 functions, 1,038 tests, 22,015 coverage edges\n  freshness     PASS   Graph is fresh at commit 822d265\n  target_repo   PASS   Target environment verified with pytest and pytest-cov\n  integrations  PASS   Integrations verified for antigravity (AGENTS.md and .gitignore present)\n  hook_timeout  PASS   Hook timeout is configured to 180s.\nResult: 7 passed, 0 warnings, 0 failures",
+    "writes": [
+      {
+        "file": ".agents/hooks.json",
+        "description": "PreInvocation (baseline SHA) and Stop hook configuration (merge-safe)"
+      },
+      {
+        "file": "AGENTS.md",
+        "description": "Agent instructions for testing and running Guard"
+      },
+      {
+        "file": ".gitignore",
+        "description": "Adds .guard/ to keep local database state uncommitted"
+      },
+      {
+        "file": ".guard/",
+        "description": "Local graph storage, session records, and test run cache"
+      }
+    ],
+    "coverageNote": "--yes may automatically install pytest-cov into your virtual environment if coverage profiling is missing.",
+    "undo": "guard hook uninstall --antigravity",
+    "platformLimit": "Embedded database needs Python 3.12+, Linux glibc 2.39+ or macOS 15+. Otherwise Guard uses Docker.",
+    "alternative": "Alternative: permanent install via pipx (`pipx install guard-cli`)."
   }
 ]

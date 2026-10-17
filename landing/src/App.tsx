@@ -1,5 +1,25 @@
 import { useState } from "react"
 import { InstallTabs } from "@/components/install/InstallTabs"
+import { TerminalDemo } from "@/components/TerminalDemo"
+import { EyeTracker } from "@/components/EyeTracker"
+import { AgentIcon } from "@/components/install/AgentIcon"
+import { Check, Copy } from "lucide-react"
+
+const GithubIcon = ({ size = 16 }: { size?: number }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+    />
+  </svg>
+)
 
 const Arrow = ({ dark = false }: { dark?: boolean }) => (
   <span className={`arrow-box ${dark ? "arrow-dark" : ""}`} aria-hidden="true">
@@ -49,13 +69,38 @@ const SectionTitle = ({
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [heroCopied, setHeroCopied] = useState(false)
+
+  const heroCommand = "uv tool install guard-cli && guard init --yes"
+
+  const handleHeroCopy = async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(heroCommand)
+      } else {
+        const ta = document.createElement("textarea")
+        ta.value = heroCommand
+        ta.style.position = "fixed"
+        ta.style.opacity = "0"
+        document.body.appendChild(ta)
+        ta.select()
+        document.execCommand("copy")
+        document.body.removeChild(ta)
+      }
+      setHeroCopied(true)
+      setTimeout(() => setHeroCopied(false), 2000)
+    } catch {
+      // ignore clipboard error
+    }
+  }
 
   return (
     <main>
       <section className="hero" id="top">
         <nav className="nav shell">
-          <a className="brand" href="#top" aria-label="Warrant home">
-            warrant
+          <a className="brand" href="#top" aria-label="Guard home">
+            <EyeTracker size={30} shape="Cube" />
+            <span>guard</span>
           </a>
           <button
             className="menu-button"
@@ -67,34 +112,37 @@ export default function App() {
             <span />
           </button>
           <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-            <a href="#features" onClick={() => setMenuOpen(false)}>
-              Features<sup>01</sup>
-            </a>
             <a href="#install" onClick={() => setMenuOpen(false)}>
-              Install<sup>02</sup>
+              Install
             </a>
             <a href="#playbooks" onClick={() => setMenuOpen(false)}>
-              How It Works<sup>03</sup>
+              How it works
             </a>
             <a href="#stories" onClick={() => setMenuOpen(false)}>
-              Benchmarks<sup>04</sup>
+              Benchmarks
             </a>
             <a href="#pricing" onClick={() => setMenuOpen(false)}>
-              Architecture<sup>05</sup>
+              Docs
             </a>
-            <a href="#cta" onClick={() => setMenuOpen(false)}>
-              CLI<sup>06</sup>
+            <a
+              href="https://github.com/thisisvaishnav/guard"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+            >
+              GitHub
             </a>
           </div>
           <div className="nav-actions">
             <a
-              className="login"
+              className="solid-github-btn"
               href="https://github.com/thisisvaishnav/guard"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub repository"
+              aria-label="View Guard repository on GitHub"
             >
-              GitHub
+              <GithubIcon size={15} aria-hidden="true" />
+              <span>View on GitHub</span>
             </a>
           </div>
         </nav>
@@ -104,64 +152,114 @@ export default function App() {
           <i />
           <i />
         </div>
+
         <div className="hero-content shell">
-          <div className="yc-badge">
+          <a
+            className="yc-badge"
+            href="https://falkordb.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Powered by FalkorDB"
+          >
             <img
               src="/assets/falkordb.svg"
               alt="FalkorDB"
               style={{
-                width: 20,
-                height: 20,
-                borderRadius: 4,
+                width: 18,
+                height: 18,
+                borderRadius: 0,
                 display: "block",
               }}
             />
             <span>Powered by</span>
             <em>FalkorDB</em>
-          </div>
-          <h1>
-            Graph-powered safety layer
-            <span>for AI coding agents,</span>
-            <span>built on FalkorDB.</span>
+          </a>
+
+          <h1 className="hero-headline">
+            Stop AI agents from finishing
+            <span>with broken code.</span>
           </h1>
-          <p>
-            After an AI agent changes code, Warrant selects the right tests to
-            run with a measured trust score — and falls back to the full suite
-            when trust is low.
+
+          <p className="hero-subhead">
+            Guard runs only the tests a change can break, and blocks your coding agent until they pass.
           </p>
-          <form
-            className="url-form"
-            onSubmit={(event) => event.preventDefault()}
-          >
-            <label className="sr-only" htmlFor="website">
-              Git diff or repo path
-            </label>
-            <input
-              id="website"
-              type="text"
-              placeholder="git diff HEAD or change.patch"
-            />
-            <button type="submit">Select tests with Warrant</button>
-          </form>
-          <div className="hero-foot">
-            <div>
-              <div className="stars">★★★★★</div>
-              <strong>0% Escapes</strong>
+
+          {/* Dark Command Box with Copy button */}
+          <div className="hero-cmd-container">
+            <div className="hero-cmd-box">
+              <span className="hero-prompt-symbol" aria-hidden="true">$ </span>
+              <code className="hero-cmd-code">{heroCommand}</code>
+              <button
+                type="button"
+                className="hero-copy-btn"
+                onClick={handleHeroCopy}
+                aria-label={heroCopied ? "Copied command" : "Copy command to clipboard"}
+              >
+                {heroCopied ? (
+                  <>
+                    <Check size={14} className="icon-copied" aria-hidden="true" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={14} aria-hidden="true" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
             </div>
-            <span>
-              ~84% test-time savings on held-out mutants without missing
-              failures.
-            </span>
-            <div className="avatars" aria-hidden="true">
-              <i>T1</i>
-              <i>S1</i>
-              <i>T5</i>
-              <i>T8</i>
+            <p className="hero-privacy-line">
+              Runs locally. Your code never leaves your machine.
+            </p>
+          </div>
+
+          {/* Action Row */}
+          <div className="hero-actions-group">
+            <a className="button hero-quickstart-btn" href="#install">
+              <Arrow />
+              <span>Quickstart Guide</span>
+            </a>
+            <a
+              className="hero-view-github-btn"
+              href="https://github.com/thisisvaishnav/guard"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GithubIcon size={16} aria-hidden="true" />
+              <span>View on GitHub</span>
+            </a>
+          </div>
+
+          {/* Factual Proof Line */}
+          <div className="hero-proof-strip">
+            <a href="#stories" className="hero-proof-link">
+              <span className="proof-highlight">0 missed failures</span> across 17 killable mutants on Flask, with <strong>67% less test time</strong> ↗
+            </a>
+          </div>
+
+          {/* Works with strip */}
+          <div className="hero-works-with-strip">
+            <span className="works-with-tag">Works with:</span>
+            <div className="works-with-list">
+              <div className="works-agent-pill">
+                <AgentIcon id="claude-code" size={17} />
+                <span>Claude Code</span>
+              </div>
+              <div className="works-agent-pill">
+                <AgentIcon id="antigravity" size={17} />
+                <span>Antigravity</span>
+              </div>
             </div>
+          </div>
+
+          {/* Terminal Demonstration */}
+          <div className="hero-demo-section">
+            <TerminalDemo />
           </div>
         </div>
       </section>
 
+      {/* Page 2: Install Section */}
       <section className="install-section" id="install">
         <div className="shell">
           <div className="eyebrow"><span>02</span> INSTALL &amp; CONNECT</div>
@@ -171,12 +269,13 @@ export default function App() {
           </SectionTitle>
           <p className="section-lead">
             Pick your agent, paste one command at the root of your project,
-            restart, verify. Your code never leaves your machine.
+            restart, and verify. Your code never leaves your machine.
           </p>
           <InstallTabs />
         </div>
       </section>
 
+      {/* Features: Graph Safety Layer */}
       <section className="agent-section" id="features">
         <div className="shell">
           <div className="eyebrow">
@@ -187,8 +286,11 @@ export default function App() {
             <span>That learns from every run.</span>
           </SectionTitle>
           <p className="section-lead light">
-            From mapping AST call graphs to per-test coverage evidence, Warrant
+            From mapping AST call graphs to per-test coverage evidence, Guard
             protects your test suite automatically.
+          </p>
+          <p className="trust-score-explainer">
+            Trust score measures evidence confidence (0.9 for per-test coverage, 0.6 for static call graph), git commit freshness, and dynamic dispatch risk before every run.
           </p>
           <div className="agent-grid">
             <article className="agent-card wide coral">
@@ -196,7 +298,7 @@ export default function App() {
                 <small>1/4</small>
                 <h3>Evaluates &amp; scores test trust first</h3>
                 <p>
-                  Warrant evaluates evidence confidence, freshness against
+                  Guard evaluates evidence confidence, freshness against
                   current commit, and dynamic dispatch risk to score trust
                   before running tests.
                 </p>
@@ -229,8 +331,8 @@ export default function App() {
               </p>
               <div className="message-card">
                 <div>
-                  <span>WR</span>
-                  <b>Warrant Decision</b>
+                  <span>GD</span>
+                  <b>Guard Decision</b>
                   <small>just now</small>
                 </div>
                 <p>
@@ -243,7 +345,7 @@ export default function App() {
               <small>4/4</small>
               <h3>Self-repairing feedback loop</h3>
               <p>
-                If an escape occurs, Warrant inserts a miss_repair edge
+                If an escape occurs, Guard inserts a miss_repair edge
                 (confidence 1.0) so the test is never missed again.
               </p>
               <div className="chart">
@@ -254,13 +356,16 @@ export default function App() {
               </div>
             </article>
           </div>
-          <a className="button coral-button" href="#pricing">
-            <Arrow />
-            <span>Run Warrant on your repo</span>
-          </a>
+          <div className="section-cta-wrap">
+            <a className="button coral-button" href="#install">
+              <Arrow />
+              <span>Run Guard on your repo</span>
+            </a>
+          </div>
         </div>
       </section>
 
+      {/* How It Works */}
       <section className="setup-section" id="playbooks">
         <div className="shell">
           <div className="eyebrow dark">
@@ -271,7 +376,7 @@ export default function App() {
             <span>Instant test acceleration.</span>
           </SectionTitle>
           <p className="section-lead">
-            Parse your repo once into FalkorDB. Warrant takes it from there.
+            Parse your repo once into FalkorDB. Guard takes it from there.
           </p>
           <div className="step-tabs">
             <span>Ingest</span>
@@ -288,22 +393,22 @@ export default function App() {
                   <i />
                 </div>
                 <div className="site-chip">
-                  guard ingest-static /path/to/repo
+                  guard init --yes
                 </div>
                 <div className="scan-line" />
               </div>
-              <h3>Ingest static call graph</h3>
+              <h3>Ingest static call graph &amp; baseline</h3>
               <p>
-                Extracts functions, calls, imports, and flags unresolvable
-                dynamic dispatch without guessing.
+                Extracts functions, calls, imports, and attaches per-test
+                coverage baseline without guessing.
               </p>
-              <b>docker compose up -d falkordb</b>
+              <b>guard init --yes</b>
             </article>
             <article>
               <div className="step-number">02</div>
               <div className="radar-mock">
                 <SignalIcon />
-                <span>14 covering tests found</span>
+                <span>26 covering tests found</span>
               </div>
               <h3>Attach coverage evidence</h3>
               <p>
@@ -320,7 +425,7 @@ export default function App() {
               <div className="calendar-mock">
                 <div className="cal-head">
                   <span>EVAL</span>
-                  <b>84% Saved</b>
+                  <b>67% Saved</b>
                 </div>
                 <div className="cal-grid">
                   {Array.from({ length: 20 }).map((_, i) => (
@@ -336,12 +441,13 @@ export default function App() {
                 Run only the tests that matter. Fall back to full suite when
                 trust drops below threshold.
               </p>
-              <b>Escape rate ≤ 5% with ≥ 40% test-time savings.</b>
+              <b>0 missed failures with 67% test-time savings on Flask.</b>
             </article>
           </div>
         </div>
       </section>
 
+      {/* Capabilities */}
       <section className="capabilities">
         <div className="shell">
           <div className="eyebrow">
@@ -352,8 +458,8 @@ export default function App() {
             <span>agent pipeline.</span>
           </SectionTitle>
           <p className="section-lead light">
-            Warrant handles AST parsing, FalkorDB traversals, trust calculation,
-            and CI enforcement.
+            Guard handles AST parsing, FalkorDB traversals, trust calculation,
+            and agent pre-commit hooks.
           </p>
           <div className="cap-grid">
             <article className="cap-card hero-cap">
@@ -367,7 +473,7 @@ export default function App() {
                 <i />
                 <i />
                 <i />
-                <b>0.85</b>
+                <b>0.94</b>
               </div>
               <div className="pills">
                 <span>FalkorDB Cypher</span>
@@ -379,12 +485,12 @@ export default function App() {
               <small>AGENT INTEGRATION</small>
               <h3>Strict gate for autonomous coding agents</h3>
               <p>
-                Agent calls guard run before declaring done. Low trust forces
-                full suite run automatically.
+                Agent calls Guard before declaring done. Low trust or failing
+                tests block task completion automatically.
               </p>
               <div className="mini-email">
                 <b>CLI Command</b>
-                <span>guard run --diff change.patch --repo /app</span>
+                <span>guard check --session sess_123</span>
               </div>
             </article>
             <article className="cap-card orange-card">
@@ -426,47 +532,20 @@ export default function App() {
               <div className="reply-ui">
                 <span>Decision Output</span>
                 <b>Skipped: no covering edge from any changed function.</b>
-                <button>guard stats ↗</button>
+                <a href="#install" className="button" style={{ padding: "8px 14px", fontSize: 12 }}>
+                  guard doctor ↗
+                </a>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <section className="stack-section">
-        <div className="shell stack-inner">
-          <div>
-            <div className="eyebrow dark">
-              <span>05</span> ONE SIMPLE STACK
-            </div>
-            <SectionTitle>
-              One graph safety layer. Eliminates blind agent runs.
-            </SectionTitle>
-            <p className="section-lead">
-              Stop choosing between 20-minute test suites and blind guessing.
-              FalkorDB delivers graph-native precision.
-            </p>
-          </div>
-          <div className="stack-visual">
-            <div className="tool-ring">
-              {[
-                "AST Call Graph",
-                "Per-Test Coverage",
-                "FalkorDB Engine",
-                "Agent Integration",
-              ].map((item) => (
-                <span key={item}>{item}</span>
-              ))}
-              <span className="tool-ring-brand">warrant</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* Benchmark & Evals */}
       <section className="stories" id="stories">
         <div className="shell">
           <div className="eyebrow">
-            <span>06</span> BENCHMARK &amp; EVALS
+            <span>05</span> BENCHMARK &amp; EVALS
           </div>
           <SectionTitle light>
             Frozen benchmark on held-out mutants
@@ -474,12 +553,12 @@ export default function App() {
           </SectionTitle>
           <div className="metrics">
             <div>
-              <b>0%</b>
-              <span>Escape rate on held-out mutants</span>
+              <b>0.0%</b>
+              <span>Escape rate on held-out mutants (0/17 killable)</span>
             </div>
             <div>
-              <b>~84%</b>
-              <span>Test-time saved vs run-all</span>
+              <b>67.3%</b>
+              <span>Test-time saved vs run-all on pallets/flask</span>
             </div>
             <div>
               <b>&lt;10ms</b>
@@ -490,15 +569,15 @@ export default function App() {
             <article>
               <div className="quote-mark">“</div>
               <blockquote>
-                On the held-out split of Flask mutants, Warrant achieved a 0%
-                escape rate and ~84% test-time savings, beating both the run-all
+                On the held-out split of Flask mutants, Guard achieved a 0.0%
+                escape rate and 67.3% test-time savings, beating both the run-all
                 baseline and same-file heuristics.
               </blockquote>
               <footer>
                 <img src="/assets/louis.png" alt="" />
                 <span>
                   <b>Evaluation Report</b>
-                  <small>Held-out Test Split</small>
+                  <small>Held-out Test Split · pallets/flask</small>
                 </span>
               </footer>
             </article>
@@ -506,8 +585,8 @@ export default function App() {
               <div className="quote-mark">“</div>
               <blockquote>
                 Mutant m08 escaped under the same-file heuristic because the
-                fault crossed module boundaries. Warrant traversed the FalkorDB
-                graph and caught it immediately.
+                fault crossed module boundaries. Guard traversed the FalkorDB
+                graph and caught it immediately in 0.13s.
               </blockquote>
               <footer>
                 <span className="avatar-letter">MG</span>
@@ -536,10 +615,11 @@ export default function App() {
         </div>
       </section>
 
+      {/* Architecture & Specs */}
       <section className="pricing" id="pricing">
         <div className="shell">
           <div className="eyebrow dark">
-            <span>07</span> SPECS &amp; ARCHITECTURE
+            <span>06</span> SPECS &amp; ARCHITECTURE
           </div>
           <SectionTitle>
             Built with discipline.
@@ -561,7 +641,7 @@ export default function App() {
                   pre-commit hooks.
                 </p>
               </div>
-              <a href="#cta">
+              <a href="https://github.com/thisisvaishnav/guard" target="_blank" rel="noopener noreferrer">
                 Read PLAN.md &amp; Spec <span>↗</span>
               </a>
               <h4>What&apos;s included</h4>
@@ -573,7 +653,7 @@ export default function App() {
                   3-tier policy with hard overrides (subset/medium/run-all)
                 </li>
                 <li>Feedback loop for automatic miss repair</li>
-                <li>Agent CLI (guard check &amp; guard run)</li>
+                <li>Agent CLI (guard check, guard doctor, guard init)</li>
               </ul>
             </article>
             <article className="price-card custom">
@@ -587,7 +667,7 @@ export default function App() {
                   AI-built systems.
                 </p>
               </div>
-              <a href="#cta">
+              <a href="https://github.com/thisisvaishnav/guard" target="_blank" rel="noopener noreferrer">
                 Read DEVIATIONS.md <span>↗</span>
               </a>
               <h4>What&apos;s included</h4>
@@ -604,58 +684,87 @@ export default function App() {
         </div>
       </section>
 
+      {/* Final CTA */}
       <section className="final-cta" id="cta">
         <div className="cta-mark" aria-hidden="true">
-          W
+          G
         </div>
         <div className="shell">
           <p>Your next</p>
           <h2>500 Test Runs</h2>
           <p>don&apos;t have to slow you down.</p>
-          <h3>Let Warrant select what matters.</h3>
-          <a className="button" href="#top">
+          <h3>Let Guard select what matters.</h3>
+          <a className="button hero-cta-btn" href="#install">
             <Arrow />
-            <span>Get Started with Warrant</span>
+            <span>Get Started with Guard</span>
           </a>
           <small>
-            Open Source · Powered by FalkorDB · Verified on pallets/flask
+            Open Source · Built on FalkorDB · Verified on pallets/flask
           </small>
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="footer">
         <div className="shell footer-grid">
           <div className="footer-brand">
-            <a className="brand" href="#top" aria-label="Warrant home">
-              warrant
+            <a className="brand" href="#top" aria-label="Guard home">
+              <EyeTracker size={30} shape="Cube" />
+              <span>guard</span>
             </a>
             <p>Graph-powered safety layer for AI coding agents.</p>
+            <div className="footer-falkor-credit">
+              <span>Built on </span>
+              <a
+                href="https://falkordb.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="falkor-link"
+              >
+                <img
+                  src="/assets/falkordb.svg"
+                  alt="FalkorDB"
+                  width="14"
+                  height="14"
+                  style={{ display: "inline-block", verticalAlign: "middle", marginRight: 4 }}
+                />
+                <strong>FalkorDB</strong>
+              </a>
+            </div>
           </div>
           <div>
-            <b>Sections</b>
-            <a href="#features">Solution</a>
-            <a href="#pricing">Architecture</a>
-            <a href="#features">Features</a>
+            <b>Navigation</b>
+            <a href="#install">Install</a>
+            <a href="#playbooks">How it works</a>
             <a href="#stories">Benchmarks</a>
+            <a href="#pricing">Architecture</a>
           </div>
           <div>
             <b>Product</b>
             <a href="#playbooks">FalkorDB Graph</a>
             <a href="#features">Decision Engine</a>
             <a href="#features">Coverage Ingest</a>
-            <a href="#cta">Agent CLI</a>
+            <a href="#install">Agent CLI</a>
           </div>
           <div>
-            <b>Information</b>
-            <a href="#top">PLAN.md</a>
-            <a href="#top">Evaluation Report</a>
-            <a href="#top">Rules R1-R9</a>
-            <a href="#top">GitHub</a>
+            <b>Project</b>
+            <a href="https://github.com/thisisvaishnav/guard" target="_blank" rel="noopener noreferrer">
+              GitHub Repository
+            </a>
+            <a href="https://github.com/thisisvaishnav/guard/blob/main/PLAN.md" target="_blank" rel="noopener noreferrer">
+              PLAN.md
+            </a>
+            <a href="https://github.com/thisisvaishnav/guard/blob/main/reports/verify_t8.md" target="_blank" rel="noopener noreferrer">
+              T8 Evaluation Report
+            </a>
+            <a href="https://github.com/thisisvaishnav/guard/blob/main/DEVIATIONS.md" target="_blank" rel="noopener noreferrer">
+              Rules R1–R9
+            </a>
           </div>
         </div>
         <div className="shell footer-bottom">
-          <span>© 2026 Warrant</span>
-          <span>Built on FalkorDB · pallets/flask target</span>
+          <span>© 2026 Guard. Open-source software.</span>
+          <span>Tested on pallets/flask · Built on FalkorDB</span>
         </div>
       </footer>
     </main>
