@@ -1,7 +1,7 @@
 # Graph Report - guard  (2026-10-18)
 
 ## Corpus Check
-- 130 files · ~143,540 words
+- 130 files · ~143,589 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 53 file(s) not represented in the graph (top: .diff 40, (none) 5, .patch 4)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `83d6ac8f`
+- Built from commit: `82994b65`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

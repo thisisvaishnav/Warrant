@@ -192,9 +192,9 @@
     "semantic_hash": ""
   },
   "landing/src/App.tsx": {
-    "mtime": 1792268700.342278,
-    "seen": 1792268884.121324,
-    "ast_hash": "c938d1eb94b88dd9f55df8f410673f87",
+    "mtime": 1792269083.9193323,
+    "seen": 1792269159.8496032,
+    "ast_hash": "c2f326f9b396f14b58c36a9da3391dce",
     "semantic_hash": ""
   },
   "landing/src/main.tsx": {
@@ -222,8 +222,8 @@
     "semantic_hash": "cef75bd50b8a4c10fe7889a18e2408f7"
   },
   "pyproject.toml": {
-    "mtime": 1792268861.6845322,
-    "seen": 1792268884.1213372,
+    "mtime": 1792268929.1116433,
+    "seen": 1792269159.849618,
     "ast_hash": "02eb44f565b80dc3d97dc1a37a5c36db",
     "semantic_hash": ""
   },
@@ -540,8 +540,8 @@
     "semantic_hash": ""
   },
   "tests/test_api_and_hook.py": {
-    "mtime": 1792268840.002031,
-    "seen": 1792268884.121342,
+    "mtime": 1792268929.1118712,
+    "seen": 1792269159.849625,
     "ast_hash": "a8cdc436e70d5e039255a932aa50137d",
     "semantic_hash": ""
   },
@@ -594,9 +594,9 @@
     "semantic_hash": ""
   },
   "landing/index.html": {
-    "mtime": 1792239312.7240462,
-    "seen": 1792252418.035022,
-    "ast_hash": "02d04d4321f068edfa562d42ad5d0e02",
+    "mtime": 1792269075.6726108,
+    "seen": 1792269159.849662,
+    "ast_hash": "44d0c3e20b34483d7c3bc0982619220a",
     "semantic_hash": ""
   },
   "landing/public/assets/09.png": {
@@ -654,8 +654,8 @@
     "semantic_hash": ""
   },
   "guard_cli/cli.py": {
-    "mtime": 1792268793.3027995,
-    "seen": 1792268884.121303,
+    "mtime": 1792268929.1114194,
+    "seen": 1792269159.849581,
     "ast_hash": "622e1b036e1117ec5fb4312d29d3ef45",
     "semantic_hash": ""
   },
@@ -846,8 +846,8 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1792268870.574167,
-    "seen": 1792268884.121366,
+    "mtime": 1792268929.1053946,
+    "seen": 1792269159.8496509,
     "ast_hash": "89205133d9dcad2609eb6d1897af881e",
     "semantic_hash": ""
   },
@@ -870,9 +870,9 @@
     "semantic_hash": ""
   },
   "landing/src/components/install/InstallTabs.tsx": {
-    "mtime": 1792268700.342605,
-    "seen": 1792268884.1213288,
-    "ast_hash": "a7732932f9b6c5471950d93ef209417e",
+    "mtime": 1792269067.4502497,
+    "seen": 1792269159.849608,
+    "ast_hash": "5fd2c373dfc1d7be2661e60699b5abf7",
     "semantic_hash": ""
   },
   "landing/src/components/install/Step.tsx": {

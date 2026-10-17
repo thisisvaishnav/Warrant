@@ -16795,7 +16795,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L258",
+      "source_location": "L267",
       "weight": 1.0
     },
     {
@@ -16807,7 +16807,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L270",
+      "source_location": "L279",
       "weight": 1.0
     },
     {
@@ -16819,7 +16819,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L279",
+      "source_location": "L288",
       "weight": 1.0
     },
     {
@@ -16831,7 +16831,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L287",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -16843,7 +16843,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L325",
+      "source_location": "L334",
       "weight": 1.0
     },
     {
@@ -16855,7 +16855,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L336",
+      "source_location": "L345",
       "weight": 1.0
     },
     {
@@ -16867,7 +16867,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L374",
+      "source_location": "L383",
       "weight": 1.0
     },
     {
@@ -16963,7 +16963,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L174",
+      "source_location": "L176",
       "weight": 1.0
     },
     {
@@ -16975,7 +16975,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L180",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -16987,7 +16987,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L187",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -16999,7 +16999,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L197",
+      "source_location": "L199",
       "weight": 1.0
     },
     {
@@ -17011,7 +17011,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L200",
+      "source_location": "L202",
       "weight": 1.0
     },
     {
@@ -17023,7 +17023,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L203",
+      "source_location": "L205",
       "weight": 1.0
     },
     {
@@ -17035,7 +17035,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L209",
+      "source_location": "L211",
       "weight": 1.0
     },
     {
@@ -17047,7 +17047,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/components/install/InstallTabs.tsx",
-      "source_location": "L210",
+      "source_location": "L212",
       "weight": 1.0
     },
     {
@@ -39446,5 +39446,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "83d6ac8f1135f9cad3113c5327e3c2b5241df866"
+  "built_at_commit": "82994b65352f3432147241699ee0a084c96f5577"
 }

@@ -149,6 +149,15 @@ export default function App() {
 
         <svg
           className="hero-orange-line"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
           viewBox="0 0 1440 900"
           fill="none"
           preserveAspectRatio="none"

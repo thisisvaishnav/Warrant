@@ -171,6 +171,8 @@ export function InstallTabs() {
         <span className="install-scope-badge">Scope: Python projects that use pytest</span>
       </div>
 
+      <div className="install-scope-cutoff" aria-hidden="true" />
+
       <Tabs
         value={value}
         onValueChange={handleValueChange}
