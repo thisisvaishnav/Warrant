@@ -58,19 +58,19 @@ export default function App() {
             <span />
           </button>
           <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
-            <a href="#features">
+            <a href="#features" onClick={() => setMenuOpen(false)}>
               Features<sup>01</sup>
             </a>
-            <a href="#playbooks">
+            <a href="#playbooks" onClick={() => setMenuOpen(false)}>
               How It Works<sup>02</sup>
             </a>
-            <a href="#stories">
+            <a href="#stories" onClick={() => setMenuOpen(false)}>
               Benchmarks<sup>03</sup>
             </a>
-            <a href="#pricing">
+            <a href="#pricing" onClick={() => setMenuOpen(false)}>
               Architecture<sup>04</sup>
             </a>
-            <a href="#cta">
+            <a href="#cta" onClick={() => setMenuOpen(false)}>
               CLI<sup>05</sup>
             </a>
           </div>
