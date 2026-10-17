@@ -530,16 +530,11 @@ def run_stop_hook(
         if is_antigravity:
             resp: dict[str, Any] = {"decision": "stop", "reason": reason or ""}
             payload = json.dumps(resp) + "\n"
-            if saved_stdout is not None:
+            target_out = real_out if real_out is not None else saved_stdout
+            if target_out is not None:
                 try:
-                    saved_stdout.write(payload)
-                    saved_stdout.flush()
-                except Exception:
-                    pass
-            if real_out is not None and real_out is not saved_stdout:
-                try:
-                    real_out.write(payload)
-                    real_out.flush()
+                    target_out.write(payload)
+                    target_out.flush()
                 except Exception:
                     pass
         return 0
@@ -548,16 +543,11 @@ def run_stop_hook(
         if is_antigravity:
             resp: dict[str, Any] = {"decision": "continue", "reason": reason_text}
             payload = json.dumps(resp) + "\n"
-            if saved_stdout is not None:
+            target_out = real_out if real_out is not None else saved_stdout
+            if target_out is not None:
                 try:
-                    saved_stdout.write(payload)
-                    saved_stdout.flush()
-                except Exception:
-                    pass
-            if real_out is not None and real_out is not saved_stdout:
-                try:
-                    real_out.write(payload)
-                    real_out.flush()
+                    target_out.write(payload)
+                    target_out.flush()
                 except Exception:
                     pass
             sys.stderr.write(reason_text)

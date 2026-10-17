@@ -3735,7 +3735,7 @@
       "file_type": "code",
       "norm_label": "_block_stop()",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L547"
+      "source_location": "L542"
     },
     {
       "id": "guard_cli_state_get_session_blocks",
@@ -15019,7 +15019,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L573",
+      "source_location": "L563",
       "weight": 1.0
     },
     {
@@ -15031,7 +15031,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L584",
+      "source_location": "L574",
       "weight": 1.0
     },
     {
@@ -15043,7 +15043,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L595",
+      "source_location": "L585",
       "weight": 1.0
     },
     {
@@ -15055,7 +15055,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L609",
+      "source_location": "L599",
       "weight": 1.0
     },
     {
@@ -15067,7 +15067,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L631",
+      "source_location": "L621",
       "weight": 1.0
     },
     {
@@ -15079,7 +15079,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L633",
+      "source_location": "L623",
       "weight": 1.0
     },
     {
@@ -15091,7 +15091,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L635",
+      "source_location": "L625",
       "weight": 1.0
     },
     {
@@ -15103,7 +15103,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L638",
+      "source_location": "L628",
       "weight": 1.0
     },
     {
@@ -15115,7 +15115,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L641",
+      "source_location": "L631",
       "weight": 1.0
     },
     {
@@ -15127,7 +15127,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L647",
+      "source_location": "L637",
       "weight": 1.0
     },
     {
@@ -15139,7 +15139,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L648",
+      "source_location": "L638",
       "weight": 1.0
     },
     {
@@ -15151,7 +15151,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L661",
+      "source_location": "L651",
       "weight": 1.0
     },
     {
@@ -20047,7 +20047,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "guard_cli/hook.py",
-      "source_location": "L547",
+      "source_location": "L542",
       "weight": 1.0
     },
     {
@@ -39446,5 +39446,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "82994b65352f3432147241699ee0a084c96f5577"
+  "built_at_commit": "4ec8cbe0cccc39c4eae5f75ea5512a603b15cc5c"
 }

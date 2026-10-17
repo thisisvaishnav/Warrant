@@ -223,9 +223,14 @@ export default function App() {
             Guard runs only the tests a change can break, and blocks your coding agent until they pass.
           </p>
 
-          {/* Dark Command Box with Copy button */}
+          {/* Bash Command Box with Copy button (White theme) */}
           <div className="hero-cmd-container">
             <div className="hero-cmd-box">
+              <div className="hero-cmd-dots" aria-hidden="true">
+                <span className="dot dot-close" />
+                <span className="dot dot-min" />
+                <span className="dot dot-max" />
+              </div>
               <span className="hero-prompt-symbol" aria-hidden="true">$ </span>
               <code className="hero-cmd-code">{heroCommand}</code>
               <button
