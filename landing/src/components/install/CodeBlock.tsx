@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { Check, Copy, Terminal } from "lucide-react"
 
 async function copyText(text: string): Promise<boolean> {
   try {
@@ -27,9 +28,13 @@ async function copyText(text: string): Promise<boolean> {
 export function CodeBlock({
   value,
   compact = false,
+  label,
+  isCommand = true,
 }: {
   value: string
   compact?: boolean
+  label?: string
+  isCommand?: boolean
 }) {
   const [copied, setCopied] = useState(false)
   const timer = useRef<number>(0)
@@ -41,22 +46,52 @@ export function CodeBlock({
     if (!ok) return
     setCopied(true)
     window.clearTimeout(timer.current)
-    timer.current = window.setTimeout(() => setCopied(false), 1500)
+    timer.current = window.setTimeout(() => setCopied(false), 1800)
   }
+
+  const displayLabel = label ?? (compact ? "terminal" : "zsh")
 
   return (
     <div className={`install-code-wrap${compact ? " compact" : ""}`}>
-      <pre className="install-code">
-        <code>{value}</code>
-      </pre>
-      <button
-        className="install-copy"
-        onClick={onCopy}
-        data-copied={copied}
-        aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
-      >
-        {copied ? "Copied" : "Copy"}
-      </button>
+      <div className="install-code-header">
+        <div className="install-code-dots" aria-hidden="true">
+          <span className="dot dot-close" />
+          <span className="dot dot-min" />
+          <span className="dot dot-max" />
+        </div>
+        <div className="install-code-title">
+          <Terminal className="install-code-term-icon" size={12} aria-hidden="true" />
+          <span>{displayLabel}</span>
+        </div>
+        <button
+          className="install-copy-btn"
+          onClick={onCopy}
+          data-copied={copied}
+          type="button"
+          aria-label={copied ? "Copied command to clipboard" : "Copy command to clipboard"}
+        >
+          {copied ? (
+            <>
+              <Check className="install-copy-icon icon-copied" size={13} aria-hidden="true" />
+              <span>Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy className="install-copy-icon" size={13} aria-hidden="true" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      <div className="install-code-body">
+        <pre className="install-code">
+          <code>
+            {isCommand && !compact && <span className="install-prompt-symbol" aria-hidden="true">$ </span>}
+            {value}
+          </code>
+        </pre>
+      </div>
     </div>
   )
 }

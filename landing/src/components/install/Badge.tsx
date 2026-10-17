@@ -8,7 +8,8 @@ const LABELS: Record<string, string> = {
 export function Badge({ status }: { status: string }) {
   return (
     <span className="install-badge" data-badge={status}>
-      {LABELS[status] ?? status}
+      {status === "enforced" && <span className="install-badge-pulse" aria-hidden="true" />}
+      <span className="install-badge-text">{LABELS[status] ?? status}</span>
     </span>
   )
 }

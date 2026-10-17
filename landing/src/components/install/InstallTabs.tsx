@@ -1,17 +1,18 @@
-import { useCallback, useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useCallback, useRef, useState } from "react"
+import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import agents from "@/data/agents.json"
 import { Badge } from "./Badge"
 import { CodeBlock } from "./CodeBlock"
 import { Step } from "./Step"
+import { ArrowRight, CheckCircle2, FileCode, RotateCcw } from "lucide-react"
 
-type Agent = typeof agents[number]
+type Agent = (typeof agents)[number]
 
 const GITHUB_URL = "https://github.com/thisisvaishnav/guard"
-
 const STORAGE_KEY = "guard-install-agent"
 
 function initialValue(): string {
+  if (typeof window === "undefined") return agents[0].id
   const requested = new URLSearchParams(window.location.search).get("agent")
   if (requested && agents.some((a) => a.id === requested)) return requested
   try {
@@ -25,72 +26,107 @@ function initialValue(): string {
 
 function InstallSteps({ agent }: { agent: Agent }) {
   return (
-    <>
-      <Step n={1} title="Run in your project folder">
+    <div className="install-steps-wrapper">
+      <Step n={1} title="Run in your project folder" tag="One command">
         <p>
-          The command writes Guard&apos;s hook files (safe to re-run). No extra
-          install step:
-          <code className="install-inline-code">uvx</code> fetches and runs
-          Guard each time.
+          The command configures Guard&apos;s enforcement hook for{" "}
+          <strong>{agent.label}</strong> (safe to re-run). No extra setup
+          step: <code className="install-inline-code">uvx</code> runs Guard on demand.
         </p>
-        <CodeBlock value={agent.run ?? ""} />
+        <CodeBlock value={agent.run ?? ""} label="bash" isCommand />
         {agent.runNote ? (
           <p className="install-runnote">{agent.runNote}</p>
         ) : null}
-        <p className="install-writes">
-          {agent.writes.map((w) => (
-            <span key={w}>{w}</span>
-          ))}
-        </p>
+
+        <div className="install-writes-box">
+          <div className="install-writes-label">
+            <FileCode size={13} className="install-writes-icon" aria-hidden="true" />
+            <span>Files configured automatically:</span>
+          </div>
+          <div className="install-writes">
+            {agent.writes.map((w) => (
+              <span key={w} className="install-file-pill">
+                <code>{w}</code>
+              </span>
+            ))}
+          </div>
+        </div>
       </Step>
-      <Step n={2} title="Restart your agent">
-        <p>{agent.restart}</p>
+
+      <Step n={2} title="Restart your agent" tag="Reload">
+        <div className="install-restart-box">
+          <div className="install-restart-icon-wrap" aria-hidden="true">
+            <RotateCcw size={15} className="install-restart-icon" />
+          </div>
+          <p className="install-restart-text">{agent.restart}</p>
+        </div>
       </Step>
-      <Step n={3} title="Verify">
-        <p>Run this in the same project folder:</p>
-        <CodeBlock value={agent.verify ?? ""} compact />
-        <p>You should see:</p>
-        <CodeBlock value={agent.expected ?? ""} compact />
+
+      <Step n={3} title="Verify integration" tag="Doctor check" isLast>
+        <p>Run the diagnostic check in your terminal to ensure hooks are active:</p>
+        <CodeBlock value={agent.verify ?? "guard doctor"} label="verify" compact isCommand />
+        <div className="install-verify-expected">
+          <div className="install-verify-header">
+            <CheckCircle2 size={13} className="install-verify-icon" aria-hidden="true" />
+            <span>Expected health report:</span>
+          </div>
+          <CodeBlock
+            value={agent.expected ?? ""}
+            label="doctor report"
+            compact
+            isCommand={false}
+          />
+        </div>
         {agent.note ? <p className="install-runnote">{agent.note}</p> : null}
       </Step>
-    </>
+    </div>
   )
 }
 
 function ComingSoon({ agent }: { agent: Agent }) {
   return (
-    <div className="install-soon">
+    <div className="install-soon-card">
+      <div className="install-soon-badge-wrap">
+        <span className="install-soon-status">Phase 3 · Roadmap</span>
+      </div>
+      <h3>{agent.label} Support in Development</h3>
       <p>
-        {agent.label} support ships with the Guard MCP server. Until then, Guard
-        protects Claude Code and Antigravity, and a git{" "}
-        <code className="install-inline-code">pre-push</code> hook covers
-        everyone.
+        Full native hook integration for <strong>{agent.label}</strong> is
+        scheduled with the Guard MCP server release. In the interim, Guard
+        safeguards Claude Code and Antigravity, and a git{" "}
+        <code className="install-inline-code">pre-push</code> hook protects your team.
       </p>
+
       {agent.format ? (
-        <div>
-          <p className="install-formathint">
-            Integration format already verified:
-          </p>
-          <CodeBlock value={agent.format} compact />
+        <div className="install-soon-preview">
+          <div className="install-soon-format-head">
+            <FileCode size={13} aria-hidden="true" />
+            <span>Target MCP Configuration:</span>
+          </div>
+          <CodeBlock value={agent.format} label="config" compact isCommand={false} />
         </div>
       ) : null}
+
       {agent.note ? <p className="install-runnote">{agent.note}</p> : null}
-      <p>
+
+      <div className="install-soon-actions">
         <a
-          className="install-githublink"
+          className="install-githublink-btn"
           href={GITHUB_URL}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Track progress on GitHub ↗
+          <span>Track progress on GitHub</span>
+          <ArrowRight size={14} className="install-link-arrow" aria-hidden="true" />
         </a>
-      </p>
+      </div>
     </div>
   )
 }
 
 export function InstallTabs() {
   const [value, setValue] = useState(initialValue)
+  const navRef = useRef<HTMLDivElement>(null)
 
   const handleValueChange = useCallback((next: string) => {
     setValue(next)
@@ -114,24 +150,33 @@ export function InstallTabs() {
       onValueChange={handleValueChange}
       className="install-tabs"
     >
-      <TabsList variant="line" aria-label="Choose your agent">
-        {agents.map((a) => (
-          <TabsTrigger key={a.id} value={a.id}>
-            {a.label}
-            <Badge status={a.badge} />
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="install-tabs-nav-outer" ref={navRef}>
+        <TabsList variant="line" aria-label="Choose your agent" className="install-tabs-list">
+          {agents.map((a) => (
+            <TabsTrigger
+              key={a.id}
+              value={a.id}
+              className="install-tab-trigger"
+            >
+              <span className="install-tab-label">{a.label}</span>
+              <Badge status={a.badge} />
+            </TabsTrigger>
+          ))}
+          <TabsIndicator className="install-tab-indicator" />
+        </TabsList>
+      </div>
 
-      {agents.map((a) => (
-        <TabsContent key={a.id} value={a.id}>
-          {a.badge === "coming-soon" ? (
-            <ComingSoon agent={a} />
-          ) : (
-            <InstallSteps agent={a} />
-          )}
-        </TabsContent>
-      ))}
+      <div className="install-tabs-panels">
+        {agents.map((a) => (
+          <TabsContent key={a.id} value={a.id} className="install-tab-content">
+            {a.badge === "coming-soon" ? (
+              <ComingSoon agent={a} />
+            ) : (
+              <InstallSteps agent={a} />
+            )}
+          </TabsContent>
+        ))}
+      </div>
     </Tabs>
   )
 }
