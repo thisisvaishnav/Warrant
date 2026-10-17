@@ -385,12 +385,24 @@ button, input { font: inherit; }
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background: #111213;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 8px 10px 8px 16px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+  background: #ffffff;
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  border-radius: 9px;
+  padding: 8px 10px 8px 14px;
+  box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
   gap: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.hero-cmd-box:hover {
+  border-color: rgba(255, 92, 81, 0.35);
+  box-shadow: 0 14px 34px -4px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(255, 92, 81, 0.15);
+}
+.hero-cmd-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 2px;
+  flex-shrink: 0;
 }
 .hero-prompt-symbol {
   color: var(--coral);
@@ -399,7 +411,7 @@ button, input { font: inherit; }
 }
 .hero-cmd-code {
   flex: 1;
-  color: #f1ede8;
+  color: #1f2937;
   font: 13.5px 'DM Mono', monospace;
   text-align: left;
   white-space: nowrap;
@@ -410,22 +422,27 @@ button, input { font: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #faf9f6;
+  color: #374151;
+  border: 1px solid rgba(20, 20, 20, 0.14);
   border-radius: 5px;
   padding: 6px 12px;
   font: 11.5px 'DM Mono', monospace;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .hero-copy-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #f0ede6;
+  color: #111;
+  border-color: rgba(20, 20, 20, 0.25);
+}
+.hero-copy-btn:active {
+  transform: scale(0.97);
 }
 .hero-copy-btn .icon-copied {
-  color: #34d399;
+  color: #059669;
 }
 .hero-privacy-line {
   margin-top: 8px;
@@ -1485,22 +1502,22 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
   max-width: 660px;
 }
 
-/* Modern Terminal CodeBlock */
+/* Modern Terminal CodeBlock — White Theme (matches guard — claude-code hook session) */
 .install-code-wrap {
   position: relative;
-  background: #111213;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid rgba(20, 20, 20, 0.12);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
   margin: 12px 0;
   width: 100%;
   max-width: 100%;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .install-code-wrap:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(255, 92, 81, 0.15);
+  border-color: rgba(255, 92, 81, 0.35);
+  box-shadow: 0 14px 34px -4px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(255, 92, 81, 0.15);
 }
 .install-code-wrap.compact {
   margin: 8px 0;
@@ -1511,27 +1528,27 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7px 14px;
-  background: rgba(255, 255, 255, 0.035);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 14px;
+  background: #faf9f6;
+  border-bottom: 1px solid rgba(20, 20, 20, 0.08);
   min-height: 36px;
 }
 .install-code-wrap.compact .install-code-header {
   min-height: 32px;
-  padding: 5px 12px;
+  padding: 6px 12px;
 }
 
 .install-code-dots {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 .dot {
   width: 9px;
   height: 9px;
   border-radius: 50%;
   display: inline-block;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 .dot-close { background: #ff5f56; }
 .dot-min { background: #ffbd2e; }
@@ -1540,12 +1557,14 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
 .install-code-title {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font: 11px 'DM Mono', monospace;
-  color: #7d828a;
+  gap: 6px;
+  font: 11.5px 'DM Mono', monospace;
+  color: #4b4845;
+  font-weight: 500;
 }
 .install-code-term-icon {
-  opacity: 0.6;
+  opacity: 0.7;
+  color: #55504a;
 }
 
 .install-copy-btn {
@@ -1554,9 +1573,9 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
   gap: 5px;
   font: 10.5px 'DM Mono', monospace;
   letter-spacing: 0.04em;
-  color: #b0b4ba;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #374151;
+  background: #ffffff;
+  border: 1px solid rgba(20, 20, 20, 0.15);
   border-radius: 5px;
   padding: 3.5px 9px;
   cursor: pointer;
@@ -1564,18 +1583,18 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
   user-select: none;
 }
 .install-copy-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #f4f4f5;
+  color: #111;
+  border-color: rgba(20, 20, 20, 0.28);
 }
 .install-copy-btn:active {
   transform: scale(0.94);
 }
 .install-copy-btn[data-copied='true'] {
-  background: var(--coral) !important;
-  color: #fff !important;
-  border-color: var(--coral) !important;
-  box-shadow: 0 0 12px rgba(255, 92, 81, 0.4);
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+  border-color: #a7f3d0 !important;
+  box-shadow: 0 0 10px rgba(5, 150, 105, 0.2);
 }
 .install-copy-btn .icon-copied {
   animation: popCheck 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -1591,6 +1610,7 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   padding: 14px 18px;
+  background: #ffffff;
 }
 .install-code-wrap.compact .install-code-body {
   padding: 10px 14px;
@@ -1600,7 +1620,7 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
   margin: 0;
   padding: 0;
   background: transparent;
-  color: #eae7e2;
+  color: #1f2937;
   font: 12.5px/1.7 'DM Mono', monospace;
   white-space: pre-wrap;
   word-break: break-word;
@@ -1614,7 +1634,7 @@ code, pre, .install-code, .hero-cmd-code, .terminal-pre {
   color: var(--coral);
   user-select: none;
   font-weight: 600;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .install-inline-code {
