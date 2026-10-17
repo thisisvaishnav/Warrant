@@ -1,0 +1,827 @@
+{
+  "communities": {
+    "0": [
+      "evals_eval_t2_run_capability_evals",
+      "guard_db",
+      "guard_db_batches",
+      "guard_db_ensure_schema",
+      "guard_db_get_callers",
+      "guard_db_get_covering_tests",
+      "guard_db_get_schema_counts",
+      "guard_db_py_any",
+      "guard_db_rationale_1",
+      "guard_db_rationale_115",
+      "guard_db_rationale_153",
+      "guard_db_rationale_188",
+      "guard_db_rationale_218",
+      "guard_db_rationale_232",
+      "guard_db_rationale_46",
+      "guard_db_reset_graph",
+      "guard_db_write_coverage",
+      "guard_db_write_run",
+      "guard_db_write_static",
+      "guard_feedback",
+      "guard_feedback_py_any",
+      "guard_feedback_rationale_1",
+      "guard_feedback_rationale_20",
+      "guard_feedback_record_miss",
+      "guard_ingest_static_funcdef",
+      "guard_ingest_static_is_test_function",
+      "guard_ingest_static_staticresult",
+      "guard_ingest_static_staticresult_call_rows",
+      "guard_ingest_static_staticresult_file_rows",
+      "guard_ingest_static_staticresult_function_rows",
+      "guard_ingest_static_staticresult_import_rows",
+      "guard_ingest_static_staticresult_summary",
+      "guard_ingest_static_staticresult_test_rows",
+      "pytest",
+      "tests_test_coverage_clean_test_graph",
+      "tests_test_coverage_py_fixture",
+      "tests_test_db",
+      "tests_test_db_py_fixture",
+      "tests_test_db_rationale_8",
+      "tests_test_db_test_ensure_schema_creates_indexes",
+      "tests_test_db_test_get_callers_multi_hop",
+      "tests_test_db_test_graph",
+      "tests_test_db_test_write_coverage_and_query_covering_tests",
+      "tests_test_db_test_write_run_and_failed_in",
+      "tests_test_db_test_write_static_creates_nodes_and_edges",
+      "tests_test_feedback",
+      "tests_test_feedback_feedback_test_graph",
+      "tests_test_feedback_py_fixture",
+      "tests_test_feedback_rationale_1",
+      "tests_test_feedback_test_record_miss_creates_repair_edge",
+      "tests_test_feedback_test_record_miss_elevates_existing_confidence",
+      "tests_test_thin_slice_py_fixture",
+      "tests_test_thin_slice_slice_test_graph"
+    ],
+    "1": [
+      "guard_decision",
+      "guard_decision_change",
+      "guard_decision_change_module_tests_for",
+      "guard_decision_compute_trust",
+      "guard_decision_coveringtest",
+      "guard_decision_decide",
+      "guard_decision_decision",
+      "guard_decision_decision_as_dict",
+      "guard_decision_decision_explain",
+      "guard_decision_evidenceedge",
+      "guard_decision_evidenceedge_as_dict",
+      "guard_decision_fresh",
+      "guard_decision_functionevidence",
+      "guard_decision_functionevidence_best_confidence",
+      "guard_decision_functionevidence_has_evidence",
+      "guard_decision_is_test_file",
+      "guard_decision_policy_for_trust",
+      "guard_decision_py_any",
+      "guard_decision_rationale_1",
+      "guard_decision_rationale_156",
+      "guard_decision_rationale_186",
+      "guard_decision_rationale_210",
+      "guard_decision_rationale_219",
+      "guard_decision_rationale_53",
+      "guard_decision_rationale_65",
+      "guard_decision_rationale_75",
+      "guard_decision_rationale_95",
+      "guard_decision_reason",
+      "guard_decision_reason_as_dict",
+      "tests_test_decision",
+      "tests_test_decision_fn",
+      "tests_test_decision_rationale_1",
+      "tests_test_decision_test_every_test_has_queryable_reason",
+      "tests_test_decision_test_frozen_parameters",
+      "tests_test_decision_test_override_dynamic_dispatch_adds_module_tests",
+      "tests_test_decision_test_override_no_changed_functions_runs_all",
+      "tests_test_decision_test_override_no_evidence_runs_all",
+      "tests_test_decision_test_override_test_file_touched_runs_all_with_warning",
+      "tests_test_decision_test_policy_level_medium_mid_trust",
+      "tests_test_decision_test_policy_level_run_all_low_trust",
+      "tests_test_decision_test_policy_level_subset_high_trust",
+      "tests_test_decision_test_policy_threshold_boundaries",
+      "tests_test_decision_test_stale_edge_lowers_freshness_not_evidence",
+      "tests_test_decision_test_trust_formula_components",
+      "tests_verify_t5",
+      "tests_verify_t5_check_one_per_override_and_level",
+      "tests_verify_t5_check_reasons_and_freeze",
+      "tests_verify_t5_check_unit_tests",
+      "tests_verify_t5_fn",
+      "tests_verify_t5_main",
+      "tests_verify_t5_rationale_1"
+    ],
+    "2": [
+      "evals_eval_t2",
+      "evals_eval_t2_main",
+      "evals_eval_t2_rationale_1",
+      "evals_eval_t2_run_regression_evals",
+      "githooks_pre_commit",
+      "githooks_pre_commit_check_plan_section_changed",
+      "githooks_pre_commit_extract_claim_and_definitions",
+      "githooks_pre_commit_get_staged_files",
+      "githooks_pre_commit_is_unlocked",
+      "githooks_pre_commit_main",
+      "os",
+      "re",
+      "redis",
+      "sqlite3",
+      "subprocess",
+      "sys",
+      "tests_verify_s1",
+      "tests_verify_s1_build_function_line_map",
+      "tests_verify_s1_inspect_coverage_mapping",
+      "tests_verify_s1_main",
+      "tests_verify_s1_py_path",
+      "tests_verify_s1_rationale_1",
+      "tests_verify_s1_rationale_44",
+      "tests_verify_s1_run_coverage_suite",
+      "tests_verify_s1_run_plain_suite",
+      "tests_verify_t1",
+      "tests_verify_t1_check_falkordb",
+      "tests_verify_t1_main",
+      "tests_verify_t1_rationale_1",
+      "tests_verify_t1_run_flask_suite",
+      "tests_verify_t3",
+      "tests_verify_t3_check_callers_for_sample_functions",
+      "tests_verify_t3_check_graph_counts_and_dynamic",
+      "tests_verify_t3_check_parser_tests",
+      "tests_verify_t3_main",
+      "tests_verify_t3_rationale_1",
+      "tests_verify_t5a",
+      "tests_verify_t5a_check_fixtures_exist",
+      "tests_verify_t5a_check_guard_check_cli",
+      "tests_verify_t5a_check_t0_integration",
+      "tests_verify_t5a_main",
+      "tests_verify_t5a_rationale_1",
+      "tests_verify_t7",
+      "tests_verify_t7_check_agent_runner_blocks_on_failure",
+      "tests_verify_t7_check_agent_runner_high_trust",
+      "tests_verify_t7_check_agent_runner_low_trust_forces_full",
+      "tests_verify_t7_main",
+      "tests_verify_t7_rationale_1",
+      "time"
+    ],
+    "3": [
+      "guard_agent_integration",
+      "guard_agent_integration_apply_patch",
+      "guard_agent_integration_count_collected_tests",
+      "guard_agent_integration_py_any",
+      "guard_agent_integration_py_path",
+      "guard_agent_integration_rationale_1",
+      "guard_agent_integration_rationale_23",
+      "guard_agent_integration_rationale_32",
+      "guard_agent_integration_rationale_38",
+      "guard_agent_integration_rationale_56",
+      "guard_agent_integration_reset_repo",
+      "guard_agent_integration_run_agent_guard",
+      "guard_init",
+      "guard_init_rationale_1",
+      "guard_thin_slice",
+      "guard_thin_slice_changedfunction",
+      "guard_thin_slice_checkresult",
+      "guard_thin_slice_checkresult_to_dict",
+      "guard_thin_slice_guard_check",
+      "guard_thin_slice_parse_unified_diff",
+      "guard_thin_slice_py_any",
+      "guard_thin_slice_py_path",
+      "guard_thin_slice_rationale_1",
+      "guard_thin_slice_rationale_140",
+      "guard_thin_slice_rationale_235",
+      "guard_thin_slice_rationale_52",
+      "guard_thin_slice_rationale_98",
+      "guard_thin_slice_resolve_changed_functions",
+      "guard_thin_slice_thin_slice_decision",
+      "pathlib",
+      "tests_test_thin_slice",
+      "tests_test_thin_slice_rationale_1",
+      "tests_test_thin_slice_test_parse_unified_diff",
+      "tests_test_thin_slice_test_thin_slice_decision_fallback_on_no_evidence",
+      "tests_test_thin_slice_test_thin_slice_decision_fallback_on_test_files_touched",
+      "tests_test_thin_slice_test_thin_slice_selects_covering_tests",
+      "typing"
+    ],
+    "4": [
+      "guard_cli",
+      "guard_cli_cmd_callers",
+      "guard_cli_cmd_check",
+      "guard_cli_cmd_covering_tests",
+      "guard_cli_cmd_feedback",
+      "guard_cli_cmd_ingest_coverage",
+      "guard_cli_cmd_ingest_static",
+      "guard_cli_cmd_run",
+      "guard_cli_cmd_stats",
+      "guard_cli_main",
+      "guard_cli_rationale_1",
+      "guard_db_get_graph",
+      "json",
+      "tests_verify_t0",
+      "tests_verify_t0_main",
+      "tests_verify_t0_rationale_1",
+      "tests_verify_t0_verify_harness_on_run_all",
+      "tests_verify_t0_verify_split_file",
+      "tests_verify_t4",
+      "tests_verify_t4_check_functions_evidence_or_flag",
+      "tests_verify_t4_check_known_covered_functions",
+      "tests_verify_t4_check_suite_runs_and_flakes",
+      "tests_verify_t4_main",
+      "tests_verify_t4_rationale_1",
+      "tests_verify_t6",
+      "tests_verify_t6_check_feedback_loop",
+      "tests_verify_t6_main",
+      "tests_verify_t6_rationale_1",
+      "tests_verify_t8",
+      "tests_verify_t8_check_evaluation_results",
+      "tests_verify_t8_check_failure_case_and_unkillables",
+      "tests_verify_t8_check_frozen_claim",
+      "tests_verify_t8_check_mutant_counts",
+      "tests_verify_t8_check_report_artifact",
+      "tests_verify_t8_main",
+      "tests_verify_t8_rationale_1"
+    ],
+    "5": [
+      "ast",
+      "call",
+      "classdef",
+      "dataclasses",
+      "expr",
+      "guard_ingest_static",
+      "guard_ingest_static_analyze_repo",
+      "guard_ingest_static_analyze_repo_lookup",
+      "guard_ingest_static_collector",
+      "guard_ingest_static_collector_func",
+      "guard_ingest_static_collector_init",
+      "guard_ingest_static_collector_visit_call",
+      "guard_ingest_static_collector_visit_classdef",
+      "guard_ingest_static_collector_visit_import",
+      "guard_ingest_static_collector_visit_importfrom",
+      "guard_ingest_static_decorator_name",
+      "guard_ingest_static_is_test_file",
+      "guard_ingest_static_module_name",
+      "guard_ingest_static_py_path",
+      "guard_ingest_static_rationale_1",
+      "guard_ingest_static_resolve_module",
+      "import",
+      "importfrom",
+      "tests_test_static",
+      "tests_test_static_make",
+      "tests_test_static_test_custom_decorator_flags_dynamic",
+      "tests_test_static_test_dynamic_dispatch_is_flagged_not_guessed",
+      "tests_test_static_test_same_module_and_cross_module_calls",
+      "tests_test_static_test_self_method_calls",
+      "tests_test_static_test_syntax_errors_are_reported_not_fatal",
+      "tests_test_static_test_test_files_excluded_by_default"
+    ],
+    "6": [
+      "build_safety_figure",
+      "build_safety_figure_at",
+      "build_safety_figure_body",
+      "build_safety_figure_bydepth",
+      "build_safety_figure_carriage",
+      "build_safety_figure_d",
+      "build_safety_figure_dial",
+      "build_safety_figure_l",
+      "build_safety_figure_matrix",
+      "build_safety_figure_needleat",
+      "build_safety_figure_nodes",
+      "build_safety_figure_p",
+      "build_safety_figure_page",
+      "build_safety_figure_plate",
+      "build_safety_figure_post",
+      "build_safety_figure_reach",
+      "build_safety_figure_renderbaseplate",
+      "build_safety_figure_rendercarriage",
+      "build_safety_figure_renderdialindicator",
+      "build_safety_figure_rendergraphmatrix",
+      "build_safety_figure_renderlatchandstylus",
+      "build_safety_figure_renderrails",
+      "build_safety_figure_renderworkpiece",
+      "build_safety_figure_s",
+      "build_safety_figure_stops",
+      "build_safety_figure_svg",
+      "build_safety_figure_workpiece",
+      "ref",
+      "ref_node_fs",
+      "ref_node_url"
+    ],
+    "7": [
+      "collections",
+      "datetime",
+      "guard_ingest_coverage",
+      "guard_ingest_coverage_compute_flakiness",
+      "guard_ingest_coverage_coverageresult",
+      "guard_ingest_coverage_coverageresult_summary",
+      "guard_ingest_coverage_ingest_coverage",
+      "guard_ingest_coverage_normalize_test_id",
+      "guard_ingest_coverage_py_any",
+      "guard_ingest_coverage_py_path",
+      "guard_ingest_coverage_rationale_1",
+      "guard_ingest_coverage_rationale_166",
+      "guard_ingest_coverage_rationale_199",
+      "guard_ingest_coverage_rationale_261",
+      "guard_ingest_coverage_rationale_336",
+      "guard_ingest_coverage_rationale_55",
+      "guard_ingest_coverage_rationale_76",
+      "guard_ingest_coverage_read_coverage_contexts",
+      "guard_ingest_coverage_run_pytest_once",
+      "guard_ingest_coverage_runresult",
+      "guard_ingest_coverage_write_to_falkordb",
+      "tests_test_coverage",
+      "tests_test_coverage_rationale_1",
+      "tests_test_coverage_test_compute_flakiness",
+      "tests_test_coverage_test_coverage_write_to_graph",
+      "tests_test_coverage_test_normalize_test_id",
+      "xml_etree_elementtree"
+    ],
+    "8": [
+      "argparse",
+      "evals_harness",
+      "evals_harness_apply_mutant",
+      "evals_harness_evaluate_diff",
+      "evals_harness_evaluate_mutant",
+      "evals_harness_main",
+      "evals_harness_py_path",
+      "evals_harness_rationale_1",
+      "evals_harness_rationale_151",
+      "evals_harness_rationale_25",
+      "evals_harness_rationale_37",
+      "evals_harness_rationale_43",
+      "evals_harness_rationale_84",
+      "evals_harness_reset_repo",
+      "evals_harness_resolve_strategy_tests",
+      "evals_harness_run_evaluation",
+      "evals_harness_run_pytest",
+      "evals_run_t8_eval",
+      "evals_run_t8_eval_main",
+      "evals_run_t8_eval_rationale_1"
+    ],
+    "9": [
+      "landing_tsconfig",
+      "landing_tsconfig_compileroptions",
+      "landing_tsconfig_compileroptions_allowimportingtsextensions",
+      "landing_tsconfig_compileroptions_baseurl",
+      "landing_tsconfig_compileroptions_isolatedmodules",
+      "landing_tsconfig_compileroptions_jsx",
+      "landing_tsconfig_compileroptions_lib",
+      "landing_tsconfig_compileroptions_module",
+      "landing_tsconfig_compileroptions_moduleresolution",
+      "landing_tsconfig_compileroptions_noemit",
+      "landing_tsconfig_compileroptions_nofallthroughcasesinswitch",
+      "landing_tsconfig_compileroptions_paths",
+      "landing_tsconfig_compileroptions_resolvejsonmodule",
+      "landing_tsconfig_compileroptions_skiplibcheck",
+      "landing_tsconfig_compileroptions_strict",
+      "landing_tsconfig_compileroptions_target",
+      "landing_tsconfig_compileroptions_types",
+      "landing_tsconfig_compileroptions_usedefineforclassfields",
+      "landing_tsconfig_include"
+    ],
+    "10": [
+      "landing_package",
+      "landing_package_name",
+      "landing_package_private",
+      "landing_package_type",
+      "landing_package_version",
+      "ref_oxfmt",
+      "ref_react_dom",
+      "ref_tailwindcss",
+      "ref_types_node",
+      "ref_types_react",
+      "ref_types_react_dom",
+      "ref_typescript"
+    ],
+    "11": [
+      "plan_s1",
+      "plan_t0",
+      "plan_t1",
+      "plan_t2",
+      "plan_t3",
+      "plan_t4",
+      "plan_t5",
+      "plan_t5a",
+      "plan_t6",
+      "plan_t7",
+      "plan_t8",
+      "plan_t9"
+    ],
+    "12": [
+      "landing_figma_make_site",
+      "landing_vite_config",
+      "landing_vite_config_figmaerroroverlayreplay",
+      "landing_vite_config_figmamakekitplugin",
+      "landing_vite_config_figmareactrefreshboundaryfallback",
+      "ref_node_path",
+      "ref_tailwindcss_vite",
+      "ref_vite",
+      "ref_vitejs_plugin_react",
+      "vite"
+    ],
+    "13": [
+      "landing_package_devdependencies",
+      "landing_package_devdependencies_oxfmt",
+      "landing_package_devdependencies_tailwindcss",
+      "landing_package_devdependencies_tailwindcss_vite",
+      "landing_package_devdependencies_types_node",
+      "landing_package_devdependencies_types_react",
+      "landing_package_devdependencies_types_react_dom",
+      "landing_package_devdependencies_typescript",
+      "landing_package_devdependencies_vite",
+      "landing_package_devdependencies_vitejs_plugin_react"
+    ],
+    "14": [
+      "evals_mutator",
+      "evals_mutator_find_mutation_candidates",
+      "evals_mutator_generate_diff",
+      "evals_mutator_main",
+      "evals_mutator_rationale_1",
+      "evals_mutator_rationale_18",
+      "evals_mutator_rationale_82",
+      "evals_mutator_select_diverse_mutants",
+      "hashlib"
+    ],
+    "15": [
+      "landing_src_app",
+      "landing_src_app_app",
+      "landing_src_app_arrow",
+      "landing_src_app_prospectstack",
+      "landing_src_app_sectiontitle",
+      "landing_src_app_signalicon",
+      "landing_src_index",
+      "landing_src_main",
+      "ref_react"
+    ],
+    "16": [
+      "landing_public_assets_falkordb",
+      "reports_readme",
+      "reports_verify_t4",
+      "reports_verify_t5",
+      "reports_verify_t5a",
+      "reports_verify_t6",
+      "reports_verify_t7",
+      "reports_verify_t8"
+    ],
+    "17": [
+      "falkordb_safety_layer_anatomy_stylus",
+      "falkordb_safety_layer_cypher_evaluation_gantry",
+      "falkordb_safety_layer_engine",
+      "falkordb_safety_layer_policy",
+      "falkordb_safety_layer_safetygate",
+      "falkordb_safety_layer_trip_latch"
+    ],
+    "18": [
+      "tests_verify_t9",
+      "tests_verify_t9_check_demo_execution",
+      "tests_verify_t9_check_readme_content",
+      "tests_verify_t9_check_report",
+      "tests_verify_t9_main",
+      "tests_verify_t9_rationale_1"
+    ],
+    "19": [
+      "falkordb_concept",
+      "falkordb_safety_layer_html",
+      "falkordb_safety_light_png",
+      "falkordb_state_blocked_png",
+      "falkordb_state_verified_png"
+    ],
+    "20": [
+      "landing_package_scripts",
+      "landing_package_scripts_build",
+      "landing_package_scripts_dev",
+      "landing_package_scripts_format",
+      "landing_package_scripts_preview"
+    ],
+    "21": [
+      "cypher",
+      "falkordb_graph_matrix",
+      "falkordb_safety_layer_light_html",
+      "graphblas"
+    ],
+    "22": [
+      "landing_vite_config_figmasiteconfiguration",
+      "landing_vite_config_figmasiteconfiguration_escapehtmltext",
+      "landing_vite_config_figmasiteconfiguration_replacehtmlcommentslot",
+      "landing_vite_config_figmasiteconfiguration_sanitizehtmlvalue"
+    ],
+    "23": [
+      "landing_package_dependencies",
+      "landing_package_dependencies_react",
+      "landing_package_dependencies_react_dom"
+    ],
+    "24": [
+      "asd_ste100_compliance",
+      "project_flow_3d_html"
+    ],
+    "25": [
+      "falkordb_safety_layer_agent",
+      "falkordb_safety_layer_intent"
+    ],
+    "26": [
+      "falkordb_service",
+      "readme_concept"
+    ],
+    "27": [
+      "gated_executor",
+      "safety_policy"
+    ],
+    "28": [
+      "githooks_post_checkout",
+      "githooks_post_checkout__entry"
+    ],
+    "29": [
+      "githooks_post_commit",
+      "githooks_post_commit__entry"
+    ],
+    "30": [
+      "guard_ingest_init",
+      "guard_ingest_init_rationale_1"
+    ],
+    "31": [
+      "landing_figma_make_analyze_routes",
+      "landing_figma_make_analyze_routes__entry"
+    ],
+    "32": [
+      "landing_figma_make_deploy",
+      "landing_figma_make_deploy__entry"
+    ],
+    "33": [
+      "landing_figma_make_deploy_preview",
+      "landing_figma_make_deploy_preview__entry"
+    ],
+    "34": [
+      "landing_figma_make_dev",
+      "landing_figma_make_dev__entry"
+    ],
+    "35": [
+      "landing_figma_make_format",
+      "landing_figma_make_format__entry"
+    ],
+    "36": [
+      "landing_figma_make_install",
+      "landing_figma_make_install__entry"
+    ],
+    "37": [
+      "landing_figma_make_langserver",
+      "landing_figma_make_langserver__entry"
+    ],
+    "38": [
+      "scripts_verify_prep",
+      "scripts_verify_prep_sh__entry"
+    ],
+    "39": [
+      "deviations_t1"
+    ],
+    "40": [
+      "deviations_t5_metric"
+    ],
+    "41": [
+      "deviations_t5_order"
+    ],
+    "42": [
+      "evals_t2_schema_eval_md"
+    ],
+    "43": [
+      "landing_public_assets_11"
+    ],
+    "44": [
+      "landing_public_assets_12"
+    ],
+    "45": [
+      "landing_public_assets_13"
+    ],
+    "46": [
+      "landing_public_assets_14"
+    ],
+    "47": [
+      "landing_public_assets_15"
+    ],
+    "48": [
+      "landing_public_assets_16"
+    ],
+    "49": [
+      "landing_public_assets_coral_glow"
+    ],
+    "50": [
+      "landing_public_assets_g2"
+    ],
+    "51": [
+      "landing_public_assets_gojiberry_logo"
+    ],
+    "52": [
+      "landing_public_assets_hero_glow"
+    ],
+    "53": [
+      "landing_public_assets_louis"
+    ],
+    "54": [
+      "landing_public_assets_warrant_logo"
+    ],
+    "55": [
+      "landing_src_vite_env_d"
+    ],
+    "56": [
+      "pkg_guard"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07982583454281568,
+    "1": 0.09490196078431372,
+    "2": 0.09438775510204081,
+    "3": 0.09759759759759759,
+    "4": 0.11746031746031746,
+    "5": 0.09462365591397849,
+    "6": 0.1310344827586207,
+    "7": 0.1452991452991453,
+    "8": 0.17894736842105263,
+    "9": 0.10526315789473684,
+    "10": 0.16666666666666666,
+    "11": 0.22727272727272727,
+    "12": 0.2222222222222222,
+    "13": 0.2,
+    "14": 0.3333333333333333,
+    "15": 0.3888888888888889,
+    "16": 0.2857142857142857,
+    "17": 0.3333333333333333,
+    "18": 0.5333333333333333,
+    "19": 0.4,
+    "20": 0.4,
+    "21": 0.8333333333333334,
+    "22": 0.5,
+    "23": 0.6666666666666666,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0
+  },
+  "gods": [
+    {
+      "id": "guard_decision_decide",
+      "label": "decide()",
+      "degree": 23
+    },
+    {
+      "id": "guard_ingest_static_staticresult",
+      "label": "StaticResult",
+      "degree": 22
+    },
+    {
+      "id": "guard_db_get_graph",
+      "label": "get_graph()",
+      "degree": 21
+    },
+    {
+      "id": "guard_decision_change",
+      "label": "Change",
+      "degree": 19
+    },
+    {
+      "id": "landing_tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 17
+    },
+    {
+      "id": "guard_ingest_static_funcdef",
+      "label": "FuncDef",
+      "degree": 16
+    },
+    {
+      "id": "guard_thin_slice_guard_check",
+      "label": "guard_check()",
+      "degree": 16
+    },
+    {
+      "id": "evals_eval_t2_run_capability_evals",
+      "label": "run_capability_evals()",
+      "degree": 13
+    },
+    {
+      "id": "guard_db_write_static",
+      "label": "write_static()",
+      "degree": 13
+    },
+    {
+      "id": "guard_ingest_static_analyze_repo",
+      "label": "analyze_repo()",
+      "degree": 13
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Task T4 Verification Report",
+      "target": "FalkorDB Logo",
+      "source_files": [
+        "reports/verify_t4.md",
+        "landing/public/assets/falkordb.svg"
+      ],
+      "confidence": "INFERRED",
+      "relation": "references",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc ↔ image); connects across different repos/directories"
+    },
+    {
+      "source": "test_coverage_write_to_graph()",
+      "target": "FuncDef",
+      "source_files": [
+        "tests/test_coverage.py",
+        "guard/ingest/static.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "test_thin_slice_selects_covering_tests()",
+      "target": "FuncDef",
+      "source_files": [
+        "tests/test_thin_slice.py",
+        "guard/ingest/static.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "test_coverage_write_to_graph()",
+      "target": "StaticResult",
+      "source_files": [
+        "tests/test_coverage.py",
+        "guard/ingest/static.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "test_thin_slice_selects_covering_tests()",
+      "target": "StaticResult",
+      "source_files": [
+        "tests/test_thin_slice.py",
+        "guard/ingest/static.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "connects across different repos/directories; bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `StaticResult` connect `db.py` to `subprocess`, `test_thin_slice.py`, `static.py`, `coverage.py`?",
+      "why": "High betweenness centrality (0.022) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `name`, `private`, `type` to the rest of the system?",
+      "why": "93 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `db.py` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.07982583454281568 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `decide` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.09490196078431372 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `subprocess` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.09438775510204081 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `test_thin_slice.py` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.09759759759759759 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `json` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.11746031746031746 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
