@@ -26,63 +26,178 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
         </svg>
       )
 
-    case "antigravity":
-      return (
-        <svg
-          role="img"
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          className={`agent-brand-icon icon-antigravity ${className}`}
-          aria-hidden="true"
-          {...props}
-        >
-          <defs>
-            <linearGradient id={antigravityGradId} x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#4285F4" />
-              <stop offset="35%" stopColor="#9B72CB" />
-              <stop offset="70%" stopColor="#EA4335" />
-              <stop offset="100%" stopColor="#FBBC05" />
-            </linearGradient>
-          </defs>
-          <path
-            fill={`url(#${antigravityGradId})`}
-            d="M14.1452 14.6818C14.9937 15.3182 16.2664 14.894 15.0997 13.7273C11.5998 10.3333 12.3421 1 7.99366 1C3.64518 1 4.3876 10.3333 0.887603 13.7273C-0.385123 15 0.993664 15.3182 1.84215 14.6818C5.13002 12.4545 4.9179 8.5303 7.99366 8.5303C11.0694 8.5303 10.8573 12.4545 14.1452 14.6818Z"
-          />
-        </svg>
-      )
+    case "antigravity": {
+      const maskId = `ag-mask-${reactId.replace(/:/g, "")}`
+      const f1 = `ag-f1-${reactId.replace(/:/g, "")}`
+      const f2 = `ag-f2-${reactId.replace(/:/g, "")}`
+      const f3 = `ag-f3-${reactId.replace(/:/g, "")}`
+      const f4 = `ag-f4-${reactId.replace(/:/g, "")}`
+      const f5 = `ag-f5-${reactId.replace(/:/g, "")}`
+      const f6 = `ag-f6-${reactId.replace(/:/g, "")}`
+      const f7 = `ag-f7-${reactId.replace(/:/g, "")}`
+      const f8 = `ag-f8-${reactId.replace(/:/g, "")}`
+      const f9 = `ag-f9-${reactId.replace(/:/g, "")}`
+      const f10 = `ag-f10-${reactId.replace(/:/g, "")}`
+      const f11 = `ag-f11-${reactId.replace(/:/g, "")}`
 
-    case "opencode":
-      return (
-        <svg
-          role="img"
-          viewBox="0 0 16 16"
-          width={size}
-          height={size}
-          className={`agent-brand-icon icon-opencode ${className}`}
-          aria-hidden="true"
-          {...props}
-        >
-          <rect x="1.5" y="1.5" width="13" height="13" rx="3.5" fill="#1E293B" stroke="#334155" strokeWidth="0.8" />
-          <path fillRule="evenodd" clipRule="evenodd" d="M12 12.5H4V3.5H12V12.5ZM10 5.2H6V10.8H10V5.2Z" fill="#10B981" />
-        </svg>
-      )
-
-    case "codex":
       return (
         <svg
           role="img"
           viewBox="0 0 24 24"
           width={size}
           height={size}
-          fill="#10A37F"
+          className={`agent-brand-icon icon-antigravity ${className}`}
+          aria-hidden="true"
+          {...props}
+        >
+          <mask height="23" id={maskId} maskUnits="userSpaceOnUse" width="24" x="0" y="1">
+            <path
+              d="M21.751 22.607c1.34 1.005 3.35.335 1.508-1.508C17.73 15.74 18.904 1 12.037 1 5.17 1 6.342 15.74.815 21.1c-2.01 2.009.167 2.511 1.507 1.506 5.192-3.517 4.857-9.714 9.715-9.714 4.857 0 4.522 6.197 9.714 9.715z"
+              fill="#fff"
+            />
+          </mask>
+          <g mask={`url(#${maskId})`}>
+            <g filter={`url(#${f1})`}>
+              <path d="M-1.018-3.992c-.408 3.591 2.686 6.89 6.91 7.37 4.225.48 7.98-2.043 8.387-5.633.408-3.59-2.686-6.89-6.91-7.37-4.225-.479-7.98 2.043-8.387 5.633z" fill="#FFE432" />
+            </g>
+            <g filter={`url(#${f2})`}>
+              <path d="M15.269 7.747c1.058 4.557 5.691 7.374 10.348 6.293 4.657-1.082 7.575-5.653 6.516-10.21-1.058-4.556-5.691-7.374-10.348-6.292-4.657 1.082-7.575 5.653-6.516 10.21z" fill="#FC413D" />
+            </g>
+            <g filter={`url(#${f3})`}>
+              <path d="M-12.443 10.804c1.338 4.703 7.36 7.11 13.453 5.378 6.092-1.733 9.947-6.95 8.61-11.652C8.282-.173 2.26-2.58-3.833-.848-9.925.884-13.78 6.1-12.443 10.804z" fill="#00B95C" />
+            </g>
+            <g filter={`url(#${f4})`}>
+              <path d="M-12.443 10.804c1.338 4.703 7.36 7.11 13.453 5.378 6.092-1.733 9.947-6.95 8.61-11.652C8.282-.173 2.26-2.58-3.833-.848-9.925.884-13.78 6.1-12.443 10.804z" fill="#00B95C" />
+            </g>
+            <g filter={`url(#${f5})`}>
+              <path d="M-7.608 14.703c3.352 3.424 9.126 3.208 12.896-.483 3.77-3.69 4.108-9.459.756-12.883C2.69-2.087-3.083-1.871-6.853 1.82c-3.77 3.69-4.108 9.458-.755 12.883z" fill="#00B95C" />
+            </g>
+            <g filter={`url(#${f6})`}>
+              <path d="M9.932 27.617c1.04 4.482 5.384 7.303 9.7 6.3 4.316-1.002 6.971-5.448 5.93-9.93-1.04-4.483-5.384-7.304-9.7-6.301-4.316 1.002-6.971 5.448-5.93 9.93z" fill="#3186FF" />
+            </g>
+            <g filter={`url(#${f7})`}>
+              <path d="M2.572-8.185C.392-3.329 2.778 2.472 7.9 4.771c5.122 2.3 11.042.227 13.222-4.63 2.18-4.855-.205-10.656-5.327-12.955-5.122-2.3-11.042-.227-13.222 4.63z" fill="#FBBC04" />
+            </g>
+            <g filter={`url(#${f8})`}>
+              <path d="M-3.267 38.686c-5.277-2.072 3.742-19.117 5.984-24.83 2.243-5.712 8.34-8.664 13.616-6.592 5.278 2.071 11.533 13.482 9.29 19.195-2.242 5.713-23.613 14.298-28.89 12.227z" fill="#3186FF" />
+            </g>
+            <g filter={`url(#${f9})`}>
+              <path d="M28.71 17.471c-1.413 1.649-5.1.808-8.236-1.878-3.135-2.687-4.531-6.201-3.118-7.85 1.412-1.649 5.1-.808 8.235 1.878s4.532 6.2 3.119 7.85z" fill="#749BFF" />
+            </g>
+            <g filter={`url(#${f10})`}>
+              <path d="M18.163 9.077c5.81 3.93 12.502 4.19 14.946.577 2.443-3.612-.287-9.727-6.098-13.658-5.81-3.931-12.502-4.19-14.946-.577-2.443 3.612.287 9.727 6.098 13.658z" fill="#FC413D" />
+            </g>
+            <g filter={`url(#${f11})`}>
+              <path d="M-.915 2.684c-1.44 3.473-.97 6.967 1.05 7.804 2.02.837 4.824-1.3 6.264-4.772 1.44-3.473.97-6.967-1.05-7.804-2.02-.837-4.824 1.3-6.264 4.772z" fill="#FFEE48" />
+            </g>
+          </g>
+          <defs>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="17.587" id={f1} width="19.838" x="-3.288" y="-11.917">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="1.117" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="38.565" id={f2} width="38.9" x="4.251" y="-13.493">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="5.4" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="36.517" id={f3} width="40.955" x="-21.889" y="-10.592">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="4.591" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="36.517" id={f4} width="40.955" x="-21.889" y="-10.592">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="4.591" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="36.595" id={f5} width="36.632" x="-19.099" y="-10.278">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="4.591" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="34.087" id={f6} width="33.533" x=".981" y="8.758">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="4.363" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="35.276" id={f7} width="35.978" x="-6.143" y="-21.659">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="3.954" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="46.523" id={f8} width="45.114" x="-11.96" y="-.46">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="3.531" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="24.054" id={f9} width="25.094" x="10.485" y=".58">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="3.159" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="30.007" id={f10} width="33.508" x="5.833" y="-12.467">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="2.669" />
+            </filter>
+            <filter colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse" height="26.151" id={f11} width="22.194" x="-8.355" y="-8.876">
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+              <feGaussianBlur result="effect1_foregroundBlur_977_115" stdDeviation="3.303" />
+            </filter>
+          </defs>
+        </svg>
+      )
+    }
+
+    case "opencode":
+      return (
+        <svg
+          role="img"
+          viewBox="-4 0 40 40"
+          width={size}
+          height={size}
+          className={`agent-brand-icon icon-opencode ${className}`}
+          aria-hidden="true"
+          {...props}
+        >
+          {/* Official OpenCode brand mark from anomalyco/opencode */}
+          <path d="M24 32H8V16H24V32Z" fill="#BCBBBB" />
+          <path d="M24 8H8V32H24V8ZM32 40H0V0H32V40Z" fill="#211E1E" />
+        </svg>
+      )
+
+    case "codex": {
+      const codexGradId = `codex-grad-${reactId.replace(/:/g, "")}`
+      return (
+        <svg
+          role="img"
+          viewBox="0 0 24 24"
+          width={size}
+          height={size}
           className={`agent-brand-icon icon-codex ${className}`}
           aria-hidden="true"
           {...props}
         >
-          <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z" />
+          <defs>
+            <linearGradient id={codexGradId} x1="12" y1="0" x2="12" y2="24" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#B1A7FF" />
+              <stop offset="0.5" stopColor="#7A9DFF" />
+              <stop offset="1" stopColor="#3941FF" />
+            </linearGradient>
+          </defs>
+          {/* Official OpenAI Codex icon with prompt cursor cut-out */}
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            fill={`url(#${codexGradId})`}
+            d="M8.086.457a6.105 6.105 0 013.046-.415c1.333.153 2.521.72 3.564 1.7a.117.117 0 00.107.029c1.408-.346 2.762-.224 4.061.366l.063.03.154.076c1.357.703 2.33 1.77 2.918 3.198.278.679.418 1.388.421 2.126a5.655 5.655 0 01-.18 1.631.167.167 0 00.04.155 5.982 5.982 0 011.578 2.891c.385 1.901-.01 3.615-1.183 5.14l-.182.22a6.063 6.063 0 01-2.934 1.851.162.162 0 00-.108.102c-.255.736-.511 1.364-.987 1.992-1.199 1.582-2.962 2.462-4.948 2.451-1.583-.008-2.986-.587-4.21-1.736a.145.145 0 00-.14-.032c-.518.167-1.04.191-1.604.185a5.924 5.924 0 01-2.595-.622 6.058 6.058 0 01-2.146-1.781c-.203-.269-.404-.522-.551-.821a7.74 7.74 0 01-.495-1.283 6.11 6.11 0 01-.017-3.064.166.166 0 00.008-.074.115.115 0 00-.037-.064 5.958 5.958 0 01-1.38-2.202 5.196 5.196 0 01-.333-1.589 6.915 6.915 0 01.188-2.132c.45-1.484 1.309-2.648 2.577-3.493.282-.188.55-.334.802-.438.286-.12.573-.22.861-.304a.129.129 0 00.087-.087A6.016 6.016 0 015.635 2.31C6.315 1.464 7.132.846 8.086.457zm-.804 7.85a.848.848 0 00-1.473.842l1.694 2.965-1.688 2.848a.849.849 0 001.46.864l1.94-3.272a.849.849 0 00.007-.854l-1.94-3.393zm5.446 6.24a.849.849 0 000 1.695h4.848a.849.849 0 000-1.696h-4.848z"
+          />
         </svg>
       )
+    }
 
     case "vscode":
       return (
