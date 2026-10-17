@@ -51,12 +51,21 @@ def test_compute_flakiness():
 
 @pytest.fixture
 def clean_test_graph():
-    g = db.get_graph("guard_cov_test")
-    db.reset_graph(g)
-    g = db.get_graph("guard_cov_test")
-    db.ensure_schema(g)
+    backend = db.get_backend()
+    if not backend.is_healthy():
+        pytest.skip("FalkorDB server is not reachable")
+    try:
+        g = db.get_graph("guard_cov_test", backend=backend)
+        db.reset_graph(g)
+        g = db.get_graph("guard_cov_test", backend=backend)
+        db.ensure_schema(g)
+    except Exception as exc:
+        pytest.skip(f"FalkorDB server error: {exc}")
     yield g
-    db.reset_graph(g)
+    try:
+        db.reset_graph(g)
+    except Exception:
+        pass
 
 
 def test_coverage_write_to_graph(clean_test_graph):

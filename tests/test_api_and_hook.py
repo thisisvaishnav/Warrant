@@ -58,10 +58,16 @@ def seeded_guard_graph():
     """Seeds a dedicated graph so check() exercises the 'select' path without
     depending on an externally pre-populated 'guard' graph (which may lack
     COVERED_BY evidence and silently fall back to run-all)."""
-    g = db.get_graph("guard_api_check_test")
-    db.reset_graph(g)
-    g = db.get_graph("guard_api_check_test")
-    db.ensure_schema(g)
+    backend = db.get_backend()
+    if not backend.is_healthy():
+        pytest.skip("FalkorDB server is not reachable")
+    try:
+        g = db.get_graph("guard_api_check_test", backend=backend)
+        db.reset_graph(g)
+        g = db.get_graph("guard_api_check_test", backend=backend)
+        db.ensure_schema(g)
+    except Exception as exc:
+        pytest.skip(f"FalkorDB server error: {exc}")
     db.write_static(
         g,
         StaticResult(
@@ -74,7 +80,10 @@ def seeded_guard_graph():
     )
     db.write_coverage(g, {"tests/test_mod.py::test_calc": ["pkg/mod.py::calc"]}, confidence=0.9)
     yield g
-    db.reset_graph(g)
+    try:
+        db.reset_graph(g)
+    except Exception:
+        pass
 
 
 def test_api_check_schema_version_and_keys(temp_repo, seeded_guard_graph):
