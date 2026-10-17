@@ -22,15 +22,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
       - name: Install dependencies
         run: |
-          uv pip install -e ".[dev]"
+          uv pip install --system -e ".[dev]"
       - name: Run unit tests
         run: |
-          uv run pytest tests/test_static.py tests/test_decision.py tests/test_feedback.py tests/test_thin_slice.py
+          python -m pytest tests/test_static.py tests/test_decision.py tests/test_feedback.py tests/test_thin_slice.py
 
   audit-site-commands:
     name: Verify Site Advertised CLI Commands
@@ -42,12 +42,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
       - name: Install Guard CLI
         run: |
-          uv pip install -e .
+          uv pip install --system -e .
       - name: Verify site CLI commands exist in release
         run: |
-          uv run python scripts/verify_site_commands.py
+          python scripts/verify_site_commands.py
+

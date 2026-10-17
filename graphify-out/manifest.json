@@ -558,9 +558,9 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1792268333.8901184,
-    "seen": 1792268396.856927,
-    "ast_hash": "867abd443d7257b56d14d897bf3dfb78",
+    "mtime": 1792270861.9330976,
+    "seen": 1792270875.9524438,
+    "ast_hash": "e6b8df86432be81ea3897cd8334b4453",
     "semantic_hash": ""
   },
   ".github/workflows/release.yml": {
