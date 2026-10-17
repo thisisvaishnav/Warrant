@@ -1,7 +1,7 @@
 # Graph Report - guard  (2026-10-18)
 
 ## Corpus Check
-- 131 files · ~143,282 words
+- 130 files · ~143,308 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 53 file(s) not represented in the graph (top: .diff 40, (none) 5, .patch 4)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fb3d6bb4`
+- Built from commit: `182cc6a5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -23,7 +23,7 @@
 - pathlib
 - pytest
 - build_safety_figure.mjs
-- guard_cli/api.py
+- guard_cli/cli.py
 - guard_cli/thin_slice.py
 - compilerOptions
 - package.json
@@ -32,7 +32,7 @@
 - devDependencies
 - EyeTracker.tsx
 - App.tsx
-- guard_cli/cli.py
+- guard_cli/api.py
 - harness.py
 - guard_cli/agent_integration.py
 - subprocess
@@ -61,11 +61,11 @@
 - Verification Reports README
 - [0.1.2] - 2026-10-18
 - resolve_backend
-- Independent Verification Report: Packaging, Backend Layer, `guard init`, and `guard doctor`
+- run_session_start_hook
 - time
 - verify_t1.py
 - StaticResult
-- run_session_start_hook
+- Independent Verification Report: Packaging, Backend Layer, `guard init`, and `guard doctor`
 - run
 - figma-make-app
 - verify_t4.py
@@ -142,9 +142,9 @@ Nodes (14): check_embedded_platform_support(), EmbeddedBackend, test_api_check_s
 Cohesion: 0.13
 Nodes (25): at(), body, byDepth(), CARRIAGE, D(), DIAL, L(), MATRIX (+17 more)
 
-### Community 7 - "guard_cli/api.py"
-Cohesion: 0.17
-Nodes (3): get_covering_tests(), get_graph_state(), get_schema_counts()
+### Community 7 - "guard_cli/cli.py"
+Cohesion: 0.05
+Nodes (37): callers(), covering_tests(), report_miss(), cmd_callers(), cmd_check(), cmd_covering_tests(), cmd_doctor(), cmd_feedback() (+29 more)
 
 ### Community 8 - "guard_cli/thin_slice.py"
 Cohesion: 0.13
@@ -178,9 +178,9 @@ Nodes (11): clamp(), Eye, LINES, measure(), outline(), radii, SHAPES, stillness(
 Cohesion: 0.17
 Nodes (14): App(), Arrow(), GithubIcon(), ProspectStack(), SectionTitle(), SignalIcon(), AgentIcon(), AgentIconProps (+6 more)
 
-### Community 16 - "guard_cli/cli.py"
-Cohesion: 0.05
-Nodes (37): callers(), covering_tests(), report_miss(), cmd_callers(), cmd_check(), cmd_covering_tests(), cmd_doctor(), cmd_feedback() (+29 more)
+### Community 16 - "guard_cli/api.py"
+Cohesion: 0.17
+Nodes (3): get_covering_tests(), get_graph_state(), get_schema_counts()
 
 ### Community 17 - "harness.py"
 Cohesion: 0.18
@@ -230,9 +230,9 @@ Nodes (10): [0.1.0] - 2026-10-17, [0.1.1] - 2026-10-17, [0.1.2] - 2026-10-18, Ad
 Cohesion: 0.11
 Nodes (8): load_config(), _parse_simple_toml(), resolve_backend(), save_config(), ServerBackend, get_backend(), test_config_save_and_load(), test_resolve_backend_with_config()
 
-### Community 59 - "Independent Verification Report: Packaging, Backend Layer, `guard init`, and `guard doctor`"
-Cohesion: 0.29
-Nodes (6): 1. Scope & Acceptance Criteria Checked, 2. Raw Test Suite Output, 3. Clean-Machine & CLI Verification, 4. Adversarial Fault Injection & Falsification (Rule 5), 5. Protected Files & Git Integrity (Rule 3), Independent Verification Report: Packaging, Backend Layer, `guard init`, and `guard doctor`
+### Community 59 - "run_session_start_hook"
+Cohesion: 0.31
+Nodes (4): _capture_payload(), _git_head_sha(), resolve_hook_context(), run_session_start_hook()
 
 ### Community 60 - "time"
 Cohesion: 0.57
@@ -246,9 +246,9 @@ Nodes (3): check_falkordb(), main(), run_flask_suite()
 Cohesion: 0.05
 Nodes (25): update_graph_meta(), record_miss(), analyze_repo(), _Collector, _decorator_name(), FuncDef, is_test_file(), is_test_function() (+17 more)
 
-### Community 63 - "run_session_start_hook"
-Cohesion: 0.31
-Nodes (4): _capture_payload(), _git_head_sha(), resolve_hook_context(), run_session_start_hook()
+### Community 63 - "Independent Verification Report: Packaging, Backend Layer, `guard init`, and `guard doctor`"
+Cohesion: 0.29
+Nodes (6): 1. Scope & Acceptance Criteria Checked, 2. Raw Test Suite Output, 3. Clean-Machine & CLI Verification, 4. Adversarial Fault Injection & Falsification (Rule 5), 5. Protected Files & Git Integrity (Rule 3), Independent Verification Report: Packaging, Backend Layer, `guard init`, and `guard doctor`
 
 ### Community 64 - "run"
 Cohesion: 0.11
@@ -310,17 +310,17 @@ Nodes (5): find_mutation_candidates(), generate_diff(), main(), select_diverse_m
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `analyze_repo()` connect `StaticResult` to `guard_cli/cli.py`, `guard_cli/init_cmd.py`?**
-  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+- **Why does `analyze_repo()` connect `StaticResult` to `guard_cli/init_cmd.py`, `guard_cli/cli.py`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **What connects `PLATE`, `MATRIX`, `NODES` to the rest of the system?**
   _137 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `decide` be split into smaller, more focused modules?**
   _Cohesion score 0.08220211161387632 - nodes in this community are weakly interconnected._
-- **Why does `StaticResult` connect `StaticResult` to `test_api_and_hook.py`, `eval_t2.py`, `guard_cli/cli.py`, `guard_cli/thin_slice.py`?**
+- **Why does `StaticResult` connect `StaticResult` to `test_api_and_hook.py`, `eval_t2.py`, `guard_cli/thin_slice.py`, `guard_cli/cli.py`?**
   _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Should `guard_cli/doctor_cmd.py` be split into smaller, more focused modules?**
   _Cohesion score 0.09175377468060394 - nodes in this community are weakly interconnected._
-- **Why does `run_stop_hook()` connect `run_stop_hook` to `run`, `guard_cli/hook.py`, `check_idle_turn`, `guard_cli/cli.py`, `test_api_and_hook.py`, `subprocess`, `json`, `test_commit_bypass_fresh_session.py`, `run_session_start_hook`?**
+- **Why does `run_stop_hook()` connect `run_stop_hook` to `run`, `guard_cli/hook.py`, `guard_cli/cli.py`, `check_idle_turn`, `test_api_and_hook.py`, `subprocess`, `json`, `run_session_start_hook`, `test_commit_bypass_fresh_session.py`?**
   _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **Should `guard_cli/hook.py` be split into smaller, more focused modules?**
   _Cohesion score 0.13213213213213212 - nodes in this community are weakly interconnected._

@@ -81,7 +81,18 @@ def run_pytest_once(
     if xml_report.exists():
         xml_report.unlink()
 
-    py_bin = python_exe or sys.executable
+    if python_exe:
+        py_bin = python_exe
+    elif (repo_path / ".venv" / "bin" / "python3").exists():
+        py_bin = str(repo_path / ".venv" / "bin" / "python3")
+    elif (repo_path / ".venv" / "bin" / "python").exists():
+        py_bin = str(repo_path / ".venv" / "bin" / "python")
+    elif (Path.cwd() / ".venv" / "bin" / "python3").exists():
+        py_bin = str(Path.cwd() / ".venv" / "bin" / "python3")
+    elif (Path.cwd() / ".venv" / "bin" / "python").exists():
+        py_bin = str(Path.cwd() / ".venv" / "bin" / "python")
+    else:
+        py_bin = sys.executable
     cmd = [
         py_bin,
         "-m",
@@ -93,7 +104,7 @@ def run_pytest_once(
 
     if record_coverage:
         cov_dest = str(cov_file.resolve()) if cov_file else str(repo_path / ".coverage")
-        source = cov_source or ("flask" if (repo_path / "src" / "flask").exists() or (repo_path / "flask").exists() else ".")
+        source = cov_source or ("src/flask" if (repo_path / "src" / "flask").exists() else ("flask" if (repo_path / "flask").exists() else "."))
         cmd.extend([
             f"--cov={source}",
             "--cov-context=test",
