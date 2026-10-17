@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { InstallTabs } from "@/components/install/InstallTabs"
+import EyeTracker from "./components/EyeTracker"
 
 const Arrow = ({ dark = false }: { dark?: boolean }) => (
   <span className={`arrow-box ${dark ? "arrow-dark" : ""}`} aria-hidden="true">
@@ -55,7 +56,8 @@ export default function App() {
       <section className="hero" id="top">
         <nav className="nav shell">
           <a className="brand" href="#top" aria-label="Warrant home">
-            warrant
+            <EyeTracker size={34} />
+            <span>warrant</span>
           </a>
           <button
             className="menu-button"
@@ -457,7 +459,10 @@ export default function App() {
               ].map((item) => (
                 <span key={item}>{item}</span>
               ))}
-              <span className="tool-ring-brand">warrant</span>
+              <span className="tool-ring-brand">
+                <EyeTracker size={28} />
+                <span>warrant</span>
+              </span>
             </div>
           </div>
         </div>
@@ -627,7 +632,8 @@ export default function App() {
         <div className="shell footer-grid">
           <div className="footer-brand">
             <a className="brand" href="#top" aria-label="Warrant home">
-              warrant
+              <EyeTracker size={30} />
+              <span>warrant</span>
             </a>
             <p>Graph-powered safety layer for AI coding agents.</p>
           </div>

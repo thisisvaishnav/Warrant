@@ -1,6 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 36" fill="none">
-  <rect x="1" y="3" width="30" height="30" rx="8" fill="#141414"/>
-  <path d="M7 11L11.5 24L16 14L20.5 24L25 11" stroke="#ff5c51" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="40" y="25.5" fill="#141414" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" font-weight="800" letter-spacing="-0.8">warrant</text>
-  <circle cx="128" cy="23.5" r="3" fill="#ff5c51"/>
+  <!-- Bencho dark theme Eye Tracker logo mark -->
+  <g transform="translate(1, 1) scale(0.34)">
+    <path d="M30 6 H70 A24 24 0 0 1 94 30 V70 A24 24 0 0 1 70 94 H30 A24 24 0 0 1 6 70 V30 A24 24 0 0 1 30 6 Z" fill="#18191c"/>
+    <!-- Left Eye -->
+    <rect x="36.5" y="42" width="10" height="16" rx="5" fill="#fbfbfa"/>
+    <!-- Right Eye -->
+    <rect x="53.5" y="42" width="10" height="16" rx="5" fill="#fbfbfa"/>
+  </g>
+  <text x="44" y="25.5" fill="#0d0e0f" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="23" font-weight="700" letter-spacing="-1.2">warrant</text>
 </svg>
