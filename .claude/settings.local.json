@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "command": "guard hook stop",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "guard hook stop",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  },
+  "commands": {
+    "guard": "guard run"
+  }
+}
