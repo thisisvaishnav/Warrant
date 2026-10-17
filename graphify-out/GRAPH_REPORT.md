@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8adf3180`
+- Built from commit: `ab74600c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -57,7 +57,7 @@
 - Hero Glow Background
 - Louis Portrait
 - Warrant Logo
-- guard
+- guard-cli
 - vercel.json
 
 ## God Nodes (most connected - your core abstractions)
