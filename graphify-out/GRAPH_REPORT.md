@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f18fab44`
+- Built from commit: `fc4cb445`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -332,7 +332,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `decide` be split into smaller, more focused modules?**
   _Cohesion score 0.08220211161387632 - nodes in this community are weakly interconnected._
 - **Why does `run_stop_hook()` connect `test_api_and_hook.py` to `guard_cli/api.py`, `guard_cli/cli.py`, `guard_cli/hook.py`, `check_idle_turn`, `guard_cli/events.py`, `subprocess`, `run_session_start_hook`, `json`, `os`, `test_commit_bypass_fresh_session.py`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Should `test_doctor_cmd.py` be split into smaller, more focused modules?**
   _Cohesion score 0.10037878787878787 - nodes in this community are weakly interconnected._
 - **Why does `DockerBackend` connect `DockerBackend` to `guard_cli/doctor_cmd.py`, `test_doctor_cmd.py`, `pytest`, `GraphBackend`, `ServerBackend`, `os`?**
