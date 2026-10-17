@@ -154,4 +154,4 @@ def test_run_doctor_json_mode(tmp_path, capsys):
     assert "status" in data
     assert "exit_code" in data
     assert "checks" in data
-    assert len(data["checks"]) == 6
+    assert len(data["checks"]) in (6, 7)

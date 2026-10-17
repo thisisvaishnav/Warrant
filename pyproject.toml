@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "guard-cli"
-version = "0.1.0"
+version = "0.1.1"
 description = "Graph-powered safety layer for AI coding agents built on FalkorDB"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.10"
 dependencies = [
     "falkordb>=1.0.0",
@@ -28,12 +28,13 @@ dev = [
 ]
 
 [project.scripts]
-guard = "guard.cli:main"
-guard-cli = "guard.cli:main"
+guard = "guard_cli.cli:main"
+guard-cli = "guard_cli.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["guard*"]
+include = ["guard_cli*"]
+exclude = ["guard", "guard.*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

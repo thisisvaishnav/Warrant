@@ -1,1 +1,1 @@
-from guard.integrations import *
+"""Integration writers for coding assistants and editors."""

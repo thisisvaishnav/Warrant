@@ -18,20 +18,20 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from guard import api
-from guard.events import log_event, read_events
-from guard.state import (
+from guard_cli import api
+from guard_cli.events import log_event, read_events
+from guard_cli.state import (
     get_session_blocks,
     record_session_block,
     reset_session_blocks,
     load_state,
 )
-from guard.hook import (
+from guard_cli.hook import (
     run_stop_hook,
     format_failure_summary,
     is_working_tree_clean,
 )
-from guard.integrations import claude
+from guard_cli.integrations import claude
 
 
 @pytest.fixture
@@ -66,7 +66,7 @@ def test_api_check_schema_version_and_keys():
 
 def test_api_check_fail_open_by_default(temp_repo):
     """When graph/database fails, check() fails open instead of throwing."""
-    with patch("guard.api.guard_check", side_effect=ConnectionError("FalkorDB unreachable")):
+    with patch("guard_cli.api.guard_check", side_effect=ConnectionError("FalkorDB unreachable")):
         res = api.check(repo_path=temp_repo, strict=False)
         assert res["version"] == "1.0"
         assert res["policy"] == "fail_open"
@@ -77,14 +77,14 @@ def test_api_check_fail_open_by_default(temp_repo):
 
 def test_api_check_strict_mode_raises(temp_repo):
     """When strict=True, exceptions are re-raised."""
-    with patch("guard.api.guard_check", side_effect=ConnectionError("FalkorDB unreachable")):
+    with patch("guard_cli.api.guard_check", side_effect=ConnectionError("FalkorDB unreachable")):
         with pytest.raises(ConnectionError):
             api.check(repo_path=temp_repo, strict=True)
 
 
 def test_api_run_fail_open_returns_exit_code_zero(temp_repo):
     """When check/database fails in run(), fail-open yields exit code 0."""
-    with patch("guard.api.check", side_effect=Exception("Database down")):
+    with patch("guard_cli.api.check", side_effect=Exception("Database down")):
         report, code = api.run(repo_path=temp_repo, strict=False)
         assert code == 0
         assert report["fail_open"] is True
@@ -134,7 +134,7 @@ def test_session_state_and_loop_guard(temp_repo):
 
 def test_stop_hook_clean_working_tree_exits_zero(temp_repo):
     """Clean git working tree should exit 0 immediately (idle turn)."""
-    with patch("guard.hook.is_working_tree_clean", return_value=True):
+    with patch("guard_cli.hook.is_working_tree_clean", return_value=True):
         code = run_stop_hook(
             repo_override=temp_repo,
             raw_input={"session_id": "sess_1", "cwd": str(temp_repo)},
@@ -145,7 +145,7 @@ def test_stop_hook_clean_working_tree_exits_zero(temp_repo):
 def test_stop_hook_non_python_change_skips_run(temp_repo):
     """Changes to non-python files (e.g. README.md) should be treated as idle turns and exit 0."""
     with patch("subprocess.run") as mock_proc, \
-         patch("guard.api.run") as mock_run:
+         patch("guard_cli.api.run") as mock_run:
         mock_proc.return_value.returncode = 0
         mock_proc.return_value.stdout = " M README.md\n?? notes.txt\n"
         code = run_stop_hook(
@@ -158,24 +158,22 @@ def test_stop_hook_non_python_change_skips_run(temp_repo):
 
 def test_stop_hook_fingerprint_cache_hit_skips_run(temp_repo):
     """Subsequent stop hook invocations on identical tree after tests passed should skip run."""
-    from guard.state import set_last_passed_fingerprint
-    import hashlib
-    fake_sha = "abc1234"
-    fake_stdout = " M calc.py\n"
-    fp = hashlib.sha256(f"{fake_sha}\n{fake_stdout}".encode("utf-8")).hexdigest()[:16]
+    from guard_cli.state import set_last_passed_fingerprint
+    fp = "abc1234567890123"
     set_last_passed_fingerprint("sess_1", fp, repo_path=temp_repo)
 
     def fake_subprocess_run(cmd, *args, **kwargs):
         res = MagicMock()
         res.returncode = 0
         if "rev-parse" in cmd:
-            res.stdout = fake_sha
+            res.stdout = "abc1234"
         elif "--porcelain" in cmd:
-            res.stdout = fake_stdout
+            res.stdout = " M calc.py\n"
         return res
 
     with patch("subprocess.run", side_effect=fake_subprocess_run), \
-         patch("guard.api.run") as mock_run:
+         patch("guard_cli.hook.compute_turn_fingerprint", return_value=fp), \
+         patch("guard_cli.api.run") as mock_run:
         code = run_stop_hook(
             repo_override=temp_repo,
             raw_input={"session_id": "sess_1", "cwd": str(temp_repo)},
@@ -196,8 +194,8 @@ def test_stop_hook_fails_with_exit_2_and_stderr(temp_repo):
         "output_summary": "1 failed, 4 passed in 0.12s",
     }
     
-    with patch("guard.hook.is_working_tree_clean", return_value=False), \
-         patch("guard.api.run", return_value=(mock_report, 1)):
+    with patch("guard_cli.hook.is_working_tree_clean", return_value=False), \
+         patch("guard_cli.api.run", return_value=(mock_report, 1)):
         
         stderr_capture = io.StringIO()
         with patch("sys.stderr", stderr_capture):
@@ -229,8 +227,8 @@ def test_stop_hook_loop_guard_caps_at_3_blocks(temp_repo):
         "tests_run_count": 1,
     }
 
-    with patch("guard.hook.is_working_tree_clean", return_value=False), \
-         patch("guard.api.run", return_value=(mock_report, 1)):
+    with patch("guard_cli.hook.is_working_tree_clean", return_value=False), \
+         patch("guard_cli.api.run", return_value=(mock_report, 1)):
         
         stderr_capture = io.StringIO()
         with patch("sys.stderr", stderr_capture):
@@ -246,8 +244,8 @@ def test_stop_hook_loop_guard_caps_at_3_blocks(temp_repo):
 
 def test_stop_hook_fail_open_on_exception(temp_repo):
     """If hook execution throws an unexpected error, it fails open (exit 0)."""
-    with patch("guard.hook.is_working_tree_clean", return_value=False), \
-         patch("guard.api.run", side_effect=RuntimeError("Unexpected crash")):
+    with patch("guard_cli.hook.is_working_tree_clean", return_value=False), \
+         patch("guard_cli.api.run", side_effect=RuntimeError("Unexpected crash")):
         
         stderr_capture = io.StringIO()
         with patch("sys.stderr", stderr_capture):

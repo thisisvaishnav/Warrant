@@ -172,6 +172,22 @@ Initializes Guard in a repository, detects backends, and configures integrations
 guard init [--backend server|docker|embedded] [--skip-coverage]
 ```
 
+#### Backends & Platform Support
+
+Guard supports three FalkorDB backend topologies:
+1. **Server (`--backend server`)**: Connects to an existing FalkorDB instance (default: `localhost:6379`). Works across all platforms.
+2. **Docker (`--backend docker`)**: Automatically launches and manages a dedicated `guard-falkordb` container on port 6390. Works on any platform with Docker installed.
+3. **Embedded (`--backend embedded`)**: Zero-configuration, in-process FalkorDBLite instance.
+   - **Supported OS & Platform Requirements**:
+     - **Python**: 3.12 or newer
+     - **Linux**: `glibc` 2.39 or newer (e.g., Ubuntu 24.04+, Fedora 40+)
+     - **macOS**: macOS 15 (Sequoia) or newer
+   - **Platform Fallback**: On unsupported platforms (such as Linux with glibc < 2.39 or macOS < 15), Guard prints a clear message:
+     ```text
+     no embedded build for this platform, use Docker or a server
+     ```
+     and guides you to use `--backend docker` or `--backend server` instead of failing with a build error.
+
 ### `guard doctor`
 Verifies system health, backend reachability, graph counts, and settings:
 ```bash

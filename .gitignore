@@ -1,4 +1,6 @@
 target_repos/
+target_repos
+scratch/
 .venv/
 __pycache__/
 *.pyc
