@@ -186,10 +186,10 @@
     "semantic_hash": "826efd12ea54fe635ef92c1c2037eaf3"
   },
   "landing/package.json": {
-    "mtime": 1792239312.724128,
-    "seen": 1792252418.0349839,
-    "ast_hash": "6a75f3785307085242c90f51b1d2bf1c",
-    "semantic_hash": "6a75f3785307085242c90f51b1d2bf1c"
+    "mtime": 1792256769.6631906,
+    "seen": 1792257696.409621,
+    "ast_hash": "43bb47c25d54d56c902ee2b40e16b5c5",
+    "semantic_hash": ""
   },
   "landing/src/App.tsx": {
     "mtime": 1792241233.6915736,
@@ -222,9 +222,9 @@
     "semantic_hash": "cef75bd50b8a4c10fe7889a18e2408f7"
   },
   "pyproject.toml": {
-    "mtime": 1792254125.7690241,
-    "seen": 1792254155.0664802,
-    "ast_hash": "40a4d665165a44d66a38b43a5f060da4",
+    "mtime": 1792256448.251111,
+    "seen": 1792257696.409631,
+    "ast_hash": "ef3d497e24f123a5b971260a42bdba40",
     "semantic_hash": ""
   },
   "scripts/verify_prep.sh": {
@@ -348,9 +348,9 @@
     "semantic_hash": "86f49fbfb9eb406bbdc5801c2da77e65"
   },
   "README.md": {
-    "mtime": 1792253748.2399788,
-    "seen": 1792254155.066508,
-    "ast_hash": "0635dae24f4f5fb8a61920365afddc99",
+    "mtime": 1792256448.2499719,
+    "seen": 1792257696.4096582,
+    "ast_hash": "1b79cb0347f9baf6acef854021f43110",
     "semantic_hash": ""
   },
   "docker-compose.yml": {
@@ -540,9 +540,9 @@
     "semantic_hash": ""
   },
   "tests/test_api_and_hook.py": {
-    "mtime": 1792249721.9919558,
-    "seen": 1792252418.034991,
-    "ast_hash": "3afab8299f1d613735ae21e074753aa6",
+    "mtime": 1792257594.5220044,
+    "seen": 1792257696.409633,
+    "ast_hash": "a963318b8a2c05f4263933dbcc1ac3b1",
     "semantic_hash": ""
   },
   "tests/test_backend.py": {
@@ -624,9 +624,9 @@
     "semantic_hash": ""
   },
   "tests/test_integration_init_doctor.py": {
-    "mtime": 1792248211.588908,
-    "seen": 1792252418.035,
-    "ast_hash": "c6d440cbb6dace00e7aff71806ae0692",
+    "mtime": 1792256448.2515726,
+    "seen": 1792257696.4096441,
+    "ast_hash": "058529484cb8de31b27b61f70abd5ee5",
     "semantic_hash": ""
   },
   "reports/verify_packaging_and_init.md": {
@@ -636,15 +636,15 @@
     "semantic_hash": ""
   },
   "guard_cli/__init__.py": {
-    "mtime": 1792254137.3096714,
-    "seen": 1792254155.066453,
-    "ast_hash": "895b73a3a02409f4b6d900a90f964e33",
+    "mtime": 1792256448.2502275,
+    "seen": 1792257696.409591,
+    "ast_hash": "0641d5b8a6ebe2814e293ff6ffad6198",
     "semantic_hash": ""
   },
   "guard_cli/api.py": {
-    "mtime": 1792253557.6801255,
-    "seen": 1792254155.066454,
-    "ast_hash": "36bde919fcff510a68a39ba1b976a252",
+    "mtime": 1792256822.8092055,
+    "seen": 1792257696.409594,
+    "ast_hash": "36a3b0b8c1a79cc6d836df473a42d5af",
     "semantic_hash": ""
   },
   "guard_cli/backend.py": {
@@ -654,9 +654,9 @@
     "semantic_hash": ""
   },
   "guard_cli/cli.py": {
-    "mtime": 1792252221.980365,
-    "seen": 1792252418.034964,
-    "ast_hash": "fb272418f33101fcb111eac9fe85e22b",
+    "mtime": 1792257232.4172475,
+    "seen": 1792257696.409596,
+    "ast_hash": "eca7d2607966200e9fd507edf8325ae9",
     "semantic_hash": ""
   },
   "guard_cli/db.py": {
@@ -690,9 +690,9 @@
     "semantic_hash": ""
   },
   "guard_cli/hook.py": {
-    "mtime": 1792253644.6673498,
-    "seen": 1792254155.06646,
-    "ast_hash": "c50d38aa6862d4a958e1c4794a7e3fcf",
+    "mtime": 1792256916.633171,
+    "seen": 1792257696.409601,
+    "ast_hash": "16678785d925ec8835367285a5c4c1f8",
     "semantic_hash": ""
   },
   "guard_cli/ingest/__init__.py": {
@@ -726,15 +726,15 @@
     "semantic_hash": ""
   },
   "guard_cli/integrations/claude.py": {
-    "mtime": 1792253767.5552657,
-    "seen": 1792254155.0664651,
-    "ast_hash": "f61b17aa2e542ecac59c0b43d313d551",
+    "mtime": 1792257258.8498392,
+    "seen": 1792257696.409608,
+    "ast_hash": "98325b100590d4a83def4ba7cbb44cdd",
     "semantic_hash": ""
   },
   "guard_cli/state.py": {
-    "mtime": 1792249391.318951,
-    "seen": 1792252418.034976,
-    "ast_hash": "e8373e15f20d1ca5e07194bac37de661",
+    "mtime": 1792256868.5931144,
+    "seen": 1792257696.4096088,
+    "ast_hash": "72baa4f198e48a4fa89582982bc55d3c",
     "semantic_hash": ""
   },
   "guard_cli/thin_slice.py": {
@@ -798,9 +798,9 @@
     "semantic_hash": ""
   },
   "guard_cli/integrations/antigravity.py": {
-    "mtime": 1792253800.7668104,
-    "seen": 1792254155.0664651,
-    "ast_hash": "3bcaf9ad98fdc58bc6c8e082e9974c08",
+    "mtime": 1792257286.855287,
+    "seen": 1792257696.409607,
+    "ast_hash": "a985739d7cfe3fad0634746813161c7b",
     "semantic_hash": ""
   },
   "landing/vercel.json": {
@@ -819,12 +819,6 @@
     "mtime": 1792253521.6261332,
     "seen": 1792254155.066491,
     "ast_hash": "9871b8fcbda5629fed84b2eb9f542cad",
-    "semantic_hash": ""
-  },
-  "scratch/test_agy/foo.txt": {
-    "mtime": 1792252403.329468,
-    "seen": 1792252418.035029,
-    "ast_hash": "591785b794601e212b260e25925636fd",
     "semantic_hash": ""
   },
   "tests/test_antigravity_integration.py": {
@@ -852,9 +846,63 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1792254081.3793113,
-    "seen": 1792254155.066505,
-    "ast_hash": "829514318a141406e68ef30efa857dc7",
+    "mtime": 1792257412.9307785,
+    "seen": 1792257696.409655,
+    "ast_hash": "b56ee290cd20f2a12f367462baba5c98",
+    "semantic_hash": ""
+  },
+  "landing/components.json": {
+    "mtime": 1792256758.6723385,
+    "seen": 1792257696.40962,
+    "ast_hash": "d2922b530154b9895e967519bcd21142",
+    "semantic_hash": ""
+  },
+  "landing/src/components/install/Badge.tsx": {
+    "mtime": 1792257594.8188677,
+    "seen": 1792257696.409622,
+    "ast_hash": "8d3337ec3f63096e7161d610675859f4",
+    "semantic_hash": ""
+  },
+  "landing/src/components/install/CodeBlock.tsx": {
+    "mtime": 1792257586.008428,
+    "seen": 1792257696.4096231,
+    "ast_hash": "10371bd2c05d198950368399523bd573",
+    "semantic_hash": ""
+  },
+  "landing/src/components/install/InstallTabs.tsx": {
+    "mtime": 1792257615.3765638,
+    "seen": 1792257696.409624,
+    "ast_hash": "a19e6281ea18e7e36078a117a0001392",
+    "semantic_hash": ""
+  },
+  "landing/src/components/install/Step.tsx": {
+    "mtime": 1792257594.4603152,
+    "seen": 1792257696.409624,
+    "ast_hash": "584af77073e2b487a9567c734c80a129",
+    "semantic_hash": ""
+  },
+  "landing/src/components/ui/tabs.tsx": {
+    "mtime": 1792256812.1450434,
+    "seen": 1792257696.409625,
+    "ast_hash": "829ca57f81a08827b5e8a8a670008a1a",
+    "semantic_hash": ""
+  },
+  "landing/src/data/agents.json": {
+    "mtime": 1792257573.9828053,
+    "seen": 1792257696.409625,
+    "ast_hash": "11bb9e90d35c259403d4e1f53e15c462",
+    "semantic_hash": ""
+  },
+  "landing/src/lib/utils.ts": {
+    "mtime": 1792256769.8614457,
+    "seen": 1792257696.409626,
+    "ast_hash": "0482d21cfeab8cfcfe44f94927e45afb",
+    "semantic_hash": ""
+  },
+  "tests/test_commit_bypass_fresh_session.py": {
+    "mtime": 1792257368.1799757,
+    "seen": 1792257696.409635,
+    "ast_hash": "1f93179f327a383f057403ca541e6838",
     "semantic_hash": ""
   }
 }

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "guard-cli"
-version = "0.1.1"
+version = "0.1.2"
 description = "Graph-powered safety layer for AI coding agents built on FalkorDB"
 readme = "README.md"
 license = "MIT"
@@ -14,6 +14,12 @@ dependencies = [
     "rich>=12.0.0",
     "coverage>=7.0.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/thisisvaishnav/guard"
+Repository = "https://github.com/thisisvaishnav/guard"
+"Bug Tracker" = "https://github.com/thisisvaishnav/guard/issues"
+Changelog = "https://github.com/thisisvaishnav/guard/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 embedded = [

@@ -121,7 +121,11 @@ def test_init_then_doctor_e2e(throwaway_repo, capsys):
     assert claude_settings.exists()
     settings = json.loads(claude_settings.read_text(encoding="utf-8"))
     assert settings.get("commands", {}).get("guard") == "guard run"
-    assert any(h.get("command") == "guard hook stop" for h in settings.get("hooks", {}).get("Stop", []))
+    assert any(
+        h.get("command") == "guard hook stop"
+        or any(sub.get("command") == "guard hook stop" for sub in h.get("hooks", []))
+        for h in settings.get("hooks", {}).get("Stop", [])
+    )
 
     # Flush capsys buffer before running doctor
     capsys.readouterr()

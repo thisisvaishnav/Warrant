@@ -13,13 +13,13 @@ import json
 import os
 import sys
 import tempfile
-from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 import pytest
 
-from guard_cli import api
+from guard_cli import api, db
 from guard_cli.events import log_event, read_events
+from guard_cli.ingest.static import StaticResult, FuncDef
 from guard_cli.state import (
     get_session_blocks,
     record_session_block,
@@ -44,13 +44,42 @@ def temp_repo(tmp_path):
 
 # --- Phase 0: Schema and API Tests -------------------------------------------
 
-def test_api_check_schema_version_and_keys():
+_SAMPLE_DIFF = """--- a/pkg/mod.py
++++ b/pkg/mod.py
+@@ -1,3 +1,3 @@
+ def calc():
+-    return 1
++    return 2
+"""
+
+
+@pytest.fixture
+def seeded_guard_graph():
+    """Seeds a dedicated graph so check() exercises the 'select' path without
+    depending on an externally pre-populated 'guard' graph (which may lack
+    COVERED_BY evidence and silently fall back to run-all)."""
+    g = db.get_graph("guard_api_check_test")
+    db.reset_graph(g)
+    g = db.get_graph("guard_api_check_test")
+    db.ensure_schema(g)
+    db.write_static(
+        g,
+        StaticResult(
+            files=["pkg/mod.py", "tests/test_mod.py"],
+            funcs=[
+                FuncDef(id="pkg/mod.py::calc", file="pkg/mod.py", qualname="calc", name="calc", start=1, end=10, cls=None),
+                FuncDef(id="tests/test_mod.py::test_calc", file="tests/test_mod.py", qualname="test_calc", name="test_calc", start=1, end=5, cls=None),
+            ],
+        ),
+    )
+    db.write_coverage(g, {"tests/test_mod.py::test_calc": ["pkg/mod.py::calc"]}, confidence=0.9)
+    yield g
+    db.reset_graph(g)
+
+
+def test_api_check_schema_version_and_keys(temp_repo, seeded_guard_graph):
     """Verify check() produces the version 1.0 schema with all required keys."""
-    # Test on diff_covered patch
-    covered_patch = Path("evals/fixtures/diff_covered.patch")
-    assert covered_patch.exists()
-    
-    res = api.check(diff_file=covered_patch)
+    res = api.check(diff_text=_SAMPLE_DIFF, repo_path=temp_repo, graph_name="guard_api_check_test")
     assert res["version"] == "1.0"
     assert "policy" in res
     assert "trust" in res
@@ -89,6 +118,45 @@ def test_api_run_fail_open_returns_exit_code_zero(temp_repo):
         assert code == 0
         assert report["fail_open"] is True
         assert report["tests_passed"] is True
+
+
+def test_api_run_fail_open_check_skips_full_suite(temp_repo):
+    """When check() itself fails open (database down), run() must not attempt the
+    full-suite fallback; it allows the stop with a loud warning and logs a
+    fail_open event (not blocked with policy fail_open)."""
+    fail_open_check = {
+        "version": "1.0",
+        "status": "run-all",
+        "policy": "fail_open",
+        "trust": 0.0,
+        "overrides_triggered": ["fail_open_error"],
+        "selected_tests": ["tests"],
+        "failures": [],
+        "reasons": {"error": "Guard check error: FalkorDB unreachable"},
+        "is_fallback": True,
+        "fallback_reason": "Guard database/internal error: FalkorDB unreachable",
+        "fail_open": True,
+        "error": "FalkorDB unreachable",
+    }
+
+    stderr_capture = io.StringIO()
+    with patch("guard_cli.api.check", return_value=fail_open_check), \
+         patch("subprocess.run") as mock_proc, \
+         patch("sys.stderr", stderr_capture):
+        report, code = api.run(repo_path=temp_repo, strict=False, session_id="sess_failopen")
+
+    assert code == 0
+    assert report["fail_open"] is True
+    assert report["tests_passed"] is True
+    assert report["policy"] == "fail_open"
+    assert report["tests_run_count"] == 0
+    # The full suite must never be executed on a fail-open check.
+    mock_proc.assert_not_called()
+    assert "fail-open" in stderr_capture.getvalue()
+
+    events = read_events(repo_path=temp_repo)
+    assert events[-1]["event"] == "fail_open"
+    assert not any(e["event"] == "blocked" for e in events)
 
 
 def test_event_logging(temp_repo):
@@ -274,8 +342,15 @@ def test_claude_settings_install_creates_file_and_hook(temp_repo):
         
     assert "hooks" in data
     assert "Stop" in data["hooks"]
-    assert any(h.get("command") == "guard hook stop" for h in data["hooks"]["Stop"])
-    
+    assert any(
+        h.get("matcher") == ""
+        and any(
+            sub.get("command") == "guard hook stop" and sub.get("type") == "command"
+            for sub in h.get("hooks", [])
+        )
+        for h in data["hooks"]["Stop"]
+    )
+
     stat = claude.status(repo_path=temp_repo, shared=False)
     assert stat["installed"] is True
 
@@ -309,7 +384,9 @@ def test_claude_settings_merge_preserves_existing_config(temp_repo):
     assert len(merged["hooks"]["Start"]) == 1
     assert len(merged["hooks"]["Stop"]) == 2
     assert merged["hooks"]["Stop"][0]["command"] == "echo 'custom pre-stop'"
-    assert merged["hooks"]["Stop"][1]["command"] == "guard hook stop"
+    guard_entry = merged["hooks"]["Stop"][1]
+    assert guard_entry.get("matcher") == ""
+    assert guard_entry["hooks"][0]["command"] == "guard hook stop"
     
     # Backup file should exist
     bak_file = temp_repo / ".claude" / "settings.local.json.bak"

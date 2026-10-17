@@ -227,6 +227,49 @@ def run(
             "fail_open": True,
         }, 0
 
+    # Fail-open short-circuit: if check() could not evaluate the diff (database/graph
+    # unavailable), do not attempt the full-suite fallback. Running the whole suite on an
+    # unknown diff is itself unreliable (e.g. Guard's own tests require FalkorDB), so we
+    # allow the stop with a loud warning and record a fail_open event, matching Guard's
+    # documented fail-open behavior instead of blocking the agent.
+    if check_dict.get("fail_open") or check_dict.get("policy") == "fail_open":
+        reason = (
+            check_dict.get("fallback_reason")
+            or check_dict.get("error")
+            or "Guard database/graph unavailable"
+        )
+        if strict:
+            raise RuntimeError(f"Guard fail-open suppressed by strict mode: {reason}")
+        sys.stderr.write(
+            f"Guard warning (fail-open): {reason}. "
+            "Skipping safety check and allowing stop without running tests.\n"
+        )
+        log_event(
+            event="fail_open",
+            session_id=session_id,
+            repo_path=repo,
+            details={"op": "run", "error": reason},
+        )
+        return {
+            "version": SCHEMA_VERSION,
+            "status": "passed",
+            "policy": "fail_open",
+            "trust": 0.0,
+            "overrides_triggered": check_dict.get("overrides_triggered", ["fail_open_error"]),
+            "selected_tests": [],
+            "failures": [],
+            "reasons": check_dict.get("reasons", {}),
+            "tests_run": [],
+            "tests_run_count": 0,
+            "tests_passed": True,
+            "forced_full": False,
+            "fallback_reason": reason,
+            "duration_s": 0.0,
+            "exit_code": 0,
+            "output_summary": f"Guard bypassed fail-open: {reason}",
+            "fail_open": True,
+        }, 0
+
     forced_full = check_dict.get("is_fallback", False) or (check_dict.get("status") == "run-all")
     if forced_full:
         tests_to_run = ["tests"]

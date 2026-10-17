@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import Any
 
 HOOK_COMMAND = "guard hook stop"
+SESSION_START_COMMAND = "guard hook session-start"
+SESSION_START_MATCHER = "startup|resume|clear|compact|fork"
 DEFAULT_HOOK_TIMEOUT = 180
 
 
@@ -28,13 +30,13 @@ def get_settings_path(repo_path: str | Path | None = None, shared: bool = False)
     return local_file
 
 
-def _contains_guard_hook(item: Any) -> bool:
+def _contains_guard_hook(item: Any, command: str = HOOK_COMMAND) -> bool:
     if isinstance(item, dict):
-        if item.get("command") == HOOK_COMMAND:
+        if item.get("command") == command:
             return True
         inner = item.get("hooks", [])
         if isinstance(inner, list):
-            return any(isinstance(h, dict) and h.get("command") == HOOK_COMMAND for h in inner)
+            return any(isinstance(h, dict) and h.get("command") == command for h in inner)
     return False
 
 
@@ -55,10 +57,19 @@ def status(repo_path: str | Path | None = None, shared: bool = False) -> dict[st
         
         hooks = data.get("hooks", {})
         stop_hooks = hooks.get("Stop", [])
-        
+        start_hooks = hooks.get("SessionStart", [])
+        if not isinstance(stop_hooks, list):
+            stop_hooks = []
+        if not isinstance(start_hooks, list):
+            start_hooks = []
+
         installed = any(_contains_guard_hook(h) for h in stop_hooks)
+        session_start_installed = any(
+            _contains_guard_hook(h, SESSION_START_COMMAND) for h in start_hooks
+        )
         return {
             "installed": installed,
+            "session_start_installed": session_start_installed,
             "target_file": str(settings_file),
             "exists": True,
             "shared": shared,
@@ -122,35 +133,57 @@ def install(repo_path: str | Path | None = None, shared: bool = False) -> tuple[
         stop_hooks = []
         hooks["Stop"] = stop_hooks
 
+    start_hooks = hooks.setdefault("SessionStart", [])
+    if not isinstance(start_hooks, list):
+        start_hooks = []
+        hooks["SessionStart"] = start_hooks
+
     # Configure command alias
     commands = data.setdefault("commands", {})
     if isinstance(commands, dict):
         commands["guard"] = "guard run"
 
-    # Check if already present
-    for h in stop_hooks:
-        if _contains_guard_hook(h):
-            return True, f"Guard Stop hook is already installed in {settings_file}"
+    stop_present = any(_contains_guard_hook(h) for h in stop_hooks)
+    start_present = any(_contains_guard_hook(h, SESSION_START_COMMAND) for h in start_hooks)
+    if stop_present and start_present:
+        return True, f"Guard hooks are already installed in {settings_file}"
 
     from guard_cli.hook import get_hook_timeout
     timeout = get_hook_timeout(repo_path)
 
     # Claude Code expects matcher objects with a 'hooks' list
-    stop_hooks.append({
-        "command": HOOK_COMMAND,
-        "hooks": [
-            {
-                "type": "command",
-                "command": HOOK_COMMAND,
-                "timeout": timeout,
-            }
-        ]
-    })
+    # (https://docs.anthropic.com/en/docs/claude-code/hooks).
+    # For the Stop event no tool matcher applies, so "matcher" is empty.
+    if not stop_present:
+        stop_hooks.append({
+            "matcher": "",
+            "hooks": [
+                {
+                    "type": "command",
+                    "command": HOOK_COMMAND,
+                    "timeout": timeout,
+                }
+            ]
+        })
+
+    # SessionStart records the baseline SHA as early as possible so a fresh
+    # session ID can never redefine the baseline to a broken HEAD.
+    if not start_present:
+        start_hooks.append({
+            "matcher": SESSION_START_MATCHER,
+            "hooks": [
+                {
+                    "type": "command",
+                    "command": SESSION_START_COMMAND,
+                    "timeout": timeout,
+                }
+            ]
+        })
 
     with open(settings_file, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
-    return True, f"Successfully installed Guard Stop hook into {settings_file}"
+    return True, f"Successfully installed Guard hooks into {settings_file}"
 
 
 def uninstall(repo_path: str | Path | None = None, shared: bool = False) -> tuple[bool, str]:
@@ -172,27 +205,30 @@ def uninstall(repo_path: str | Path | None = None, shared: bool = False) -> tupl
         return False, f"Failed to read {settings_file}: {exc}"
 
     hooks = data.get("hooks", {})
-    if not isinstance(hooks, dict) or "Stop" not in hooks:
-        return True, "No Stop hooks found"
-
-    stop_hooks = hooks["Stop"]
-    if not isinstance(stop_hooks, list):
-        return True, "No Stop hook array found"
+    if not isinstance(hooks, dict):
+        return True, "No hooks config found"
 
     # Backup before modification
     bak_file = settings_file.with_suffix(settings_file.suffix + ".bak")
     shutil.copy2(settings_file, bak_file)
 
-    initial_len = len(stop_hooks)
-    hooks["Stop"] = [
-        h for h in stop_hooks
-        if not _contains_guard_hook(h)
-    ]
+    modified = False
+    for event, command in (("Stop", HOOK_COMMAND), ("SessionStart", SESSION_START_COMMAND)):
+        entries = hooks.get(event)
+        if not isinstance(entries, list):
+            continue
+        filtered = [h for h in entries if not _contains_guard_hook(h, command)]
+        if len(filtered) != len(entries):
+            modified = True
+            if filtered:
+                hooks[event] = filtered
+            else:
+                del hooks[event]
 
-    if len(hooks["Stop"]) == initial_len:
-        return True, f"Guard Stop hook was not found in {settings_file}"
+    if not modified:
+        return True, f"Guard hooks were not found in {settings_file}"
 
     with open(settings_file, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
-    return True, f"Successfully removed Guard Stop hook from {settings_file}"
+    return True, f"Successfully removed Guard hooks from {settings_file}"
