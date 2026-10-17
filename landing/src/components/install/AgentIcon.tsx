@@ -27,25 +27,15 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
       return (
         <svg
           role="img"
-          viewBox="0 0 24 24"
+          viewBox="0 0 16 16"
           width={size}
           height={size}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          fill="currentColor"
           className={`agent-brand-icon icon-antigravity ${className}`}
           aria-hidden="true"
           {...props}
         >
-          <circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none" />
-          <path d="M12 2.5a9.5 9.5 0 0 1 9.5 9.5" />
-          <path d="M12 21.5a9.5 9.5 0 0 1-9.5-9.5" />
-          <path d="M5.5 5.5l1.8 1.8" />
-          <path d="M16.7 16.7l1.8 1.8" />
-          <path d="M12 6.5V2" />
-          <path d="M12 22v-4.5" />
+          <path d="M14.1452 14.6818C14.9937 15.3182 16.2664 14.894 15.0997 13.7273C11.5998 10.3333 12.3421 1 7.99366 1C3.64518 1 4.3876 10.3333 0.887603 13.7273C-0.385123 15 0.993664 15.3182 1.84215 14.6818C5.13002 12.4545 4.9179 8.5303 7.99366 8.5303C11.0694 8.5303 10.8573 12.4545 14.1452 14.6818Z" />
         </svg>
       )
 
@@ -53,21 +43,15 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
       return (
         <svg
           role="img"
-          viewBox="0 0 24 24"
+          viewBox="0 0 16 16"
           width={size}
           height={size}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          fill="currentColor"
           className={`agent-brand-icon icon-opencode ${className}`}
           aria-hidden="true"
           {...props}
         >
-          <rect x="2.5" y="3.5" width="19" height="17" rx="3.5" />
-          <path d="m7 9.5 2.5 2.5L7 14.5" />
-          <line x1="12" y1="14.5" x2="16.5" y2="14.5" strokeWidth="2.2" />
+          <path fillRule="evenodd" clipRule="evenodd" d="M13 14H3V2H13V14ZM10.5 4.4H5.5V11.6H10.5V4.4Z" />
         </svg>
       )
 
