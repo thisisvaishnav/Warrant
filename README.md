@@ -3,12 +3,6 @@
 > **A high-velocity, graph-native regression prevention engine built on FalkorDB.**  
 > Guard selects the exact minimal subset of tests to run after an AI coding agent modifies code, measures a multi-factor **Trust Score**, and deterministically triggers hard fallbacks to full test suites when graph confidence drops.
 
-<p align="center">
-  <img src="falkordb-safety-shot.png" alt="Guard FalkorDB Safety Layer Architecture" width="800" />
-</p>
-
----
-
 ## 1. Problem Statement & Motivation
 
 When AI coding agents (Claude Code, Cursor, Codex, OpenCode) modify complex codebases, running the entire test suite on every step slows iteration cycles to a crawl. Conversely, naive heuristics used by developers or agents to speed things up introduce catastrophic silent escapes:
