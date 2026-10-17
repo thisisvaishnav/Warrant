@@ -132,15 +132,6 @@ export default function App() {
         </div>
       </section>
 
-      <section className="logo-strip">
-        <p>Tested and verified on production Python codebases (pallets/flask).</p>
-        <div className="logo-row shell">
-          {['10.png', '11.png', '12.png', '13.png', '14.png', '15.webp', '16.png'].map((logo) => (
-            <img key={logo} src={`/assets/${logo}`} alt="" />
-          ))}
-        </div>
-      </section>
-
       <section className="agent-section" id="features">
         <div className="shell">
           <div className="eyebrow"><span>01</span> GRAPH SAFETY LAYER</div>
