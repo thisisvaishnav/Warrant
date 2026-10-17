@@ -24517,7 +24517,6 @@
       "context": "import",
       "source_file": "landing/src/components/install/AgentIcon.tsx",
       "source_location": "L1",
-      "type_only": true,
       "weight": 1.0
     },
     {
@@ -37367,5 +37366,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7a358f2beb796d7be231b01f5ef356e64720774f"
+  "built_at_commit": "f303a2d82dd7ceff83117570612f2bac4172bfef"
 }

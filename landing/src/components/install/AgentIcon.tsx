@@ -1,4 +1,4 @@
-import type { SVGProps } from "react"
+import { useId, type SVGProps } from "react"
 
 interface AgentIconProps extends SVGProps<SVGSVGElement> {
   id: string
@@ -6,6 +6,9 @@ interface AgentIconProps extends SVGProps<SVGSVGElement> {
 }
 
 export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIconProps) {
+  const reactId = useId()
+  const antigravityGradId = `ag-grad-${reactId.replace(/:/g, "")}`
+
   switch (id) {
     case "claude-code":
       return (
@@ -14,7 +17,7 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
           viewBox="0 0 24 24"
           width={size}
           height={size}
-          fill="currentColor"
+          fill="#D97757"
           className={`agent-brand-icon icon-claude ${className}`}
           aria-hidden="true"
           {...props}
@@ -30,12 +33,22 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
           viewBox="0 0 16 16"
           width={size}
           height={size}
-          fill="currentColor"
           className={`agent-brand-icon icon-antigravity ${className}`}
           aria-hidden="true"
           {...props}
         >
-          <path d="M14.1452 14.6818C14.9937 15.3182 16.2664 14.894 15.0997 13.7273C11.5998 10.3333 12.3421 1 7.99366 1C3.64518 1 4.3876 10.3333 0.887603 13.7273C-0.385123 15 0.993664 15.3182 1.84215 14.6818C5.13002 12.4545 4.9179 8.5303 7.99366 8.5303C11.0694 8.5303 10.8573 12.4545 14.1452 14.6818Z" />
+          <defs>
+            <linearGradient id={antigravityGradId} x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#4285F4" />
+              <stop offset="35%" stopColor="#9B72CB" />
+              <stop offset="70%" stopColor="#EA4335" />
+              <stop offset="100%" stopColor="#FBBC05" />
+            </linearGradient>
+          </defs>
+          <path
+            fill={`url(#${antigravityGradId})`}
+            d="M14.1452 14.6818C14.9937 15.3182 16.2664 14.894 15.0997 13.7273C11.5998 10.3333 12.3421 1 7.99366 1C3.64518 1 4.3876 10.3333 0.887603 13.7273C-0.385123 15 0.993664 15.3182 1.84215 14.6818C5.13002 12.4545 4.9179 8.5303 7.99366 8.5303C11.0694 8.5303 10.8573 12.4545 14.1452 14.6818Z"
+          />
         </svg>
       )
 
@@ -46,12 +59,12 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
           viewBox="0 0 16 16"
           width={size}
           height={size}
-          fill="currentColor"
           className={`agent-brand-icon icon-opencode ${className}`}
           aria-hidden="true"
           {...props}
         >
-          <path fillRule="evenodd" clipRule="evenodd" d="M13 14H3V2H13V14ZM10.5 4.4H5.5V11.6H10.5V4.4Z" />
+          <rect x="1.5" y="1.5" width="13" height="13" rx="3.5" fill="#1E293B" stroke="#334155" strokeWidth="0.8" />
+          <path fillRule="evenodd" clipRule="evenodd" d="M12 12.5H4V3.5H12V12.5ZM10 5.2H6V10.8H10V5.2Z" fill="#10B981" />
         </svg>
       )
 
@@ -62,7 +75,7 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
           viewBox="0 0 24 24"
           width={size}
           height={size}
-          fill="currentColor"
+          fill="#10A37F"
           className={`agent-brand-icon icon-codex ${className}`}
           aria-hidden="true"
           {...props}
@@ -75,15 +88,16 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
       return (
         <svg
           role="img"
-          viewBox="0 0 24 24"
+          viewBox="0 0 128 128"
           width={size}
           height={size}
-          fill="currentColor"
           className={`agent-brand-icon icon-vscode ${className}`}
           aria-hidden="true"
           {...props}
         >
-          <path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.94-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.146 14.861L10.826 12l7.178-5.448v10.896z" />
+          <path fill="#0065A9" d="M123.471 13.82 97.097 1.12A7.973 7.973 0 0 0 88 2.668L1.662 81.387a5.333 5.333 0 0 0 .006 7.887l7.052 6.411a5.333 5.333 0 0 0 6.811.303l103.971-78.875c3.488-2.646 8.498-.158 8.498 4.22v-.306a8.001 8.001 0 0 0-4.529-7.208Z" />
+          <path fill="#007ACC" d="m123.471 114.181-26.374 12.698A7.973 7.973 0 0 1 88 125.333L1.662 46.613a5.333 5.333 0 0 1 .006-7.887l7.052-6.411a5.333 5.333 0 0 1 6.811-.303l103.971 78.874c3.488 2.647 8.498.159 8.498-4.219v.306a8.001 8.001 0 0 1-4.529 7.208Z" />
+          <path fill="#1F9CF0" d="M97.098 126.882A7.977 7.977 0 0 1 88 125.333c2.952 2.952 8 .861 8-3.314V5.98c0-4.175-5.048-6.266-8-3.313a7.977 7.977 0 0 1 9.098-1.549L123.467 13.8A8 8 0 0 1 128 21.01v85.982a8 8 0 0 1-4.533 7.21l-26.369 12.681Z" />
         </svg>
       )
 
@@ -91,15 +105,17 @@ export function AgentIcon({ id, size = 20, className = "", ...props }: AgentIcon
       return (
         <svg
           role="img"
-          viewBox="0 0 24 24"
+          viewBox="0 0 466.73 532.09"
           width={size}
           height={size}
-          fill="currentColor"
           className={`agent-brand-icon icon-cursor ${className}`}
           aria-hidden="true"
           {...props}
         >
-          <path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23" />
+          {/* Official 3D Isometric Cursor Cube with shaded facets */}
+          <path fill="#0D0E11" d="M457.43,125.94L244.42,2.96c-6.84-3.95-15.28-3.95-22.12,0L9.3,125.94c-5.75,3.32-9.3,9.46-9.3,16.11v247.99c0,6.65,3.55,12.79,9.3,16.11l213.01,122.98c6.84,3.95,15.28,3.95,22.12,0l213.01-122.98c5.75-3.32,9.3-9.46,9.3-16.11v-247.99c0-6.65-3.55-12.79-9.3-16.11h-.01Z" />
+          <path fill="#2B2D33" d="M444.05,151.99l-205.63,356.16c-1.39,2.4-5.06,1.42-5.06-1.36v-233.21c0-4.66-2.49-8.97-6.53-11.31L24.87,145.67c-2.4-1.39-1.42-5.06,1.36-5.06h411.26c5.84,0,9.49,6.33,6.57,11.39h-.01Z" />
+          <polygon fill="#E2E4E8" points="233.36 272.22 444.05 151.99 24.87 145.67" />
         </svg>
       )
 
