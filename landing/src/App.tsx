@@ -76,14 +76,13 @@ export default function App() {
           </div>
           <div className="nav-actions">
             <a
-              className="button nav-cta"
+              className="login"
               href="https://github.com/thisisvaishnav/guard"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub repository"
             >
-              <Arrow />
-              <span>GitHub</span>
+              GitHub
             </a>
           </div>
         </nav>

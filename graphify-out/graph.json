@@ -8133,7 +8133,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L141",
+      "source_location": "L140",
       "weight": 1.0
     },
     {
@@ -8145,7 +8145,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L164",
+      "source_location": "L163",
       "weight": 1.0
     },
     {
@@ -8157,7 +8157,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L172",
+      "source_location": "L171",
       "weight": 1.0
     },
     {
@@ -8169,7 +8169,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "landing/src/App.tsx",
-      "source_location": "L85",
+      "source_location": "L193",
       "weight": 1.0
     },
     {
@@ -17932,5 +17932,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "ab74600ce209a58ba64302a050d9273f2eab641b"
+  "built_at_commit": "1a8b890db5be4c075cdba7766ad82e78f1fa7351"
 }
