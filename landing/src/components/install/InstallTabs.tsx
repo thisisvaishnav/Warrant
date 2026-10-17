@@ -168,7 +168,7 @@ export function InstallTabs() {
   return (
     <div className="install-tabs-container">
       <div className="install-scope-bar">
-        <span className="install-scope-badge">Python projects with pytest</span>
+        <span className="install-scope-badge">Scope: Python projects that use pytest</span>
       </div>
 
       <Tabs
@@ -215,7 +215,7 @@ export function InstallTabs() {
 
       {/* Coming next row */}
       <div className="install-coming-next-row">
-        <span>Coming next: <strong>Cursor</strong>, <strong>VS Code</strong>, <strong>Codex</strong>, <strong>OpenCode</strong> (needs the MCP server).</span>
+        <span>Planned agent support: <strong>Cursor</strong>, <strong>VS Code</strong>, <strong>Codex</strong>, and <strong>OpenCode</strong> (requires the MCP server).</span>
         <a
           href={GITHUB_URL}
           target="_blank"
