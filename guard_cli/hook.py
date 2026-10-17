@@ -31,6 +31,11 @@ from guard_cli.state import (
     get_last_verified_sha,
     set_last_verified_sha,
     clear_last_verified_sha,
+    get_repo_baseline_sha,
+    set_repo_baseline_sha,
+    get_repo_last_verified_sha,
+    set_repo_last_verified_sha,
+    get_ingest_sha,
 )
 
 
@@ -46,6 +51,100 @@ def read_hook_input() -> dict[str, Any]:
         return data if isinstance(data, dict) else {}
     except Exception:
         return {}
+
+
+def resolve_hook_context(
+    repo_override: str | Path | None,
+    hook_input: dict[str, Any],
+) -> tuple[Path, str, bool]:
+    """Resolves (cwd, session_id, is_antigravity) from a hook payload."""
+    # Antigravity (agy) payloads use camelCase fields.
+    is_antigravity = bool(
+        "conversationId" in hook_input
+        or "terminationReason" in hook_input
+        or "workspacePaths" in hook_input
+    )
+    session_id = (
+        hook_input.get("conversationId")
+        or hook_input.get("session_id")
+        or "default_session"
+    )
+
+    workspace_paths = hook_input.get("workspacePaths")
+    input_cwd = (
+        workspace_paths[0]
+        if (isinstance(workspace_paths, list) and workspace_paths)
+        else hook_input.get("cwd")
+    )
+    if repo_override:
+        cwd = Path(repo_override).resolve()
+    elif input_cwd:
+        cwd = Path(input_cwd).resolve()
+    else:
+        cwd = Path.cwd()
+    return cwd, session_id, is_antigravity
+
+
+def _git_head_sha(repo_path: Path) -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            timeout=5.0,
+        )
+        if proc.returncode == 0:
+            return proc.stdout.strip()
+    except Exception:
+        pass
+    return ""
+
+
+def run_session_start_hook(
+    repo_override: str | Path | None = None,
+    raw_input: dict[str, Any] | None = None,
+) -> int:
+    """Records the baseline SHA as early as possible in an agent lifecycle.
+
+    Invoked by the Claude Code `SessionStart` hook and by the Antigravity
+    `PreInvocation` hook (which fires before each model call; it records the
+    baseline on first use). Recording a repo-level baseline here means a fresh
+    session cannot redefine the baseline to a broken HEAD.
+
+    Returns 0 always: baseline recording must never block an agent session.
+    """
+    hook_input = raw_input if raw_input is not None else read_hook_input()
+    cwd, session_id, is_antigravity = resolve_hook_context(repo_override, hook_input)
+
+    head_sha = _git_head_sha(cwd)
+    recorded_repo = False
+    recorded_session = False
+    if head_sha:
+        if not get_repo_baseline_sha(repo_path=cwd):
+            set_repo_baseline_sha(head_sha, repo_path=cwd)
+            recorded_repo = True
+        if not get_baseline_sha(session_id, repo_path=cwd):
+            set_baseline_sha(session_id, head_sha, repo_path=cwd)
+            recorded_session = True
+
+    log_event(
+        event="session_start",
+        session_id=session_id,
+        repo_path=cwd,
+        details={
+            "head_sha": head_sha,
+            "baseline_recorded": recorded_repo,
+            "agent_type": "antigravity" if is_antigravity else "claude",
+        },
+    )
+
+    # Antigravity PreInvocation expects a neutral JSON reply; `{}` is the
+    # documented "no opinion, proceed" output. Claude Code needs no output.
+    if is_antigravity:
+        sys.stdout.write("{}\n")
+        sys.stdout.flush()
+    return 0
 
 
 def is_working_tree_clean(repo_path: Path) -> bool:
@@ -142,6 +241,54 @@ def get_hook_timeout(repo_path: str | Path | None = None) -> int:
     return DEFAULT_HOOK_TIMEOUT
 
 
+def resolve_diff_ref(
+    repo_path: Path,
+    session_id: str,
+    head_sha: str,
+) -> tuple[str | None, str]:
+    """Resolves the commit to diff against, independent of the session ID.
+
+    Priority:
+        1. repo-level last_verified_sha (updated whenever tests pass)
+        2. SHA recorded at ingest (.guard/state.json)
+        3. session last_verified_sha (backward compatibility)
+        4. repo-level baseline_sha
+        5. session baseline_sha (backward compatibility)
+        6. HEAD
+
+    A fresh session ID therefore can neither reset the baseline to a broken
+    HEAD nor hide a commit that has not been verified.
+
+    Returns:
+        (diff_ref, source)
+    """
+    repo_last_verified = get_repo_last_verified_sha(repo_path)
+    session_last_verified = get_last_verified_sha(session_id, repo_path=repo_path)
+    ingest_sha = get_ingest_sha(repo_path)
+    repo_baseline = get_repo_baseline_sha(repo_path)
+    session_baseline = get_baseline_sha(session_id, repo_path=repo_path)
+
+    # Record a repo-level baseline on first ever use so there is always a
+    # non-HEAD reference for future sessions. Never overwrite an existing one.
+    if head_sha and not any(
+        (repo_last_verified, session_last_verified, ingest_sha, repo_baseline, session_baseline)
+    ):
+        set_repo_baseline_sha(head_sha, repo_path=repo_path)
+        repo_baseline = head_sha
+
+    for sha, source in (
+        (repo_last_verified, "repo_last_verified"),
+        (ingest_sha, "ingest_sha"),
+        (session_last_verified, "session_last_verified"),
+        (repo_baseline, "repo_baseline"),
+        (session_baseline, "session_baseline"),
+    ):
+        if sha:
+            return sha, source
+
+    return (head_sha or None), "head"
+
+
 def check_idle_turn(
     repo_path: Path,
     session_id: str = "default_session",
@@ -164,19 +311,13 @@ def check_idle_turn(
         )
         head_sha = head_proc.stdout.strip() if head_proc.returncode == 0 else ""
 
-        # Initialize or retrieve baseline_sha for session
-        baseline_sha = get_baseline_sha(session_id, repo_path=repo_path)
-        if not baseline_sha and head_sha:
-            baseline_sha = head_sha
-            set_baseline_sha(session_id, baseline_sha, repo_path=repo_path)
+        # Resolve the diff baseline in a session-independent way so a fresh
+        # session ID cannot reset the baseline to a broken HEAD.
+        diff_ref, _ = resolve_diff_ref(repo_path, session_id, head_sha)
 
-        # Retrieve last_verified_sha
-        last_verified = get_last_verified_sha(session_id, repo_path=repo_path)
-        if not last_verified and baseline_sha:
-            last_verified = baseline_sha
-            set_last_verified_sha(session_id, last_verified, repo_path=repo_path)
-
-        diff_ref = last_verified or head_sha
+        # Keep a session-level baseline for backward compatibility.
+        if head_sha and not get_baseline_sha(session_id, repo_path=repo_path):
+            set_baseline_sha(session_id, head_sha, repo_path=repo_path)
 
         # Working tree status
         status_proc = subprocess.run(
@@ -344,32 +485,8 @@ def run_stop_hook(
         2 on test failure for Claude Code, or 0 with continue decision for Antigravity
     """
     hook_input = raw_input if raw_input is not None else read_hook_input()
-    
-    # Detect if invoked by Antigravity CLI (agy)
-    is_antigravity = bool(
-        "conversationId" in hook_input
-        or "terminationReason" in hook_input
-        or "workspacePaths" in hook_input
-    )
-    session_id = (
-        hook_input.get("conversationId")
-        or hook_input.get("session_id")
-        or "default_session"
-    )
-    
-    # Resolve working directory
-    workspace_paths = hook_input.get("workspacePaths")
-    input_cwd = (
-        workspace_paths[0]
-        if (isinstance(workspace_paths, list) and workspace_paths)
-        else hook_input.get("cwd")
-    )
-    if repo_override:
-        cwd = Path(repo_override).resolve()
-    elif input_cwd:
-        cwd = Path(input_cwd).resolve()
-    else:
-        cwd = Path.cwd()
+
+    cwd, session_id, is_antigravity = resolve_hook_context(repo_override, hook_input)
 
     def _allow_stop(reason: str | None = None) -> int:
         if is_antigravity:
@@ -456,7 +573,11 @@ def run_stop_hook(
         try:
             head_proc = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(cwd), capture_output=True, text=True)
             if head_proc.returncode == 0 and head_proc.stdout.strip():
-                set_last_verified_sha(session_id, head_proc.stdout.strip(), repo_path=cwd)
+                verified_sha = head_proc.stdout.strip()
+                set_last_verified_sha(session_id, verified_sha, repo_path=cwd)
+                # Repo-level marker: survives new session IDs so a later broken
+                # commit is always diffed against the last verified commit.
+                set_repo_last_verified_sha(verified_sha, repo_path=cwd)
         except Exception:
             pass
         return _allow_stop()

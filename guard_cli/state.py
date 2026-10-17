@@ -121,6 +121,61 @@ def set_baseline_sha(session_id: str, sha: str, repo_path: str | Path | None = N
     save_state(state, repo_path)
 
 
+def get_repo_state(repo_path: str | Path | None = None) -> dict[str, Any]:
+    """Returns repo-level state (shared across all agent sessions)."""
+    state = load_state(repo_path)
+    repo = state.get("repo", {})
+    return repo if isinstance(repo, dict) else {}
+
+
+def get_repo_baseline_sha(repo_path: str | Path | None = None) -> str | None:
+    """Returns the repo-level baseline SHA recorded at first use / session start."""
+    return get_repo_state(repo_path).get("baseline_sha")
+
+
+def set_repo_baseline_sha(sha: str, repo_path: str | Path | None = None) -> None:
+    """Records the repo-level baseline SHA (shared across sessions)."""
+    state = load_state(repo_path)
+    repo = state.setdefault("repo", {})
+    repo["baseline_sha"] = sha
+    repo["baseline_recorded_at"] = time.time()
+    save_state(state, repo_path)
+
+
+def get_repo_last_verified_sha(repo_path: str | Path | None = None) -> str | None:
+    """Returns the repo-level SHA of the last commit whose tests passed.
+
+    This is intentionally not scoped to a session: a fresh session ID must not
+    be able to reset the baseline to a broken HEAD (commit bypass).
+    """
+    return get_repo_state(repo_path).get("last_verified_sha")
+
+
+def set_repo_last_verified_sha(sha: str, repo_path: str | Path | None = None) -> None:
+    """Records the repo-level SHA of the last commit whose tests passed."""
+    state = load_state(repo_path)
+    repo = state.setdefault("repo", {})
+    repo["last_verified_sha"] = sha
+    repo["last_verified_at"] = time.time()
+    save_state(state, repo_path)
+
+
+def get_ingest_sha(repo_path: str | Path | None = None) -> str | None:
+    """Returns the HEAD SHA recorded at ingest time (.guard/state.json)."""
+    try:
+        base = Path(repo_path).resolve() if repo_path else Path.cwd()
+        state_file = base / ".guard" / "state.json"
+        if not state_file.exists():
+            return None
+        data = json.loads(state_file.read_text(encoding="utf-8"))
+        sha = data.get("head_sha") if isinstance(data, dict) else None
+        if sha and sha != "unknown":
+            return sha
+    except Exception:
+        pass
+    return None
+
+
 def get_last_verified_sha(session_id: str, repo_path: str | Path | None = None) -> str | None:
     """Returns the most recent commit SHA where tests passed."""
     state = load_state(repo_path)

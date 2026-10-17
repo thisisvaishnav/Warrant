@@ -171,23 +171,41 @@ def cmd_hook_stop(args) -> int:
     )
 
 
+def cmd_hook_session_start(args) -> int:
+    from guard_cli.hook import run_session_start_hook
+    return run_session_start_hook(repo_override=args.repo)
+
+
 def cmd_hook_install(args) -> int:
-    from guard_cli.integrations import claude
-    ok, msg = claude.install(repo_path=args.repo, shared=args.shared)
+    if getattr(args, "antigravity", False):
+        from guard_cli.integrations import antigravity
+        ok, msg = antigravity.install(repo_path=args.repo)
+    else:
+        from guard_cli.integrations import claude
+        ok, msg = claude.install(repo_path=args.repo, shared=args.shared)
     print(msg)
     return 0 if ok else 1
 
 
 def cmd_hook_uninstall(args) -> int:
-    from guard_cli.integrations import claude
-    ok, msg = claude.uninstall(repo_path=args.repo, shared=args.shared)
+    if getattr(args, "antigravity", False):
+        from guard_cli.integrations import antigravity
+        ok, msg = antigravity.uninstall(repo_path=args.repo)
+    else:
+        from guard_cli.integrations import claude
+        ok, msg = claude.uninstall(repo_path=args.repo, shared=args.shared)
     print(msg)
     return 0 if ok else 1
 
 
 def cmd_hook_status(args) -> int:
-    from guard_cli.integrations import claude
-    stat = claude.status(repo_path=args.repo, shared=args.shared)
+    if getattr(args, "antigravity", False):
+        stat = {"claude": None}
+        from guard_cli.integrations import antigravity
+        stat["antigravity"] = antigravity.status(repo_path=args.repo)
+    else:
+        from guard_cli.integrations import claude
+        stat = claude.status(repo_path=args.repo, shared=args.shared)
     print(json.dumps(stat, indent=2))
     return 0
 
@@ -260,20 +278,24 @@ def main(argv=None) -> int:
     hk_stop.add_argument("--strict", action="store_true", help="fail closed on error")
     hk_stop.set_defaults(fn=cmd_hook_stop)
 
-    hk_inst = hk_sub.add_parser("install", help="Install Stop hook into Claude Code settings")
+    hk_start = hk_sub.add_parser("session-start", help="Record baseline SHA at session start (Claude Code SessionStart / Antigravity PreInvocation)")
+    hk_start.add_argument("--repo", default=None, help="path to repo root")
+    hk_start.set_defaults(fn=cmd_hook_session_start)
+
+    hk_inst = hk_sub.add_parser("install", help="Install Stop hook into agent settings (Claude Code by default, Antigravity with --antigravity)")
     hk_inst.add_argument("--repo", default=None, help="path to repo root")
     hk_inst.add_argument("--shared", action="store_true", help="install to settings.json instead of settings.local.json")
-    hk_inst.set_defaults(fn=cmd_hook_install)
+    hk_inst.add_argument("--antigravity", action="store_true", help="install to Antigravity .agents/hooks.json instead of Claude Code settings")
 
-    hk_uninst = hk_sub.add_parser("uninstall", help="Uninstall Stop hook from Claude Code settings")
+    hk_uninst = hk_sub.add_parser("uninstall", help="Uninstall Stop hook from agent settings (Claude Code by default, Antigravity with --antigravity)")
     hk_uninst.add_argument("--repo", default=None, help="path to repo root")
     hk_uninst.add_argument("--shared", action="store_true", help="uninstall from settings.json instead of settings.local.json")
-    hk_uninst.set_defaults(fn=cmd_hook_uninstall)
+    hk_uninst.add_argument("--antigravity", action="store_true", help="uninstall from Antigravity .agents/hooks.json instead of Claude Code settings")
 
-    hk_stat = hk_sub.add_parser("status", help="Check Claude Code hook installation status")
+    hk_stat = hk_sub.add_parser("status", help="Check hook installation status (Claude Code by default, Antigravity with --antigravity)")
     hk_stat.add_argument("--repo", default=None, help="path to repo root")
     hk_stat.add_argument("--shared", action="store_true", help="check settings.json instead of settings.local.json")
-    hk_stat.set_defaults(fn=cmd_hook_status)
+    hk_stat.add_argument("--antigravity", action="store_true", help="check Antigravity .agents/hooks.json instead of Claude Code settings")
 
     fb = sub.add_parser("feedback")
     fb.add_argument("--function", required=True, help="Function ID where fault was missed")

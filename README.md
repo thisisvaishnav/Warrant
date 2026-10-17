@@ -155,7 +155,13 @@ $$\text{Trust} = 0.5 \cdot \text{EvidenceRatio} + 0.3 \cdot \text{Freshness} + 0
 
 ## Claude Code & Agent Integration
 
-Guard integrates seamlessly into autonomous coding workflows:
+> **Experimental**: Both the Claude Code Stop hook and the Antigravity integration are
+> labeled **experimental**. The Antigravity `hooks.json` schema was verified against
+> [Antigravity's official hook documentation](https://antigravity.google/docs/hooks), but
+> both integrations have only been validated with simulated stdin/stdout input. A real
+> live session (Claude Code, Antigravity) has not yet confirmed end-to-end behavior.
+
+Guard integrates into autonomous coding workflows:
 
 - **Claude Code Stop Hook**: Installed via `guard hook install` into `.claude/settings.local.json`. Whenever Claude attempts to conclude a task, the Stop hook evaluates the diff. If tests fail, it blocks completion (Exit 2) and injects a concise $\le$ 30 line failure report.
 - **Idle-Turn Optimization**: Caches working-tree SHA-256 fingerprints and skips unchanged turns and non-Python diffs.
@@ -207,11 +213,11 @@ guard check [--repo /path/to/repo] [--json]
 ```
 
 ### `guard hook`
-Manages Claude Code and agent hook configurations:
+Manages Claude Code and agent hook configurations (experimental — see note above):
 ```bash
-guard hook install [--shared]
+guard hook install [--shared] [--antigravity]
 guard hook status
-guard hook uninstall
+guard hook uninstall [--antigravity]
 ```
 
 ### `guard feedback`

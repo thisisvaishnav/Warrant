@@ -1,8 +1,18 @@
-"""Antigravity CLI (agy) Stop Hook Integration Writer.
+"""Antigravity (App / CLI / IDE) Stop Hook Integration Writer.
 
 Installs, uninstalls, and checks status of Guard's Stop hook in .agents/hooks.json.
 - Merges into existing `hooks.json` config.
 - Preserves all other configured hooks and handlers.
+
+Format verified against official Antigravity docs (antigravity.google/docs/hooks):
+the top level maps hook names to event configs; for Stop (like PreInvocation and
+PostInvocation) handler objects sit directly under the event key (matcher is
+ignored), each supporting {type: "command", command, timeout}. Stop hooks
+re-enter the loop by emitting {"decision": "continue", "reason": ...} on stdout
+(exit 0); any other decision (or silent exit 0) allows the stop.
+
+EXPERIMENTAL: verified against the published schema and simulated stdin/stdout
+only; a live Antigravity session has not yet confirmed end-to-end behavior.
 """
 from __future__ import annotations
 import json
@@ -11,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 HOOK_COMMAND = "guard hook stop"
+SESSION_START_COMMAND = "guard hook session-start"
 DEFAULT_HOOK_TIMEOUT = 180
 
 
@@ -20,9 +31,9 @@ def get_hooks_file_path(repo_path: str | Path | None = None) -> Path:
     return base / ".agents" / "hooks.json"
 
 
-def _contains_guard_hook(handlers: list[dict[str, Any]]) -> bool:
+def _contains_guard_hook(handlers: list[dict[str, Any]], command: str = HOOK_COMMAND) -> bool:
     for h in handlers:
-        if isinstance(h, dict) and h.get("command") == HOOK_COMMAND:
+        if isinstance(h, dict) and h.get("command") == command:
             return True
     return False
 
@@ -48,11 +59,16 @@ def status(repo_path: str | Path | None = None) -> dict[str, Any]:
             if isinstance(hook_cfg, dict):
                 stop_handlers = hook_cfg.get("Stop", [])
                 if isinstance(stop_handlers, list) and _contains_guard_hook(stop_handlers):
+                    pre_handlers = hook_cfg.get("PreInvocation", [])
                     return {
                         "installed": True,
                         "target_file": str(hooks_file),
                         "exists": True,
                         "hook_name": hook_name,
+                        "pre_invocation_installed": (
+                            isinstance(pre_handlers, list)
+                            and _contains_guard_hook(pre_handlers, SESSION_START_COMMAND)
+                        ),
                     }
         return {"installed": False, "target_file": str(hooks_file), "exists": True}
     except Exception as exc:
@@ -95,22 +111,40 @@ def install(repo_path: str | Path | None = None) -> tuple[bool, str]:
         stop_list = []
         guard_hook["Stop"] = stop_list
 
-    if _contains_guard_hook(stop_list):
-        return True, f"Guard Stop hook is already installed in {hooks_file}"
+    pre_list = guard_hook.setdefault("PreInvocation", [])
+    if not isinstance(pre_list, list):
+        pre_list = []
+        guard_hook["PreInvocation"] = pre_list
+
+    stop_present = _contains_guard_hook(stop_list)
+    pre_present = _contains_guard_hook(pre_list, SESSION_START_COMMAND)
+    if stop_present and pre_present:
+        return True, f"Guard hooks are already installed in {hooks_file}"
 
     from guard_cli.hook import get_hook_timeout
     timeout = get_hook_timeout(repo_path)
 
-    stop_list.append({
-        "type": "command",
-        "command": HOOK_COMMAND,
-        "timeout": timeout,
-    })
+    if not stop_present:
+        stop_list.append({
+            "type": "command",
+            "command": HOOK_COMMAND,
+            "timeout": timeout,
+        })
+
+    # agy has no SessionStart event; PreInvocation fires before every model call
+    # and records the baseline on first use (see antigravity.google/docs/hooks).
+    # PreInvocation takes a flat handler list (matcher ignored).
+    if not pre_present:
+        pre_list.append({
+            "type": "command",
+            "command": SESSION_START_COMMAND,
+            "timeout": timeout,
+        })
 
     with open(hooks_file, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
-    return True, f"Successfully installed Guard Stop hook into {hooks_file}"
+    return True, f"Successfully installed Guard hooks into {hooks_file}"
 
 
 def uninstall(repo_path: str | Path | None = None) -> tuple[bool, str]:
@@ -129,18 +163,24 @@ def uninstall(repo_path: str | Path | None = None) -> tuple[bool, str]:
 
     modified = False
     for hook_name, hook_cfg in list(data.items()):
-        if isinstance(hook_cfg, dict) and "Stop" in hook_cfg:
-            orig = hook_cfg["Stop"]
-            if isinstance(orig, list):
-                new_list = [h for h in orig if not (isinstance(h, dict) and h.get("command") == HOOK_COMMAND)]
-                if len(new_list) != len(orig):
-                    if new_list:
-                        hook_cfg["Stop"] = new_list
-                    else:
-                        del hook_cfg["Stop"]
-                    if not hook_cfg:
-                        del data[hook_name]
-                    modified = True
+        if not isinstance(hook_cfg, dict):
+            continue
+        container_modified = False
+        for event, command in (("Stop", HOOK_COMMAND), ("PreInvocation", SESSION_START_COMMAND)):
+            orig = hook_cfg.get(event)
+            if not isinstance(orig, list):
+                continue
+            new_list = [h for h in orig if not (isinstance(h, dict) and h.get("command") == command)]
+            if len(new_list) != len(orig):
+                if new_list:
+                    hook_cfg[event] = new_list
+                else:
+                    del hook_cfg[event]
+                container_modified = True
+        if container_modified:
+            modified = True
+            if not hook_cfg:
+                del data[hook_name]
 
     if not modified:
         return True, f"Guard Stop hook was not found in {hooks_file}"

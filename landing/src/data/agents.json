@@ -1,0 +1,80 @@
+[
+  {
+    "id": "claude-code",
+    "label": "Claude Code",
+    "badge": "enforced",
+    "run": "uvx guard-cli setup --agent claude-code",
+    "runNote": "uvx runs Guard without a permanent install. Prefer a hard install? Use pipx install guard-cli, then guard setup --agent claude-code.",
+    "restart": "Quit Claude Code and start it again in your project.",
+    "verify": "guard doctor",
+    "expected": "status: pass\nenvironment   pass   Python 3.10+, guard installed\nbackend       pass   Backend 'server' is healthy\ntarget_repo   pass   Target environment verified with pytest and pytest-cov\nintegrations  pass   Stop hook installed in .claude/settings.local.json\nhook_timeout  pass   Hook timeout is configured to 180s.",
+    "writes": [".claude/settings.local.json — Stop hook (enforcement: exit 2)"],
+    "note": "The Stop hook runs guard check before Claude Code reports a task complete. Failing tests block the stop with exit code 2.",
+    "format": null
+  },
+  {
+    "id": "antigravity",
+    "label": "Antigravity",
+    "badge": "experimental",
+    "run": "uvx guard-cli setup --agent antigravity",
+    "runNote": null,
+    "restart": "Quit Antigravity and reopen your workspace.",
+    "verify": "guard doctor",
+    "expected": "status: pass\nenvironment   pass   Python 3.10+, guard installed\nbackend       pass   Backend 'server' is healthy\ntarget_repo   pass   Target environment verified with pytest and pytest-cov\nintegrations  pass   Stop hook installed in .agents/hooks.json",
+    "writes": [".agents/hooks.json — Stop hook (merge-safe, uninstallable)"],
+    "note": "Writes a merge-safe Stop hook into .agents/hooks.json. The git pre-push hook is the safety net while the decision-JSON contract is under QA.",
+    "format": null
+  },
+  {
+    "id": "opencode",
+    "label": "OpenCode",
+    "badge": "coming-soon",
+    "run": null,
+    "runNote": null,
+    "restart": null,
+    "verify": null,
+    "expected": null,
+    "writes": ["opencode.json — mcp block with a command array"],
+    "note": "Ships with the MCP server (Phase 3). Advisory enforcement only — OpenCode hooks run for their side effects and cannot block a stop.",
+    "format": "opencode.json → { \"mcp\": { \"guard\": { \"command\": [...] } } }"
+  },
+  {
+    "id": "codex",
+    "label": "Codex",
+    "badge": "coming-soon",
+    "run": null,
+    "runNote": null,
+    "restart": null,
+    "verify": null,
+    "expected": null,
+    "writes": ["codex mcp add guard -- <command>"],
+    "note": "Ships with the MCP server (Phase 3). Advisory enforcement alongside the git pre-push hook.",
+    "format": "codex mcp add guard -- <command>"
+  },
+  {
+    "id": "vscode",
+    "label": "VS Code",
+    "badge": "coming-soon",
+    "run": null,
+    "runNote": null,
+    "restart": null,
+    "verify": null,
+    "expected": null,
+    "writes": [".vscode/mcp.json — mcpServers entry"],
+    "note": "Ships with the MCP server (Phase 3). Advisory enforcement alongside the git pre-push hook.",
+    "format": ".vscode/mcp.json → { \"mcpServers\": { \"guard\": { ... } } }"
+  },
+  {
+    "id": "cursor",
+    "label": "Cursor",
+    "badge": "coming-soon",
+    "run": null,
+    "runNote": null,
+    "restart": null,
+    "verify": null,
+    "expected": null,
+    "writes": [".cursor/mcp.json — mcpServers entry"],
+    "note": "Ships with the MCP server (Phase 3), plus a one-click Cursor deep link with the server config encoded in the URL.",
+    "format": ".cursor/mcp.json → { \"mcpServers\": { \"guard\": { ... } } }"
+  }
+]
